@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "127582348875",
+    "firebase_url": "https://privyapp-1362a.firebaseio.com",
+    "project_id": "privyapp-1362a",
+    "storage_bucket": "privyapp-1362a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127582348875:android:3b6515d21dd135fe",
+        "android_client_info": {
+          "package_name": "com.privyapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127582348875-hkmbugt6bnc5joodjqcklj3tjqc7ojko.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcDQxD8VKZeeMN_lW7C7pOlv8JAFwopFM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
