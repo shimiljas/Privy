@@ -8,11 +8,22 @@ import KeyWords from "../../common/Localization";
 import { ButtonComponent } from "../../components";
 import Styles from "./Styles";
 import Header from "../../components/header/header";
+import clientApi from "../../common/ApiManager";
+
 
 class TermsScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {content: ""};
+  }
+
+  componentDidMount() {
+    clientApi.callPostApi("get_terms.php").then(res => {
+      console.log("RESULT GETTERMS", res);
+      if(res.success == 1) {
+        this.setState({content: res.data.content})
+      }
+    })  
   }
 
   back = () => {
@@ -30,7 +41,7 @@ class TermsScreen extends React.Component {
           </View> */}
           <View style={Styles.textView}>
             <ScrollView>
-              <Text>{KeyWords.termsConditionContent}</Text>
+              <Text>{this.state.content}</Text>
             </ScrollView>
           </View>
           <View style={Styles.btnView}>

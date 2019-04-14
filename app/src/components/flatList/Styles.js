@@ -23,7 +23,7 @@ export default {
             paddingRight: '7%'
         },
         
-        imagesView: { width: "95%", marginLeft: '5%' }, 
+        imagesView: { width: "95%" }, 
 
         flexGrow: {flexGrow: 1,  paddingRight:'28%', paddingLeft: '5%'},
 

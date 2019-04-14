@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, Image, TouchableOpacity, FlatList, AsyncStorage } from "react-native";
 import { Container, Content, InputGroup, Input } from "native-base";
 import ImagePicker from "react-native-image-picker";
 import { connect } from "react-redux";
@@ -12,10 +12,14 @@ import {
   SpinnerLoad,
   ButtonComponent,
   InputComponent,
-  CheckBoxComponent
+  CheckBoxComponent,
+  InfoInput,
+  LocationModal
 } from "../../../components";
 import Header from '../../../components/header/header';
+import clientApi from '../../../common/ApiManager';
 import KeyWords from "../../../common/Localization";
+import Color from "../../../common/Color";
 
 
 class StudentProfileComponent extends React.Component {
@@ -24,8 +28,10 @@ class StudentProfileComponent extends React.Component {
     const { userData } = this.props;
     this.state = {
       user_id: userData._id,
+      isOpenHome:false,
       name: userData.name,
       email: userData.email,
+      homeLocation: "",
       profilePic: userData.profilePic,
       age: userData.age,
       country:
@@ -51,28 +57,49 @@ class StudentProfileComponent extends React.Component {
           : ""
     };
   }
+
+  async componentDidMount() {
+    let user_id = await AsyncStorage.getItem("userId");
+    clientApi.callPostApi("get_user_profile.php", {user_id}).then(res =>{
+      console.log("RESUSER", res);
+      if(res.success == 1) {
+        this.setState({
+          _id: user_id,
+          name: res.data.name,
+          instructChildren: res.data.instructChildren,
+          country: res.data.country || "",
+          email: res.data.email,
+          homeLocation: res.data.add1,
+          classLocation: res.data.add2,
+          profilePic: res.data.profilePic,
+          age: res.data.age || 0
+        })
+      }
+    });
+  }
   
   inputClick = (text, key) => {
-    switch (key) {
-      case "email":
-        this.setState({ email: text });
-        break;
-      case "streetAddress":
-        this.setState({ streetAddress: text });
-        break;
-      case "state":
-        this.setState({ state: text });
-        break;
-      case "city":
-        this.setState({ city: text });
-        break;
-      case "zipcode":
-        this.setState({ zipcode: text });
-        break;
+    this.setState({[key]: text})
+    // switch (key) {
+    //   case "email":
+    //     this.setState({ email: text });
+    //     break;
+    //   case "streetAddress":
+    //     this.setState({ streetAddress: text });
+    //     break;
+    //   case "state":
+    //     this.setState({ state: text });
+    //     break;
+    //   case "city":
+    //     this.setState({ city: text });
+    //     break;
+    //   case "zipcode":
+    //     this.setState({ zipcode: text });
+    //     break;
 
-      default:
-        break;
-    }
+    //   default:
+    //     break;
+    // }
   };
   componentCall = data => {
     return (
@@ -123,51 +150,140 @@ class StudentProfileComponent extends React.Component {
     });
   };
 
-  async update() {
-    const { userData, updateUserData } = this.props;
+  // async update() {
+  //   const { userData, updateUserData } = this.props;
+  //   const {
+  //     name,
+  //     user_id,
+  //     country,
+  //     streetAddress,
+  //     state,
+  //     city,
+  //     age,
+  //     zipcode,
+  //     base64ProfilePic
+  //   } = this.state;
+  //   if (name == "") {
+  //     alert(KeyWords.enter + " " + KeyWords.name);
+  //   } else {
+  //     var obj = {};
+  //     obj.name = name;
+  //     obj.user_id = user_id;
+  //     obj.lat = "22.7545";
+  //     obj.long = "75.2454";
+
+  //     if (country != "") obj.country = country;
+  //     if (streetAddress != "") obj.streetAddress = streetAddress;
+  //     if (state != "") obj.state = state;
+  //     if (city != "") obj.city = city;
+  //     if (zipcode != "") obj.zipCode = zipcode;
+  //     if (age != "") obj.age = age;
+
+  //     if (base64ProfilePic != "" && base64ProfilePic != undefined)
+  //       obj.profilePic = base64ProfilePic;
+  //     var data = {
+  //       methodName: "updateStudentProfile",
+  //       data: obj,
+  //       token: userData.api_token != null ? userData.api_token : userData.token
+  //     };
+
+  //     console.log("before calling api", userData, data);
+  //     updateUserData(data);
+  //   }
+  // }
+
+  update = () => {
+    // const { userData, updateUserData } = this.props;
     const {
+      _id,
+      base64ProfilePic,
+      instructChildren,
       name,
-      user_id,
-      country,
+      country_permanent,
+      aboutMe,
+      streetAddress_permanent,
+      state_permanent,
+      city_permanent,
+      zipcode_permanent,
       streetAddress,
       state,
       city,
-      age,
       zipcode,
-      base64ProfilePic
+      country,
+      homeLocation,
     } = this.state;
-    if (name == "") {
-      alert(KeyWords.enter + " " + KeyWords.name);
-    } else {
-      var obj = {};
-      obj.name = name;
-      obj.user_id = user_id;
-      obj.lat = "22.7545";
-      obj.long = "75.2454";
 
-      if (country != "") obj.country = country;
-      if (streetAddress != "") obj.streetAddress = streetAddress;
-      if (state != "") obj.state = state;
-      if (city != "") obj.city = city;
-      if (zipcode != "") obj.zipCode = zipcode;
-      if (age != "") obj.age = age;
-
-      if (base64ProfilePic != "" && base64ProfilePic != undefined)
-        obj.profilePic = base64ProfilePic;
-      var data = {
-        methodName: "updateStudentProfile",
-        data: obj,
-        token: userData.api_token != null ? userData.api_token : userData.token
-      };
-
-      console.log("before calling api", userData, data);
-      updateUserData(data);
+    const obj = {
+      user_id: _id,
+      name,
+      aboutMe,
+      add1: homeLocation,
+      instructChildren,
+      country,
     }
-  }
+
+    clientApi.callPostApi("update_user_profile.php", {...obj}).then(res =>{
+      console.log(res)
+      if(res.success == 1) {
+        alert(res.message);
+        // this.setState({
+        //   _id: user_id,
+        //   name: res.data.name,
+        //   instructChildren: res.data.instructChildren,
+        //   countryText: res.data.country || "",
+        //   homeLocation: res.data.add1,
+        //   classLocation: res.data.add2
+        // })
+      }
+    });
+
+    // if (name == "") {
+    //   alert(KeyWords.enter + " " + KeyWords.name);
+    // } else {
+    //   var obj = {};
+    //   obj.name = name;
+    //   obj.user_id = _id;
+    //   obj.lat = "22.7545";
+    //   obj.long = "75.2454";
+    //   obj.lat_permanent = "22.7545";
+    //   obj.long_permanent = "75.2454";
+
+    //   // permanent address
+    //   if (country_permanent != "") obj.country_permanent = country_permanent;
+    //   if (streetAddress_permanent != "")
+    //     obj.streetAddress_permanent = streetAddress_permanent;
+    //   if (state_permanent != "") obj.state_permanent = state_permanent;
+    //   if (city_permanent != "") obj.city_permanent = city_permanent;
+    //   if (zipcode_permanent != "") obj.zipCode_permanent = zipcode_permanent;
+
+    //   // class address
+    //   if (country != "") obj.country = country;
+    //   if (streetAddress != "") obj.streetAddress = streetAddress;
+    //   if (state != "") obj.state = state;
+    //   if (city != "") obj.city = city;
+    //   if (zipcode != "") obj.zipCode = zipcode;
+
+    //   if (aboutMe != "") obj.aboutMe = aboutMe;
+    //   if (instructChildren != "") obj.instructChildren = instructChildren;
+
+    //   //photo
+    //   if (base64ProfilePic != "" && base64ProfilePic != undefined)
+    //     obj.profilePic = base64ProfilePic;
+
+    //   console.log("profile obj == ", obj);
+    //   var data = {
+    //     methodName: "updateInstructorProfile",
+    //     data: obj,
+    //     token: userData.api_token != null ? userData.api_token : userData.token
+    //   };
+
+    //   updateUserData(data);
+    // }
+  };
 
   render() {
     const { showDefault, profilePic, SpinnerVisible } = this.state;
-    var icon = showDefault ? Images.user : profilePic;
+    var icon = showDefault ? Images.user : {uri : profilePic};
     const {
       name,
       country,
@@ -175,8 +291,8 @@ class StudentProfileComponent extends React.Component {
       email,
       streetAddress,
       zipcode,
-      city,
-      state
+      city,homeLocation,
+      state,isOpenHome
     } = this.state;
     return (
       <Container>
@@ -243,61 +359,29 @@ class StudentProfileComponent extends React.Component {
                 fieldDisable
               />
 
-              <InputComponent
-                title={KeyWords.street + " " + KeyWords.address}
-                icon={Images.locationImg}
-                iconStyle={Styles.icon}
-                placeholder={KeyWords.street + " " + KeyWords.address}
-                multiline
-                value={streetAddress}
-                setValues={text => this.setState({ streetAddress: text })}
-                fieldWidth={GlobalStyle.width100p}
-                height={70}
-                maxLength={100}
-
-              />
-
-              <InputComponent
-                title={KeyWords.state}
-                icon={Images.locationImg}
-                iconStyle={Styles.icon}
-                placeholder={KeyWords.state}
-                multiline={false}
-                value={state}
-                setValues={text => this.setState({ state: text })}
-                fieldWidth={GlobalStyle.width100p}
-                height={70}
-                maxLength={100}
-
-              />
-
-              <InputComponent
-                title={KeyWords.city}
-                icon={Images.locationImg}
-                iconStyle={Styles.icon}
-                placeholder={KeyWords.city}
-                multiline={false}
-                value={city}
-                setValues={text => this.setState({ city: text })}
-                fieldWidth={GlobalStyle.width100p}
-                height={70}
-                maxLength={100}
-
-              />
-
-              <InputComponent
-                title={KeyWords.zipcode}
-                icon={Images.locationImg}
-                iconStyle={Styles.icon}
-                placeholder={KeyWords.zipcode}
-                multiline={false}
-                value={zipcode}
-                setValues={text => this.setState({ zipcode: text })}
-                fieldWidth={GlobalStyle.width100p}
-                height={70}
-                maxLength={100}
-                keyboardType="numeric"
-              />
+              <View style={{ height: 10 }} />
+              <TouchableOpacity
+                onPress={() => this.setState({ isOpenHome: !isOpenHome })}
+              >
+                <InfoInput
+                  title={KeyWords.residence}
+                  icon={Images.locationImg}
+                  iconStyle={Styles.icon}
+                >
+                  <Text
+                    style={{
+                      color: Color.darkGray,
+                      flex: 1,
+                      paddingHorizontal: 0,
+                      paddingVertical: 10,
+                      borderBottomColor: Color.grayClg,
+                      borderBottomWidth: 0.5
+                    }}
+                  >
+                    {homeLocation || "Type your home location here."}
+                  </Text>
+                </InfoInput>
+              </TouchableOpacity>
 
               <Text style={Styles.lable}>
                 {KeyWords.ageOver18}
@@ -308,14 +392,14 @@ class StudentProfileComponent extends React.Component {
                 <View style={Styles.radioView}>
                   <CheckBoxComponent
                     title={KeyWords.yes}
-                    value={age}
-                    setValues={() => this.setState({ age: true })}
+                    value={age == 1}
+                    setValues={() => this.setState({ age: 1 })}
                   />
 
                   <CheckBoxComponent
                     title={KeyWords.no}
-                    value={!age}
-                    setValues={() => this.setState({ age: false })}
+                    value={age == 0}
+                    setValues={() => this.setState({ age: 0 })}
                   />
                 </View>
               </View>
@@ -329,6 +413,18 @@ class StudentProfileComponent extends React.Component {
               </View>
             </View>
           </View>
+          <LocationModal
+            isOpen={isOpenHome}
+            title={
+              "Enter " + KeyWords.residence + " address"}
+            onSave={loc =>
+              this.setState({
+                homeLocation: loc.Address,
+                isOpenHome: !isOpenHome
+              })
+            }
+            onClose={() => this.setState({ isOpenHome: !isOpenHome })}
+          />
         </Content>
       </Container>
     );

@@ -12,7 +12,7 @@ var ApiManager = {
         "Content-Type": "application/json" //'application/x-www-form-urlencoded',
       },
       body: body
-    });
+    }).then(res => res.json());
   },
 
   callPostApiWithToken: async function(apiMethod, obj, token, serialize = 1) {

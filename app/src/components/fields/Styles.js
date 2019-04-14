@@ -12,9 +12,9 @@ export default {
   centerH: {
     justifyContent: "center"
   },
-  disableDate:{
-    marginLeft:'1%',
-    fontSize: RF(2),
+  disableDate: {
+    marginLeft: "1%",
+    fontSize: RF(2)
   },
   icon: { color: Color.grayClg, marginTop: "2%" },
   pickerIcon: { color: Color.grayClg, marginTop: "6%" },

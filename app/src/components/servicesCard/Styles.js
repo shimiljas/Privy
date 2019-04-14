@@ -8,18 +8,18 @@ export default {
 	},
 	title: {
 		fontSize: RF(3.0),
-		fontWeight: "bold",
+		fontFamily: "Poppins-Medium",
 		color: Color.grayClg
 	},
 	titleView: {
-		position: "absolute",
-		//top: 10,
-		left: "8%"
+		// position: "absolute",
+		// //top: 10,
+		// left: "8%"
 	},
 
 	imageView: { position: "absolute", top: 0, right: 0 },
 
-	moreIcon: {width: Util.getWidth(9), height: Util.getWidth(7)},
+	moreIcon: {width: 32, height:32,  resizeMode: "contain"},
 	height35p: { height: "35%",  paddingRight:5, },
 	cardStyle: {
 		marginBottom: "5%",

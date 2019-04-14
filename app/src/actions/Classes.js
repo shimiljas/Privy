@@ -20,10 +20,10 @@ const getAllClasses = async (dispatch, data) => {
   dispatch({
     type: LOADERON,
   });
-  const method = "getAllbookings";
+  const method = "get_classes_ins.php";
   console.log(method, "getAllClasses data", data.api_token);
   //changed on 6 december
-  var obj = { user_id: data.user_id, status: data.status  };
+  var obj = { user_id: 6, status: data.status  };
   console.log("final booking obj == ",obj);
   var token = data.api_token;
    await API.callPostApiWithToken(method, obj, token)

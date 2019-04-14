@@ -30,6 +30,7 @@ const images = {
 	addImg: require("../../asstes/imgs/add.png"),
 	writingImg: require("../../asstes/imgs/writing.png"),
 	maths: require("../../asstes/imgs/maths.png"),
+	editImg: require("../../asstes/imgs/pencil.png"),
 	englishImg: require("../../asstes/imgs/english.png"),
 	oneononeImg: require("../../asstes/imgs/oneonone.png"),
 	grouplessonsImg: require("../../asstes/imgs/grouplessons.png"),

@@ -5,12 +5,12 @@ import {
   Alert,
   FlatList,
   Modal,
-  ScrollView,
-  TouchableHighlight,
+  
+  AsyncStorage,
   TouchableOpacity
 } from "react-native";
 import { Container, Content, Text, CheckBox, Row, Col } from "native-base";
-import ModalSelector from "react-native-modal-selector";
+
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Images from "../../../common/images";
@@ -23,93 +23,73 @@ import styles from "../../../components/header/styles";
 import KeyWords from "../../../common/Localization";
 import clientApi from "../../../common/ApiManager";
 
-var lessons = [];
-
-var categories = [];
-
-//var selectedData = [];
-
-var services = [];
 
 class ServicesComponent extends React.Component {
   constructor(props) {
     super(props);
-    //console.log("services ", props);
 
     this.state = {
-      //timePassed: false,
       modalVisible: false,
-      category: 0,
+      category: {},
       selectedData: [],
-      services: services,
+      lessons:[],
+      services:[],
       editItemDetails: {},
-      modifiedModelVisible: false
-      //updateCagetory: ""
-      //categories: categories,
+      modifiedModelVisible: false, pids: "EXIT", lIds: [],cIds: []
     };
+  }
 
-    this.getLessons();
-
-    this.getCategories();
-
-    this.getAllServices();
+  async componentDidMount() {
+    await this.getLessons();
+    await this.getCategories();
+    await this.getAllServices();
   }
 
   onValueChange(value) {
     const { selectedData } = this.state;
-    console.log("called fun ===", value);
     this.setState({
       category: value,
-      selectedData: []
+      selectedData: [],
+      
     });
     console.log("called fun ===1", selectedData);
   }
 
   getLessons = async () => {
-    var response = await clientApi.callGetApi("getLessonType");
-    if (response.status == "true") {
-      lessons = response.data;
-      console.log("lessons == ", lessons);
+    let response = await clientApi.callPostApi("get_lessons.php");
+    if (response.success == 1) {
+      console.log("LESSONS", response.data)
+      this.setState({lessons : response.data});
     }
   };
 
   getCategories = async () => {
-    var response = await clientApi.callGetApi("getCategories");
-    console.log("=== ==== catwgories == ", response);
-    if (response.status == "true") {
+    let response = await clientApi.callPostApi("get_categories.php", {pid: null});
+    if (response.success == 1) {
       categories = response.data;
       this.setState({
-        category: categories[0]
+        categoryData: categories
       });
-      //console.log("categories response == ", categories, categories[this.state.category]._id);
-    } else {
-      //console.log("categories else res == ", response);
     }
   };
 
   getAllServices = async () => {
-    const { userData } = this.props;
-    var obj = {
-      user_id: userData._id
+    let obj = {
+      user_id: await AsyncStorage.getItem("userId")
     };
-    var response = await clientApi.callApi(
-      "getService",
-      obj,
-      userData.api_token != null ? userData.api_token : userData.token
+    let response = await clientApi.callPostApi(
+      "get_services_ins.php",
+      {...obj}
     );
-    console.log(" ffh ser res == ", response);
-    if (response.status == "true") {
-      services = response.data;
-
-      this.setState({ services: services });
+    if (response.success == 1) {
+      console.log(" ffh ser res == ", response);
+      this.setState({ services: response.data.data, helperCats: response.data.cats });
     }
   };
 
   setModalVisible = () => {
     const { modalVisible } = this.state;
-    var visible = !modalVisible;
-    //console.log("modle bn function");
-    this.setState({ modalVisible: visible });
+    this.setState({ modalVisible: !modalVisible, pids: "EXIT", lIds: [], cIds: [] });
   };
 
   updateSelectedValue = data => {
@@ -119,92 +99,103 @@ class ServicesComponent extends React.Component {
   };
 
   save = async () => {
-    var lessonSelected = false;
-    const { selectedData, category } = this.state;
-    const { userData } = this.props;
-    var visible = false;
-    var subCaregorySelected = (lessonSelected = false);
-    console.log("sub data -- ", selectedData);
-
-    if (selectedData == "") {
-      alert("Select sub-category and lessons");
-    } else {
-      console.log("nn selected data = ", selectedData);
-
-      var subCategories = selectedData;
-      if (subCategories.find(k => k == lessons[0]._id)) {
-        subCategories = subCategories.filter(k => k !== lessons[0]._id);
-        lessonSelected = true;
-      }
-      if (subCategories.find(k => k == lessons[1]._id)) {
-        subCategories = subCategories.filter(k => k !== lessons[1]._id);
-        lessonSelected = true;
-      }
-      if (subCategories.find(k => k == lessons[2]._id)) {
-        subCategories = subCategories.filter(k => k !== lessons[2]._id);
-        lessonSelected = true;
-      }
-      if (subCategories.find(k => k == lessons[3]._id)) {
-        subCategories = subCategories.filter(k => k !== lessons[3]._id);
-        lessonSelected = true;
-      }
-
-      if (subCategories.length > 0) {
-        subCaregorySelected = true;
-      }
-
-      if (lessonSelected === true && subCaregorySelected === true) {
-        console.log("subCategories data = ", subCategories);
-
-        var obj = {
-          user_id: userData._id,
-          categoryId: category._id,
-          subCategoryId: subCategories,
-          oneOnOne: selectedData.find(k => k == lessons[0]._id) ? 1 : 0,
-          groupLessons: selectedData.find(k => k == lessons[2]._id) ? 1 : 0,
-          camp: selectedData.find(k => k == lessons[1]._id) ? 1 : 0,
-          bootCamp: selectedData.find(k => k == lessons[3]._id) ? 1 : 0
-        };
-
-        console.log("add service data == ", obj);
-
-        var response = await clientApi.callApi(
-          "addService",
-          obj,
-          userData.api_token != null ? userData.api_token : userData.token,
-          2
-        );
-        console.log("api response == ", response);
-        if (response.status == "true") {
-          this.getAllServices();
-          Alert.alert(
-            KeyWords.successs,
-            response.message,
-            [
-              {
-                text: KeyWords.ok,
-                onPress: () => {
-                  this.setState({
-                    modalVisible: visible,
-                    modifiedModelVisible: false,
-                    selectedData: []
-                  });
-                }
-              }
-            ],
-            { cancelable: false }
-          );
-        }
-      } else {
-        if (subCaregorySelected === false) {
-          alert( KeyWords.selectSubCategoryMsg);
-        }
-        if (lessonSelected === false) {
-          alert(KeyWords.selectLessonMsg);
-        }
-      }
+    const { cIds, lIds } = this.state;
+    const user_id = await AsyncStorage.getItem("userId");
+    const result  = await clientApi.callPostApi("update_services_ins.php", {user_id, cid: cIds.join(","), lid: lIds.join(","), pid: cIds[0]})
+    console.log("SERVICE ADD RESULT " , result);
+    if(result.success == 1) {
+      this.setState({services: result.data.data, modalVisible: false, pids: "EXIT", lIds: [], cIds: []});
+      // this.setModalVisible();
     }
   };
+
+  // saveItem = async () => {
+  //   let lessonSelected = false;
+  //   const { selectedData, category } = this.state;
+  //   const { userData } = this.props;
+  //   let visible = false;
+  //   let subCaregorySelected = (lessonSelected = false);
+  //   console.log("sub data -- ", selectedData);
+
+  //   if (selectedData == "") {
+  //     alert("Select sub-category and lessons");
+  //   } else {
+  //     console.log("nn selected data = ", selectedData);
+
+  //     let subCategories = selectedData;
+  //     if (subCategories.find(k => k == lessons[0]._id)) {
+  //       subCategories = subCategories.filter(k => k !== lessons[0]._id);
+  //       lessonSelected = true;
+  //     }
+  //     if (subCategories.find(k => k == lessons[1]._id)) {
+  //       subCategories = subCategories.filter(k => k !== lessons[1]._id);
+  //       lessonSelected = true;
+  //     }
+  //     if (subCategories.find(k => k == lessons[2]._id)) {
+  //       subCategories = subCategories.filter(k => k !== lessons[2]._id);
+  //       lessonSelected = true;
+  //     }
+  //     if (subCategories.find(k => k == lessons[3]._id)) {
+  //       subCategories = subCategories.filter(k => k !== lessons[3]._id);
+  //       lessonSelected = true;
+  //     }
+
+  //     if (subCategories.length > 0) {
+  //       subCaregorySelected = true;
+  //     }
+
+  //     if (lessonSelected === true && subCaregorySelected === true) {
+  //       console.log("subCategories data = ", subCategories);
+
+  //       let obj = {
+  //         user_id: userData._id,
+  //         categoryId: category._id,
+  //         subCategoryId: subCategories,
+  //         oneOnOne: selectedData.find(k => k == lessons[0]._id) ? 1 : 0,
+  //         groupLessons: selectedData.find(k => k == lessons[2]._id) ? 1 : 0,
+  //         camp: selectedData.find(k => k == lessons[1]._id) ? 1 : 0,
+  //         bootCamp: selectedData.find(k => k == lessons[3]._id) ? 1 : 0
+  //       };
+
+  //       console.log("add service data == ", obj);
+
+  //       let response = await clientApi.callApi(
+  //         "addService",
+  //         obj,
+  //         userData.api_token != null ? userData.api_token : userData.token,
+  //         2
+  //       );
+  //       console.log("api response == ", response);
+  //       if (response.status == "true") {
+  //         this.getAllServices();
+  //         Alert.alert(
+  //           KeyWords.successs,
+  //           response.message,
+  //           [
+  //             {
+  //               text: KeyWords.ok,
+  //               onPress: () => {
+  //                 this.setState({
+  //                   modalVisible: visible,
+  //                   modifiedModelVisible: false,
+  //                   selectedData: []
+  //                 });
+  //               }
+  //             }
+  //           ],
+  //           { cancelable: false }
+  //         );
+  //       }
+  //     } else {
+  //       if (subCaregorySelected === false) {
+  //         alert(KeyWords.selectSubCategoryMsg);
+  //       }
+  //       if (lessonSelected === false) {
+  //         alert(KeyWords.selectLessonMsg);
+  //       }
+  //     }
+  //   }
+  // };
 
   _deleteItem = async () => {
     const { editItemDetails } = this.state;
@@ -221,13 +212,13 @@ class ServicesComponent extends React.Component {
         {
           text: KeyWords.ok,
           onPress: async () => {
-            var obj = {
+            let obj = {
               user_id: editItemDetails.userId,
               service_id: editItemDetails._id
             };
 
             console.log("delete service data == ", obj);
-            var response = await clientApi.callApi(
+            let response = await clientApi.callApi(
               "deleteService",
               obj,
               userData.api_token != null ? userData.api_token : userData.token,
@@ -253,9 +244,9 @@ class ServicesComponent extends React.Component {
   };
   _modifyBtnClick = item => {
     const { modifiedModelVisible, selectedData } = this.state;
-    var visible = !modifiedModelVisible;
+    let visible = !modifiedModelVisible;
     if (visible == true) {
-      var element = [];
+      let element = [];
 
       if (item.oneOnOne == true) element.push(lessons[0]._id);
       if (item.camp == true) element.push(lessons[1]._id);
@@ -279,169 +270,284 @@ class ServicesComponent extends React.Component {
       category: categories.find(x => x._id == item.categoryId._id)
     });
   };
-  checkBoxClick = item => {
-    const { selectedData } = this.state;
-    var d = selectedData;
-    if (d.find(k => k == item._id)) {
-      d = d.filter(k => k !== item._id);
-    } else {
-      d.push(item._id);
+  checkBoxClick = (itemId, stateType, pid = undefined) => {
+    const data = this.state[stateType];
+    let d = [...data];
+    if(pid == null && stateType == "cIds") {
+      d = []
     }
-    this.updateSelectedValue(d);
+    if (d.find(k => k == itemId)) {
+      d = d.filter(k => k !== itemId);
+    } else {
+      d.push(itemId);
+    }
+    this.setState({[stateType]: d})
   };
-  subcategoryList = () => {
-    const { category } = this.state;
-    return (categories.length > 0 ? category.subcategory : []).map(item => {
-      return (
-        <View style={[GlobalStyle.row, Styles.marginTop2p]}>
+  subcategoryList = ( item ) => {
+    const {cIds} = this.state;
+    let isTick = cIds.find(x => x == item.id);
+    return (
+      <View style={[GlobalStyle.row]}>
+        <CheckBox
+          checked={ isTick ? true : false }
+          color="green"
+          onPress={() => this.checkBoxClick(item.id, "cIds", item.parent_id)}
+          style={Styles.btnPadding}
+        />
+        <TouchableOpacity onPress={() =>  this.getSubCategories(item.id, false)}>
+          <View style={{ padding: 5 }}>
+            <Text style={[Styles.text, {fontFamily: "Poppins"}]}>{item.name}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+  lessonsList = ({ item }) => {
+    const {lIds} = this.state;
+    let isTick = lIds.find(x => x == item.id);
+    return (
+      <View style={{ padding: 5 }}>
+        <View style={[GlobalStyle.row, Styles.marginTop2p, { width: 180 }]}>
           <CheckBox
             checked={
-              this.state.selectedData.find(k => k == item._id) ? true : false
+              isTick ? true : false
             }
             color="green"
             onPress={() => {
-              this.checkBoxClick(item);
+              this.checkBoxClick(item.id, "lIds");
             }}
             style={Styles.btnPadding}
           />
-          <Text style={Styles.text}>{item.name}</Text>
+          <Text style={[Styles.text, {fontFamily: "Poppins"}]}>{item.name}</Text>
         </View>
-      );
-    });
-  };
-  lessonsList = () => {
-    return lessons.map(item => {
-      return (
-        <View style={[GlobalStyle.row, Styles.marginTop2p]}>
-          <CheckBox
-            checked={
-              this.state.selectedData.find(k => k == item._id) ? true : false
-            }
-            color="green"
-            onPress={() => {
-              this.checkBoxClick(item);
-            }}
-            style={Styles.btnPadding}
-          />
-          <Text style={Styles.text}>{item.name}</Text>
-        </View>
-      );
-    });
+      </View>
+    );
   };
   _modelShow = data => {
-    const {
-      selectedData,
-      modifiedModelVisible,
-      modalVisible,
-      category
-    } = this.state;
-    console.log("item details", category);
-    return (
-      <Modal
-        style={Styles.modelView}
-        animationType="slide"
-        transparent
-        visible={
-          data == 2 ? modalVisible : data == 1 ? modifiedModelVisible : false
-        }
-        onRequestClose={() => {
-          //data = 0;
-          this.setModalVisible();
-        }}
-      >
-        <View
-          style={[
-            GlobalStyle.viewCenter,
-            GlobalStyle.fullHeight,
-            { backgroundColor: Color.modelBackground }
-          ]}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              {
-                data == 2
-                  ? this.setModalVisible()
-                  : data == 1
-                  ? this.setState({ modifiedModelVisible: false })
-                  : false;
-              }
-            }}
-            style={[Styles.height5p, Styles.closeBtnStyle]}
-          >
-            <Image source={Images.closeImg} style={Styles.closeBtn} />
-          </TouchableOpacity>
-          <View style={[Styles.formView]}>
-            <View style={GlobalStyle.height10}>
-              <Text style={Styles.subTitle}>{KeyWords.category}</Text>
-            </View>
+    return this.showAddService();
+    // const {
+    //   selectedData,
+    //   modifiedModelVisible,
+    //   modalVisible,
+    //   category
+    // } = this.state;
+    // console.log("item details", category);
+    // return (
+    //   <Modal
+    //     animationType="fade"
+        
+    //     visible={
+    //       data == 2 ? modalVisible : data == 1 ? modifiedModelVisible : false
+    //     }
+    //     onRequestClose={() => {
+    //       //data = 0;
+    //       this.setModalVisible();
+    //     }}
+    //   >
+    //     <View
+    //       style={[
+    //         GlobalStyle.viewCenter,
+    //         GlobalStyle.fullHeight,
+    //         { backgroundColor: Color.modelBackground }
+    //       ]}
+    //     >
+    //       <TouchableOpacity
+    //         onPress={() => {
+    //           {
+    //             data == 2
+    //               ? this.setModalVisible()
+    //               : data == 1
+    //               ? this.setState({ modifiedModelVisible: false })
+    //               : false;
+    //           }
+    //         }}
+    //         style={[Styles.height5p, Styles.closeBtnStyle]}
+    //       >
+    //         <Image source={Images.closeImg} style={Styles.closeBtn} />
+    //       </TouchableOpacity>
+    //       <View style={Styles.formView}>
+    //         <View style={{ paddingVertical: 10 }}>
+    //           <Text style={{ fontSize: RF(2), color: Color.grayClg }}>
+    //             {KeyWords.category}
+    //           </Text>
 
-            <View style={[Styles.height15p, GlobalStyle.justifyContentCenter]}>
-              {data == 2 ? (
-                <ModalSelector
-                  data={categories}
-                  keyExtractor={item => item._id}
-                  labelExtractor={item =>
-                    item.name != null ? item.name : item.title
-                  }
-                  onChange={value => this.onValueChange(value)}
-                  selectStyle={[
-                    GlobalStyle.borderWidth0,
-                    GlobalStyle.alignItemsFlexStart,
-                    { color: "red" }
-                  ]}
-                />
-              ) : (
-                <Text>{category.name}</Text>
-              )}
-            </View>
+    //           <DropDownCategory
+    //             selectedName={this.state.category.name}
+    //             data={categories}
+    //             onSelect={category => this.setState({ category })}
+    //           />
+    //         </View>
 
-            <View style={GlobalStyle.divider} />
+    //         {/* <View style={[Styles.height15p, GlobalStyle.justifyContentCenter]}>
+    //           {data == 2 ? (
+    //             <ModalSelector
+    //               data={categories}
+    //               keyExtractor={item => item._id}
+    //               labelExtractor={item =>
+    //                 item.name != null ? item.name : item.title
+    //               }
+    //               onChange={value => this.onValueChange(value)}
+    //               selectStyle={[
+    //                 GlobalStyle.borderWidth0,
+    //                 GlobalStyle.alignItemsFlexStart,
+    //                 { color: "red" }
+    //               ]}
+    //             />
+    //           ) : (
+    //             <Text>{category.name}</Text>
+    //           )}
+    //         </View> */}
 
-            <View style={[GlobalStyle.height10, Styles.marginTop1p]}>
-              <Text style={Styles.subTitle}>{KeyWords.subCategories}</Text>
-            </View>
+    //         <View style={{ paddingVertical: 10 }}>
+    //           <Text style={Styles.subTitle}>{KeyWords.subCategories}</Text>
+                                                                                                       
+    //           <FlatList
+    //             keyExtractor={item => item._id}
+    //             data={category.subcategory}
+    //             numColumns={2}
+    //             extraData={this.state}
+    //             renderItem={item => this.subcategoryList(item)}
+    //           />
+    //         </View>
 
-            <View style={[Styles.height20p]}>
-              <ScrollView>{this.subcategoryList()}</ScrollView>
-            </View>
+    //         <View style={{ paddingVertical: 10 }}>
+    //           <Text style={Styles.lessonTitle}>
+    //             {KeyWords.typeOfLessonsProvided}
+    //           </Text>
 
-            <View style={Styles.lessonTitleView}>
-              <Text style={Styles.lessonTitle}>
-                {KeyWords.typeOfLessonsProvided}
-              </Text>
-            </View>
-
-            <View style={[Styles.height40p]}>
-              <ScrollView>
-          
-                {this.lessonsList()}
-          
-              </ScrollView>
-              {/* <GridView
-                data={data}
+    //           <FlatList
+    //             keyExtractor={item => item._id}
+    //             data={lessons}
+    //             numColumns={2}
+    //             extraData={this.state}
+    //             renderItem={item => this.lessonsList(item)}
+    //           />
+    //           {/* <GridView
+    //             data={data}
                 
-                itemsPerRow={itemsPerRow}
-                renderItem={this.lessonsList()}
-              /> */}
-              {/* <FlatListCheckboxComponent
-                data={lessons}
-                name="lessons"
-                selectedData={selectedData}
-                callFunction={data => this.updateSelectedValue(data)}
-              /> */}
-            </View>
-            <View
-              style={[GlobalStyle.height20, GlobalStyle.justifyContentCenter]}
-            >
-              {modalVisible == true
-                ? this._addModelBtn()
-                : this._editModelBtn()}
-            </View>
+    //             itemsPerRow={itemsPerRow}
+    //             renderItem={this.lessonsList()}
+    //           /> */}
+    //           {/* <FlatListCheckboxComponent
+    //             data={lessons}
+    //             name="lessons"
+    //             selectedData={selectedData}
+    //             callFunction={data => this.updateSelectedValue(data)}
+    //           /> */}
+    //         </View>
+    //         <View style={[GlobalStyle.justifyContentCenter]}>
+    //           {modalVisible == true
+    //             ? this._addModelBtn()
+    //             : this._editModelBtn()}
+    //         </View>
+    //       </View>
+    //     </View>
+    //   </Modal>
+    // );
+  };
+  showAddService = () => {
+    const { modalVisible } = this.state;
+    return(
+      <Modal 
+        animationType="fade"
+        visible={modalVisible}
+        onRequestClose={() => this.setModalVisible()}
+      >
+        <View style={{backgroundColor:"whitesmoke", flex:1, flexDirection: 'column'}}>
+          <View style={{flexDirection: 'row',padding: 5, justifyContent: "space-between", alignItems: 'center', backgroundColor: Color.inputBg}}>
+            <TouchableOpacity onPress={() => this.getSubCategories(null, true)}>
+            <View style={{ padding:"5%", borderRadius: 20}}>
+              <Text style={{fontFamily: "Poppins-Medium", textAlign: 'center'}}>{'< Back'}</Text></View>
+            </TouchableOpacity>
+            <TouchableOpacity  onPress={() => this.save()}>
+              <View style={{ padding:"5%", backgroundColor: Color.appDefultColor, borderRadius: 20, elevation: 3}}>
+                <Text style={{ fontFamily: "Poppins-Medium", color: "white", textAlign: 'center' }}>Save</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View style={{padding: 10, justifyContent: 'space-between', flexDirection: "column", flex:1}}>            
+            {this.showCategories()}
+            {this.showLessons()}
           </View>
         </View>
       </Modal>
-    );
-  };
+    )
+  }
+
+  showCategories = () => {
+    const { categoryData } = this.state;
+    return (
+      <View style={{ paddingVertical: 5 }}>
+        <Text style={[Styles.lessonTitle, {fontFamily: "Poppins-Medium"}]}>
+          {"Categories"}
+        </Text>
+        <View style={{height: 10}} />
+        <FlatList 
+            data={categoryData} keyExtractor={item => item.id} extraData={this.state.cIds}
+            renderItem={({ item }) => this.subcategoryList(item)}
+        />
+      </View>
+    )
+  }
+
+  async getSubCategories(pid, back = false) {
+    let { pids , categoryData } = this.state;
+    if(back) {
+      if(pids == "EXIT") {
+        this.setModalVisible();
+        return;
+      }
+      pid = pids;
+      pids = pid == null ? "EXIT" : categoryData[0].parent_id;
+    } else {
+      pids = categoryData[0].parent_id
+    }
+    let response = await clientApi.callPostApi("get_categories.php", {pid});
+    if (response.success == 1 && response.data.length > 0) {
+      let categories = response.data;
+      this.setState({
+        categoryData: categories, pids
+      });
+    } else {
+      // alert(response.message);
+    }
+  }
+
+  async deleteService(service) {
+    console.log(service);
+    const user_id = await AsyncStorage.getItem("userId");
+    let response = await clientApi.callPostApi("del_service_ins.php", {user_id, pid: service.pid});
+    if (response.success == 1) {
+      console.log("RESPONSE DELTE SERIVCE", response)
+      this.getAllServices();
+      // let categories = response.data;
+      // this.setState({
+      //   categoryData: categories, pids
+      // });
+    } else {
+      // alert(response.message);
+    }
+  }
+
+  showLessons = () => {
+    console.log(this.state.lessons, this.state.lIds, "HI THERE")
+    return(
+      <View style={{ paddingVertical: 10 }}>
+        <Text style={[Styles.lessonTitle, {fontFamily: "Poppins-Medium"}]}>
+          {KeyWords.typeOfLessonsProvided}
+        </Text>
+        <View style={{height: 10}} />
+        <FlatList
+          keyExtractor={item => item.id}
+          data={this.state.lessons}
+          numColumns={2}
+          extraData={this.state.lIds}
+          renderItem={item => this.lessonsList(item)}
+        />
+      </View>
+    )
+  }
+
   _editModelBtn = () => {
     return (
       <View style={[GlobalStyle.row]}>
@@ -480,51 +586,84 @@ class ServicesComponent extends React.Component {
     return this._modelShow(2);
   };
   render() {
-    const { modalVisible, modifiedModelVisible, services } = this.state;
+    const { modalVisible, modifiedModelVisible, services, helperCats } = this.state;
+    console.log("SERVICESSSS " , services);
     return (
       <Container>
         <Header title={KeyWords.services} />
-        <Content padder contentContainerStyle={Styles.flexGrow}>
+        <Content contentContainerStyle={Styles.flexGrow}>
           <View>
             {modalVisible == true ? this._addModel() : <View />}
             {modifiedModelVisible == true ? this._editModel() : <View />}
 
-            <View style={[GlobalStyle.row]}>
+            <View style={[GlobalStyle.row, { padding: "2%" }]}>
               <View style={[Styles.mainTitleView]}>
                 <Text style={Styles.title}>
                   {KeyWords.services + " " + KeyWords.provided}
                 </Text>
               </View>
 
-              <View style={Styles.menuIcon}>
-                <TouchableHighlight
-                  onPress={() => {
-                    this.setModalVisible();
-                    this.setState({ selectedData: [] });
-                  }}
-                >
-                  <Image source={Images.addImg} />
-                </TouchableHighlight>
-              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({ selectedData: [], modalVisible: !modalVisible });
+                }}
+              >
+                <Image
+                  style={{ height: 32, resizeMode: "contain" }}
+                  source={Images.addImg}
+                />
+              </TouchableOpacity>
             </View>
             <View>
-              {services.length > 0 ? (
+              {this.state.services.length > 0 ? (
                 <FlatList
                   contentContainerStyle={Styles.margin15}
                   horizontal={false}
                   numColumns={1}
+                  extraData={this.state.services}
                   data={services}
                   renderItem={({ item }) => {
                     console.log(item);
+                    let subCats = [];
+                    let sLessons = [];
+                    let foundItem = null;
+                    let cids = item.cid.split(",").filter(x => x != item.pid)
+                    // let lids = item.lid.split(",").filter(x => x != item.pid)
+                    for(let id of cids) {
+                      foundItem = helperCats.find(x => x.id == id)
+                      if(foundItem) {
+                        subCats.push(foundItem)
+                      }
+                    }
+                    for(let id of item.lid.split(",")) {
+                      foundItem = this.state.lessons.find(x => x.id == id)
+                      if(foundItem) {
+                        sLessons.push(foundItem)
+                      }
+                    }
+                    const cardData = {
+                      category: helperCats.find(x => x.id == item.pid),
+                      subCats, sLessons
+                    }
                     return (
                       <CardComponentSer
-                        click={() => this._modifyBtnClick(item)}
-                        data={item}
+                        click={() => this._modifyBtnClick(cardData)}
+                        onEdit={() => {
+                          this.setState({
+                            cIds: item.cid.split(",").map(x => parseInt(x)),
+                            lIds: item.lid.split(",").map(x => parseInt(x)),
+                            modalVisible: true
+                          })
+                        }}
+                        onDelete={() => {
+                          this.deleteService({pid: item.pid});
+                        }}
+                        data={cardData}
                       />
                     );
                   }}
                   listKey="categories"
-                  keyExtractor={category => category.categoryId.name}
+                  keyExtractor={category => category.id+"s"}
                 />
               ) : (
                 <View style={[Styles.margin15, GlobalStyle.marginLeft15]}>
@@ -548,6 +687,70 @@ const maptoprops = state => {
     userData: state.User.userdata
   };
 };
+
+class DropDownCategory extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      openDrop: false
+    };
+  }
+  selectCategory(item) {
+    this.setState({ openDrop: false });
+    this.props.onSelect(item);
+  }
+
+  render() {
+    return (
+      <View style={{ backgroundColor: "transparent" }}>
+        <TouchableOpacity onPress={() => this.setState({ openDrop: true })}>
+          <View style={{ paddingVertical: 10 }}>
+            <Text
+              style={{
+                borderBottomColor: "#999",
+                borderBottomWidth: 1,
+                fontSize: 25,
+                fontWeight: "800",
+                letterSpacing: 1.2,
+                color: Color.grayClg
+              }}
+            >
+              {this.props.selectedName}
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        <Modal
+          animationType="fade"
+          onRequestClose={() => this.setState({ openDrop: false })}
+          visible={this.state.openDrop}
+        >
+          <View style={[{ backgroundColor: "transparent", padding: 20 }]}>
+            <FlatList
+              data={this.props.data}
+              keyExtractor={item => item._id}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => this.selectCategory(item)}>
+                  <View
+                    style={{
+                      paddingVertical: 5,
+                      borderBottomColor: "#AAA",
+                      borderBottomWidth: 0.6
+                    }}
+                  >
+                    <Text style={{ fontSize: 25, color: Color.grayClg }}>
+                      {item.name}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </Modal>
+      </View>
+    );
+  }
+}
 
 export default connect(
   maptoprops,

@@ -12,25 +12,26 @@ class FlatListComponent extends React.Component {
 
 	_keyExtractor = (item, index) => item.name;
 
+
 	getImage = name => {
 		name = name.toLowerCase();
-		//console.log("eng == ", name);
+		console.log("eng == ", name);
 		switch (name) {
 			case "maths":
 				return Images.maths;
 			case "english":
 				return Images.englishImg;
-			case "science":
+			case "meditation":
 				return Images.scienceImg;
 			case "spanish":
 				return Images.spainImg;
-			case "oneonone":
+			case "1 on 1":
 				return Images.oneononeImg;
-			case "camp":
+			case "camps":
 				return Images.campImg;
-			case "grouplessons":
+			case "group lesson":
 				return Images.grouplessonsImg;
-			case "bootcamp":
+			case "boot camp":
 				return Images.bulkCampImg;
 			default:
 				return Images.writingImg;
@@ -49,7 +50,7 @@ class FlatListComponent extends React.Component {
 					renderItem={({ item }) => (
 						<View style={[GlobalStyle.viewCenter, Styles.marginright]}>
 							<Image source={this.getImage(item.name)} style={Styles.imagesStyle} />
-							<Text>{item.name}</Text>
+							<Text style={{fontFamily: "Poppins"}}>{item.name}</Text>
 						</View>
 					)}
 				/>

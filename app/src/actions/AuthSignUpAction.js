@@ -156,14 +156,15 @@ const SignMe = (dispatch, data) => {
     type: FORMCHANGE,
     successData: false
   });
-  const signUp = "signUp";
+  const signUp = "register.php";
   API.callPostApi(signUp, data)
     .then(res => res.json())
     .then(res => {
       dispatch({
         type: LOADEROFF,
       });
-      if (res.status == "true") {
+      console.log("RESULT FOR REGISTER", res)
+      if (res.success == 1) {
         dispatch({
           type: FORMCHANGE,
           successData: true
@@ -193,21 +194,20 @@ const LogMeIn = async (dispatch, data) => {
     type: LOADERON,
     // visible: true
   });
-  const signin = "signIn";
+  const signin = "login.php";
   await API.callPostApi(signin, data)
-    .then(res => res.json())
     .then(async res => {
       console.log("response signIn :", res);
-      
-      if (res.status == "true") {
-        await AsyncStorage.setItem("userId", res.data._id);
-        await AsyncStorage.setItem("apiToken", res.data.api_token);
+     
+      if (res.success == 1) {
+        
+        await AsyncStorage.setItem("userId", String(res.data._id));
+        await AsyncStorage.setItem("apiToken", String(res.data.api_token));
         await AsyncStorage.setItem("roleId", String(res.data.roleId));
-        console.log("roll_id", res.data.roleId);
+        await AsyncStorage.setItem("USEROBJ", JSON.stringify(res.data));
         res.data.profilePic = {
-          uri: Url + "images/profile/" + res.data.profilePic
+          uri: Url + "images/profile/" + res.data.profilePic+""
         };
-
         dispatch({
           type: USERAUTH,
           payload: res.data

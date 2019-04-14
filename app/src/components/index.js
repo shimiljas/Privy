@@ -17,3 +17,5 @@ export * from "./messageCard/messageCard.js";
 export * from "./bookingCard/bookingCard.js";
 export * from "./calenderCard/calenderCard.js";
 export * from "./reviewCard/reviewCard.js";
+export * from "./fields/input_new";
+export * from "./fields/location_modal";

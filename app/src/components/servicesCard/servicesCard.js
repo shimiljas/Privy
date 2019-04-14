@@ -6,6 +6,7 @@ import Images from "../../common/images";
 import { FlatListComponent } from "../../components";
 import KeyWords from "../../common/Localization";
 import GlobalStyle from "../../common/GlobalStyle";
+import Color from "../../common/Color";
 
 class CardComponentSer extends React.Component {
   constructor(props) {
@@ -13,41 +14,50 @@ class CardComponentSer extends React.Component {
   }
 
   render() {
-    const { data, click } = this.props;
+    const { data, onEdit, onDelete } = this.props;
 
     var newlessons = [];
     var obj = {};
-    if (data.oneOnOne) {
-      obj = { name: "1 On 1", image: Images.oneononeImg };
-      newlessons.push(obj);
+    for(let lesson of data.sLessons) {
+      if (lesson.name == "1 On 1") {
+        obj = { name: "1 On 1", image: Images.oneononeImg };
+        newlessons.push(obj);
+      }
+  
+      if (lesson.name == "Group Lesson") {
+        obj = { name: "Group Lesson", image: Images.grouplessonsImg };
+        newlessons.push(obj);
+      }
+  
+      if (lesson.name == "Camps") {
+        obj = { name: "Camps", image: Images.campImg };
+        newlessons.push(obj);
+      }
+  
+      if (lesson.name == "Boot Camp") {
+        obj = { name: "Boot Camp", image: Images.bulkCampImg };
+        newlessons.push(obj);
+      }
     }
-
-    if (data.groupLessons) {
-      obj = { name: "Group Lessons", image: Images.oneononeImg };
-      newlessons.push(obj);
-    }
-
-    if (data.camp) {
-      obj = { name: "Camp", image: Images.oneononeImg };
-      newlessons.push(obj);
-    }
-
-    if (data.bootCamp) {
-      obj = { name: "Boot Camp", image: Images.oneononeImg };
-      newlessons.push(obj);
-    }
+    
     return (
       <Card style={Styles.cardStyle}>
-        <CardItem style={GlobalStyle.height15}>
+        <CardItem style={{...GlobalStyle.row, justifyContent: 'space-between',} }>
           <View style={Styles.titleView}>
-            <Text style={Styles.title}>{data.categoryId.name}</Text>
+            <Text style={Styles.title}>{data.category.name}</Text>
           </View>
-          <TouchableOpacity onPress={click} style={Styles.imageView}>
-            <Image source={Images.moreImg} style={Styles.moreIcon} />
+          <View style={GlobalStyle.row}>
+          <TouchableOpacity onPress={() => onEdit()} >
+            <Image source={Images.editImg} style={{...Styles.moreIcon,tintColor: Color.grayClg}} />
           </TouchableOpacity>
+          <View style={{marginHorizontal:5}} />
+          <TouchableOpacity onPress={() => onDelete()} >
+            <Image source={Images.deleteImg} style={Styles.moreIcon} />
+          </TouchableOpacity>
+          </View>
         </CardItem>
         <CardItem style={GlobalStyle.height30}>
-          <FlatListComponent data={data.subCategoryId} key="subCategories" />
+          <FlatListComponent data={data.subCats} key="subCategories" />
         </CardItem>
         <CardItem style={GlobalStyle.height15}>
           <View style={Styles.titleView}>

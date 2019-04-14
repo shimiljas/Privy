@@ -1,11 +1,12 @@
 import React from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, AsyncStorage } from "react-native";
 import { Container, Text, Item } from "native-base";
 import { connect } from "react-redux";
 import { Actions } from "react-native-router-flux";
 
 import PropTypes from "prop-types";
-import { deshBoardValue, AllClasses } from "../../../actions";
+import ClientApi from "../../../common/ApiManager";
+import { deshBoardValue, AllClasses, getUserInfo } from "../../../actions";
 import Images from "../../../common/images";
 import GlobalStyle from "../../../common/GlobalStyle";
 import { CardComponent } from "../../../components";
@@ -17,19 +18,23 @@ class DashboardComponent extends React.Component {
   constructor(props) {
     super(props);
     console.log("dash ", props);
+    this.state = {
+      userData: {},
+    }
   }
   componentDidMount = async () => {
-    const { userData, deshBoardValue } = this.props;
-    var d = userData;
+    const { deshBoardValue } = this.props;
     let data = {
-      roll_id: d.roleId,
-      user_id: d._id,
-      api_token: d.api_token != null ? d.api_token : d.token
+      role_id: await AsyncStorage.getItem("roleId"),
+      user_id: await AsyncStorage.getItem("userId"),
+      api_token: await AsyncStorage.getItem("apiToken")
     };
+    this.setState({userData: {roleId: data.role_id, _id: data.user_id, token: data.api_token}});
     await deshBoardValue(data);
   };
   openScreen = async title => {
-    const { userData, AllClasses } = this.props;
+    const {  AllClasses } = this.props;
+    const { userData } = this.state;
     switch (title) {
       case "Messages":
         Actions.Messages({ type: "replace" });
@@ -38,14 +43,14 @@ class DashboardComponent extends React.Component {
         Actions.SpecialPrice({ type: "replace" });
         break;
       case "Bookings":
-      AllClasses({
-        status: 0,
-        roll_id: userData.roleId,
-        user_id: userData._id,
-        api_token:
-          userData.api_token != null ? userData.api_token : userData.token
-      });
-           Actions.BookingScreen({ type: "replace" });
+        AllClasses({
+          status: 0,
+          roll_id: userData.roleId,
+          user_id: userData._id,
+          api_token:
+            userData.api_token != null ? userData.api_token : userData.token
+        });
+        Actions.BookingScreen({ type: "replace" });
         break;
       case "Booked Lessons":
         AllClasses({
@@ -97,40 +102,71 @@ class DashboardComponent extends React.Component {
     Actions.Schedules({ type: "replace" });
   };
 
+  toggleProfile = async () => {
+    Actions.FirstLogin({ type: "replace" });
+    // const { userData } = this.props;
+    // var token =
+    //   userData.api_token != null ? userData.api_token : userData.token;
+
+    // let roleId = userData.roleId;
+    // if (roleId == 2) roleId = 3;
+    // else if (roleId == 3) roleId = 2;
+
+    // var obj = { user_id: userData._id, roleId: roleId };
+    // var response = await ClientApi.callApi("setUserRole", obj, token);
+    // // console.log("api response toggleProfile == ", response);
+    // if (response.status == "true") {
+    //   await AsyncStorage.setItem("roleId", String(roleId));
+    //   var data = { user_id: this.props.userData._id };
+    //   data.api_token = token;
+    //   // Actions.drawer({ type: "replace" });
+    //   await this.props.deshBoardValue({
+    //     user_id: this.props.userData._id,
+    //     role_id: roleId,
+    //     api_token: token
+    //   });
+    //   await this.props.getUserInfo(data);
+    // }
+  };
+
   render() {
-    const { userData, DashboardCall } = this.props;
+    const {  DashboardCall } = this.props;
+    const { userData } = this.state;
+    console.log("USERDATA < DASHBOARD CALL");
+    console.log({userData, DashboardCall});
+    console.log("USERDATA < DASHBOARD CALL");
     var instructor = [
       {
         title: "Earnings",
         image: Images.earningsImg,
-        value: `$ ${DashboardCall.earnings}`,
+        value: `$ ${DashboardCall.earnings || 0}`,
         subTitle: "My Reviews",
         footerImage: Images.starImg,
-        footerValue: "0"
+        footerValue:`$ ${DashboardCall.reviews || 0}`
       },
       {
         title: "Bookings",
         image: Images.bookedlessonsImg,
-        value: `${DashboardCall.booked_lesson}`,
+        value: `${DashboardCall.booked_lesson || 0}`,
         subTitle: "Cancellations",
         footerImage: Images.cancelImg,
-        footerValue: DashboardCall.cancelled_booking
+        footerValue: DashboardCall.cancelled_booking || 0
       },
       {
         title: "Lesson Price",
         image: Images.submitrfylImg,
-        value: "$ 15.00",
+        value: `$ ${DashboardCall.lesson_price || 0}`,
         subTitle: "Special Price",
         footerImage: Images.specialImg,
-        footerValue: "0"
+        footerValue:  `$ ${DashboardCall.sp_price || 0}`
       },
       {
         title: "Messages",
         image: Images.messagesImg,
-        value: `${DashboardCall.messages}`,
+        value: `${DashboardCall.messages || 0}`,
         subTitle: "Unread",
         footerImage: Images.commentImg,
-        footerValue: DashboardCall.unread_messages
+        footerValue: DashboardCall.unread_messages || 0
       }
     ];
 
@@ -146,7 +182,7 @@ class DashboardComponent extends React.Component {
       {
         title: "Booked Lessons",
         image: Images.bookedlessonsImg,
-        value: `${DashboardCall.booked_lesson}`,
+        value: `${DashboardCall.booked_lesson || 0}`,
         subTitle: "Cancellations",
         footerImage: Images.cancelImg,
         footerValue: DashboardCall.cancelled_booking
@@ -154,7 +190,7 @@ class DashboardComponent extends React.Component {
       {
         title: "Messages",
         image: Images.messagesImg,
-        value: `${DashboardCall.messages}`,
+        value: `${DashboardCall.messages || 0}`,
         subTitle: "Unread",
         footerImage: Images.commentImg,
         footerValue: DashboardCall.unread_messages
@@ -171,8 +207,14 @@ class DashboardComponent extends React.Component {
 
     return (
       <Container style={Styles.container}>
-        <Header title={KeyWords.dashboard} />
+        <Header
+          title={KeyWords.dashboard}
+          onHome={true}
+          roleId={userData.roleId}
+          onToggleProfile={() => this.toggleProfile()}
+        />
         <View style={[GlobalStyle.viewCenter]}>
+          <View style={{ height: 15 }} />
           <FlatList
             contentContainerStyle={Styles.flatlist}
             data={userData.roleId == 3 ? instructor : student}
@@ -204,7 +246,6 @@ DashboardComponent.propTypes = {
 };
 
 const maptoprops = state => {
-  console.log("dashboard state state", state.DashboardCall.dashBoard);
   return {
     userData: state.User.userdata,
     DashboardCall: state.DashboardCall.dashBoard
@@ -213,5 +254,5 @@ const maptoprops = state => {
 
 export default connect(
   maptoprops,
-  { deshBoardValue, AllClasses }
+  { deshBoardValue, AllClasses, getUserInfo }
 )(DashboardComponent);

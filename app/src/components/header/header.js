@@ -10,43 +10,43 @@ import { deshHomeValue } from "../../actions";
 
 class Header extends React.Component {
   static defaultProps = {
-	backIcon: undefined,
-	styleBack: undefined,
-	title: '',
+    backIcon: undefined,
+    styleBack: undefined,
+    title: ""
   };
-  
+
   constructor(props) {
     super(props);
   }
 
+  homeBtnClick = async () => {
+    const { deshHomeValue } = this.props;
+    //  await deshHomeValue('DashboardScreen'
+    //  );
 
-  homeBtnClick=async()=>{
-    const{deshHomeValue}=this.props;
-  //  await deshHomeValue('DashboardScreen'
-  //  );
-
-  Actions.Dashboard({ type: "replace" });
-  }
+    Actions.Dashboard({ type: "replace" });
+  };
 
   render() {
-     const { backIcon, styleBack, title} = this.props;
+    const {
+      backIcon,
+      styleBack,
+      title,
+      onHome,
+      onToggleProfile,
+      roleId
+    } = this.props;
     return (
       <View style={[Styles.container, styleBack]}>
         <TouchableOpacity
           style={Styles.backBg}
           onPress={() => {
-            backIcon == undefined ?
-            Actions.drawerOpen():Actions.pop()
-          }
-          }
+            backIcon == undefined ? Actions.drawerOpen() : Actions.pop();
+          }}
         >
           <View style={Styles.backBtn}>
             <Image
-              source={
-                backIcon == undefined
-                  ? Images.MenuIcon
-                  : Images.backImg
-              }
+              source={backIcon == undefined ? Images.MenuIcon : Images.backImg}
               style={Styles.imageSize}
             />
           </View>
@@ -54,23 +54,41 @@ class Header extends React.Component {
         <View style={Styles.titleBg}>
           <Text
             style={[
-				Styles.titleText,
+              Styles.titleText,
               styleBack == undefined ? {} : { color: "white" }
             ]}
           >
             {title}
           </Text>
         </View>
+        {backIcon == undefined && onHome == true ? (
+          <TouchableOpacity
+            style={Styles.backBg}
+            onPress={() => onToggleProfile()}
+          >
+            <View style={Styles.imageSize2}>
+              <Image
+                style={Styles.imageSize2}
+                source={
+                  roleId == 3 ? Images.instructorIcon : Images.studentIcon
+                }
+              />
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <View style={Styles.backBg} />
+        )}
         {backIcon == undefined ? (
           <TouchableOpacity
             style={Styles.backBg}
-            onPress={()=>this.homeBtnClick()}
+            onPress={() => this.homeBtnClick()}
           >
             <Image source={Images.homeBtn} style={Styles.imageSize2} />
           </TouchableOpacity>
         ) : (
           <View style={Styles.backBg} />
         )}
+
         {backIcon == undefined ? (
           <TouchableOpacity style={Styles.backBg}>
             <Image source={Images.message_Image} style={Styles.imageSize2} />
@@ -84,17 +102,15 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-	backIcon: PropTypes.string,
-	styleBack: PropTypes.string,
-  title: PropTypes.string,
-
-}
+  backIcon: PropTypes.string,
+  styleBack: PropTypes.string,
+  title: PropTypes.string
+};
 
 //export default DrawerContent;
 const maptoprops = state => {
   //console.log("new drawer state", state);
-  return {
-  };
+  return {};
 };
 
 export default connect(

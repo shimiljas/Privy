@@ -5,8 +5,8 @@ import Util from "../../../common/Util";
 import GlobalStyle from "../../../common/GlobalStyle";
 export default {
   padding10: { padding: 10 },
-  margin15: { margin: 15 },
-  flexGrow: { flexGrow: 1 },
+  margin15: { margin: 10 },
+  flexGrow: {  flexGrow:1 },
   modelBtnView: {
     height: "20%",
     width: "100%",
@@ -17,7 +17,7 @@ export default {
 
   title: {
     fontSize: FS(2.5),
-    fontWeight: "bold",
+    fontFamilyt: "Poppins-Medium",
     color: Color.grayClg
   },
 

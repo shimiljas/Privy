@@ -27,7 +27,10 @@ class SplashComponent extends React.Component {
                     Actions.Login({ type: "replace" });
                   } else {
                     data.api_token = token;
-                    getUserInfo(data);
+                    // getUserInfo(data);
+                    Actions.drawer({
+                      type: "replace"
+                    });
                   }
                 });
                 console.log("token");

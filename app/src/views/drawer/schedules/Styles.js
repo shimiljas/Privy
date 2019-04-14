@@ -12,21 +12,23 @@ export default {
         },
     activeTab: {
             backgroundColor: Color.appDefultColor,
+            fontFamily: "Poppins"
         },
     headerTitle: {
             fontSize: RF(3.5),
             color: Color.grayClg,
             padding: '5%',
-            fontWeight: 'bold'
+            fontFamily: "Poppins-Medium"
         },   
     tabText: {
-            color: Color.grayClg
+            color: Color.grayClg,
+            fontFamily: "Poppins"
         },
-    title: { fontSize: RF(3), color: Color.darkGray, fontWeight: "bold"},
+    title: { fontSize: RF(3), color: Color.darkGray, fontFamily: "Poppins-Medium"},
     
     menuIcon: { width: "12%", alignItems: "flex-end" },
         
-        margin15: { margin: Util.getWidth(5) },
+        margin15: { margin: 10 },
     
         flexGrow: { flexGrow: 1 },
     
@@ -47,7 +49,7 @@ export default {
             //alignSelf: 'center',
             fontSize: RF(3),
             color: Color.grayClg,
-            fontWeight: 'bold',
+            fontFamily: "Poppins-Medium",
             marginTop: 15,
             //marginLeft: Util.getWidth(15)
         },
@@ -55,7 +57,7 @@ export default {
     lable: {
 			fontSize: RF(2.3),
 			color: Color.grayClg,
-	
+            fontFamily: "Poppins",
 			//marginLeft: Util.getWidth(15)
         },
         
@@ -71,8 +73,8 @@ export default {
         width: '100%'
     },
     imageBck:{
-        height: Util.getWidth(13), 
-        width: Util.getWidth(13)
+        height: 24, 
+        width: 24
     },
     width10p: {
         width: '10%'
@@ -86,9 +88,7 @@ export default {
 
     marginBottom5p: {marginBottom: '5%'},
 
-    headerView: { marginLeft:Util.getWidth(5),
-        marginTop:'5%',
-        marginRight:Util.getWidth(5)}, 
+    headerView: {  paddingHorizontal:15 }, 
     headerTitleView: {flex:1, justifyContent:'center'},
     marginBottom1p: {marginBottom: '1%'},
     menuProvider: {backdrop: {

@@ -1,4 +1,4 @@
-import { Alert } from "react-native";
+import { Alert, AsyncStorage } from "react-native";
 import { Actions } from "react-native-router-flux";
 import API from "../common/ApiManager";
 import { SCHEDULES, LOADEROFF, LOADERON, SCHEDULE, APIRESPONSE } from "./Types";
@@ -40,8 +40,8 @@ const getSchedules = async (dispatch, data) => {
     type: LOADERON,
     // visible: true
   });
-  const method = "getAllClasses";
-  var obj = { user_id: data.user_id };
+  const method = "get_classes_ins.php";
+  var obj = { user_id: await AsyncStorage.getItem("userId") };
   var token = data.api_token;
   await API.callPostApiWithToken(method, obj, token)
     .then(res => res.json())
@@ -49,8 +49,7 @@ const getSchedules = async (dispatch, data) => {
       dispatch({
         type: LOADEROFF,
       })
-      //console.log("getAllClasses +++ ", res);
-      if (res.status == "true") {
+      if (res.success == 1) {
         dispatch({
           type: SCHEDULES,
           payload: res.data

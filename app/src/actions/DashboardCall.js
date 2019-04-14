@@ -27,24 +27,21 @@ const getDeshHomeValue = async (dispatch,data) => {
 };
 
 const getDeshBoardValue = async (dispatch, data) => {
-  const method = data.roll_id == "2" ? "studentSummery" : "instructorSummery";
-  var obj = { user_id: data.user_id };
+  // const method = data.roll_id == "2" ? "studentSummery" : "instructorSummery";
+  const method = "get_dashboard_user.php"
+  var obj = { user_id: data.user_id, roleId: data.role_id };
   var token = data.api_token;
   await API.callPostApiWithToken(method, obj, token)
     .then(res => res.json())
     .then(async res => {
-      console.log(method, "get user data Dashboard ", res);
-      if (res.status == "true") {
-        console.log(method, "Dashboard staus", res.status);
+      if (res.success == 1) {
         dispatch({
           type: DASHBOARD,
           dashBoard: res.data
         });
-      } else {
-        console.log("Dashboard staus asdas", res.status);
       }
     })
     .catch(res => {
-      console.log("Dashboard staus error", res.status);
+      console.log("Dashboard status error", res.message);
     });
 };

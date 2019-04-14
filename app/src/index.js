@@ -58,15 +58,15 @@ function mapStateToProps() {
   };
 }
 function mapDispatchToProps() {
-  return {
-  };
+  return {};
 }
 
 class PrivyApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isInternetConnected: true
+      isInternetConnected: true,
+      tempDateChange: 1
     };
   }
 
@@ -152,7 +152,7 @@ class PrivyApp extends Component {
             }}
             contentComponent={DrawerContent}
             drawerImage={Images.MenuIcon}
-            drawerWidth={Util.getWidth(60)}
+            drawerWidth={Util.getWidth(80)}
           >
             <Scene hideNavBar panHandlers={null}>
               <Stack
@@ -211,6 +211,14 @@ class PrivyApp extends Component {
                   key="StudentProfile"
                   component={() => this._renderScene(StudentProfileScreen)}
                   title="Profile"
+                />
+              </Stack>
+              <Stack key="TermsNConditionScreen" title="Terms">
+                <Scene
+                  hideNavBar
+                  key="TNCScreen"
+                  component={() => this._renderScene(TermsScreen)}
+                  title="Terms"
                 />
               </Stack>
 
@@ -373,10 +381,7 @@ class PrivyApp extends Component {
     }
     return (
       <Container style={{ backgroundColor: Colors.appDefultColor }}>
-        <StatusBar
-          backgroundColor={Colors.appDefultColor}
-          barStyle="dark-content"
-        />
+        <StatusBar backgroundColor={Colors.inputBg} barStyle="dark-content" />
         {this.loadScenes()}
       </Container>
     );

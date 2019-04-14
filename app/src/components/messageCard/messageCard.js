@@ -19,46 +19,43 @@ class CardComponentMessage extends React.Component {
   test() {}
 
   render() {
-    const { data, click, replyClick, userId} = this.props;
+    const { data, click, replyClick, userId,nameClick, hideReply = false} = this.props;
    
     return (
-      <Card style={Styles.cardView}>
-        <CardItem style={Styles.cardItemView}>
-          <View>
-            <Image
-              resizeMode="contain"
-              source={Images.userImg}
-              style={Styles.profilePic}
-            />
-          </View>
-          <View style={Styles.titleView}>
-          <Text style={Styles.title}>
-                            {userId == 2
-                                ? data.reciever.name
-                                : data.sender.name}
-                        </Text>
-            <Text style={Styles.time}>{KeyWords.justNow}</Text>
-          </View>
-          <TouchableOpacity onPress={click} style={Styles.imageView}>
-            <Image source={Images.deleteImg} />
-          </TouchableOpacity>
-        </CardItem>
-        <CardItem cardBody style={GlobalStyle.height50}>
-          <Text style={Styles.message}>{data.content}</Text>
-        </CardItem>
-        <View style={[GlobalStyle.divider, Styles.leftRightMargin]} />
-        <CardItem style={GlobalStyle.height20}>
-          <View style={GlobalStyle.justifyContentCenter}>
-            <Image source={Images.replyImg} />
-          </View>
-          <TouchableOpacity
-                        style={Styles.replyView}
-                        onPress={replyClick}
-                    >
-                        <Text style={Styles.reply}>{KeyWords.reply}</Text>
-                    </TouchableOpacity>
-        </CardItem>
-      </Card>
+      <TouchableOpacity onPress={() => nameClick()}>
+        <Card style={Styles.cardView}>
+          <CardItem style={Styles.cardItemView}>
+            <View>
+              <Image
+                resizeMode="contain"
+                source={Images.userImg}
+                style={Styles.profilePic}
+              />
+            </View>
+            
+              <View style={Styles.titleView}>
+                <Text style={Styles.title}> {data.name.toUpperCase()} </Text>
+                <Text style={Styles.time}>{KeyWords.justNow}</Text>
+              </View>
+            
+            <TouchableOpacity onPress={click} style={Styles.imageView}>
+              <Image source={Images.deleteImg} />
+            </TouchableOpacity>
+          </CardItem>
+          <CardItem cardBody>
+            <Text style={Styles.message}>{data.content}</Text>
+          </CardItem>
+          <View style={[GlobalStyle.divider, Styles.leftRightMargin]} />
+          {!hideReply ? <CardItem style={GlobalStyle.height20}>
+            <View style={GlobalStyle.justifyContentCenter}>
+              <Image source={Images.replyImg} />
+            </View>
+            <TouchableOpacity style={Styles.replyView} onPress={replyClick}>
+              <Text style={Styles.reply}>{KeyWords.reply}</Text>
+            </TouchableOpacity>
+          </CardItem> : null}
+        </Card>
+      </TouchableOpacity>
     );
   }
 }
@@ -66,7 +63,8 @@ class CardComponentMessage extends React.Component {
 CardComponentMessage.propTypes = {
   click: PropTypes.bool,
   data: PropTypes.element.isRequired,
-  replyClick: PropTypes.bool
+  replyClick: PropTypes.func,
+  nameClick: PropTypes.func
 };
 
 export { CardComponentMessage };

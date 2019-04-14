@@ -3,12 +3,13 @@ import Color from "../../common/Color";
 import Util from "../../common/Util";
 
 export default {
-    profilePic: { width: Util.getWidth(25), height: Util.getWidth(15), borderRadius: Util.getWidth(15) },
+    profilePic: { width: Util.getWidth(15), height: Util.getWidth(15), borderRadius: Util.getWidth(15) },
 
     titleView: {
-		position: "absolute",
-		//top: 10,
-		left: "40%",
+		// position: "absolute",
+		// //top: 10,
+        // left: "40%",
+        paddingLeft: 5
 	},
 
     imageView: { position: "absolute", top: 10, right: 10 },
@@ -22,36 +23,34 @@ export default {
 
     title: {
         fontSize: RF(3),
-        fontWeight: 'bold',
+        fontFamily: "Poppins-Medium",
         color: Color.darkGray
     },
 
     time: {
         fontSize: RF(2),
+        fontFamily: "Poppins",
         color: Color.grayClg
     },
-
     message: {
         fontSize: RF(2.5),
         color: Color.darkGray,
+        fontFamily: "Poppins",
         padding: Util.getWidth(4),
     },
-
     reply: {
         fontSize: RF(2.5),
+        fontFamily: "Poppins",
         color: Color.grayClg
     },
-    
     marginTop: {
         marginTop: 10,
     },
-
     cardView: {
-        marginBottom: "5%",
-        borderWidth: 1,
-        height: Util.getHeight(55)
+        flex:1
+        // height: Util.getHeight(55)
     },
-    cardItemView: { height: "20%", marginTop: 10 },
+    cardItemView: { padding:1 },
     leftRightMargin: { marginLeft: "5%", marginTop: "5%" },
 
 };

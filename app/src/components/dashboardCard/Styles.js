@@ -3,37 +3,38 @@ import Util from "../../common/Util";
 
 export default {
   space: {
-    height: Util.getHeight(4)
+    height: Util.getHeight(2)
   },
   imageValText: {
     position: "absolute",
     fontSize: RF(2)
   },
   imageAreaView: {
-    height: "30%",
-    width: "100%"
+    height: 48,
+    width: 48,
+    margin: 5
   },
   imageView: {
     flex: 1,
-    aspectRatio: 0.5,
     resizeMode: "contain"
   },
   amountAreaText: {
     height: "10%",
-    width: "90%"
+    width: "90%",
+    marginVertical: 5
   },
   card: {
+    marginTop: 5,
     marginRight: 10,
-    marginLeft: 10,
     borderRadius: 15,
     width: Util.getWidth(42),
     height: Util.getHeight(35)
   },
 
   headerText: {
-    fontSize: RF(2.7),
+    fontSize: RF(3),
     color: "#aeb5bc",
-    fontWeight: "500",
+    fontFamily: "Poppins-Bold",
     textAlign: "center"
   },
 
@@ -41,6 +42,7 @@ export default {
     color: "#aeb5bc",
     fontSize: RF(2),
     position: "absolute",
+    fontFamily: "Poppins-Medium",
     bottom: 0
   },
 
@@ -60,11 +62,12 @@ export default {
   valueAreaText: {
     height: "10%",
     width: "100%",
-    alignItems: "center"
+    alignItems: "center",
+    fontFamily: "Poppins-Medium"
   },
   amountText: {
     color: "black",
     fontSize: RF(3),
-    fontWeight: "500"
+    fontFamily: "Poppins-Bold"
   }
 };

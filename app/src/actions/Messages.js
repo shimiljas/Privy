@@ -18,7 +18,7 @@ const getAllMessage = async (dispatch, data) => {
     type: LOADERON,
     // visible: true
   });
-  const messageUrlKey = "getAllMessages";
+  const messageUrlKey = "get_messages.php";
   var token = data.api_token;
   var obj = {
     user_id: data.user_id
@@ -28,23 +28,22 @@ const getAllMessage = async (dispatch, data) => {
     .then(res => res.json())
     .then(async res => {
       console.log("getAllMessage pass :", res);
-      if (res.status == "true") {
+      if (res.success == 1) {
         dispatch({
           type: GETALLMESSAGE,
           messageList: res.data
         });
         dispatch({
           type: LOADEROFF,
-          // visible: false
         });
       } else {
         dispatch({
           type: LOADEROFF,
-          // visible: false
         });
       }
     })
     .catch(err => {
+      console.log(err);
       Alert.alert(
         "Error",
         "Somethings want wrong!" + err,
@@ -65,19 +64,17 @@ const getAllMessage = async (dispatch, data) => {
 };
 
 const getSendMessage = async (dispatch, data) => {
-  const messageUrlKey = "sendMessage";
+  const messageUrlKey = "create_message.php";
   var token = data.api_token;
   var obj = {
-    user_id: data.user_id,
-    reciever_id: data.reciever_id,
-    content: data.content
+    ...data
   };
-  console.log("getSendMessage data", data);
+  console.log("OBJSEND", obj)
   await API.callPostApiWithToken(messageUrlKey, obj, token)
     .then(res => res.json())
     .then(async res => {
       console.log("getSendMessage pass :", res);
-      if (res.status == "true") {
+      if (res.success == 1) {
         Alert.alert(
           "Success",
           res.message,

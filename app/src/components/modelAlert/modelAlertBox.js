@@ -20,7 +20,7 @@ class ModelAlert extends React.Component {
     return (
       <Modal
         style={Styles.modelView}
-        animationType="slide"
+        animationType="fade"
         transparent
         visible={successData}
         onRequestClose={onClose}

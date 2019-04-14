@@ -58,8 +58,8 @@ class SchedulesComponent extends React.Component {
   };
 
   getLessons = async () => {
-    var response = await clientApi.callGetApi("getLessonType");
-    if (response.status == "true") {
+    var response = await clientApi.callPostApi("get_lessons.php");
+    if (response.success == 1) {
       lessons = response.data;
       //alert(lessons[0].name);
       console.log("lessons == ", lessons);
@@ -73,21 +73,22 @@ class SchedulesComponent extends React.Component {
 
   getActivetab = e => {
     //console.log("get classes = ",e, lessons);
-    const { schedules } = this.props;
+    // const { schedules } = this.props;
     var heading = e.ref.props.heading;
-    //this.state.activeTabIndex
-    var activeTabIndex = lessons.findIndex(function(result) {
-      return result.name === heading;
-    });
-    this.setState({ activeTabIndex: activeTabIndex });
-    var selectedLessonType = lessons.filter(function(result) {
-      return result.name === heading;
-    });
-    var filteredClasses = schedules.filter(function(result) {
-      return result.lessonType === selectedLessonType[0].lessonNumber;
-    });
-    //console.log("filtered classes = ",filteredClasses, selectedLessonType);
-    this.setState({ title: heading, classes: filteredClasses });
+    // //this.state.activeTabIndex
+    // var activeTabIndex = lessons.findIndex(function(result) {
+    //   return result.name === heading;
+    // });
+    // this.setState({ activeTabIndex: activeTabIndex });
+    // var selectedLessonType = lessons.filter(function(result) {
+    //   return result.name === heading;
+    // });
+    // var filteredClasses = schedules.filter(function(result) {
+    //   return result.lessonType === selectedLessonType[0].lessonNumber;
+    // });
+    // //console.log("filtered classes = ",filteredClasses, selectedLessonType);
+    this.setState({ title: heading });
+    // this.setState({ title: heading, classes: filteredClasses });
   };
 
   addEditSchedule = () => {
@@ -190,7 +191,7 @@ class SchedulesComponent extends React.Component {
                 </TouchableHighlight>
               </View>
             </View>
-            <MenuProvider style={{ flex: 1, paddingTop: 20 }}>
+            <MenuProvider style={{ flex: 1, paddingTop: 5 }}>
               <View>
                 {classes.length > 0 ? (
                   <FlatList
@@ -211,7 +212,7 @@ class SchedulesComponent extends React.Component {
                     listKey="classes"
                   />
                 ) : (
-                  <Text style={Styles.margin15}>{KeyWords.noClassesAdded}</Text>
+                  <Text style={[Styles.margin15, {fontFamily: "Poppins"}]}>{KeyWords.noClassesAdded}</Text>
                 )}
               </View>
             </MenuProvider>

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity, FlatList } from "react-native";
+import { View, Text, Image, TouchableOpacity, TextInput, AsyncStorage } from "react-native";
 import { Container, Content, InputGroup, Input } from "native-base";
 import ImagePicker from "react-native-image-picker";
 import { connect } from "react-redux";
@@ -9,81 +9,103 @@ import Images from "../../../common/images";
 import { updateUserData } from "../../../actions";
 import GlobalStyle from "../../../common/GlobalStyle";
 import {
-
   SpinnerLoad,
   ButtonComponent,
   InputComponent,
-  CheckBoxComponent
+  CheckBoxComponent,
+  InfoInput,
+  LocationModal
 } from "../../../components";
-import Header from '../../../components/header/header';
+import clientApi from '../../../common/ApiManager';
+import Header from "../../../components/header/header";
 import KeyWords from "../../../common/Localization";
-
+import Color from "../../../common/Color";
 
 class ProfileComponent extends React.Component {
   constructor(props) {
     super(props);
     const { userData } = this.props;
     this.state = {
-      
-      _id: userData._id,
-      name: userData.name,
-      profilePic: userData.profilePic,
-      instructChildren: userData.instructChildren,
-      base64ProfilePic: "",
-      aboutMe: userData.aboutMe,
-      country_permanent:
-        userData.country_permanent != null ||
-        userData.country_permanent != undefined
-          ? userData.country_permanent
-          : "",
-      streetAddress_permanent:
-        userData.streetAddress_permanent != null ||
-        userData.streetAddress_permanent != undefined
-          ? userData.streetAddress_permanent
-          : "",
-      state_permanent:
-        userData.state_permanent != null ||
-        userData.state_permanent != undefined
-          ? userData.state_permanent
-          : "",
-      city_permanent:
-        userData.city_permanent != null || userData.city_permanent != undefined
-          ? userData.city_permanent
-          : "",
-      zipcode_permanent:
-        (userData.zipCode_permanent != null ||
-          userData.zipCode_permanent != undefined) &&
-        userData.zipCode_permanent > 0
-          ? userData.zipCode_permanent
-          : "",
+      isOpenClass: false,
+      isOpenHome: false,
+      homeLocation: "",
+      classLocation: "",
+    //   _id: userData._id,
+    //   name: userData.name,
+    //   profilePic: userData.profilePic,
+    //   instructChildren: userData.instructChildren,
+    //   base64ProfilePic: "",
+    //   aboutMe: userData.aboutMe,
+    //   country_permanent:
+    //     userData.country_permanent != null ||
+    //     userData.country_permanent != undefined
+    //       ? userData.country_permanent
+    //       : "",
+    //   streetAddress_permanent:
+    //     userData.streetAddress_permanent != null ||
+    //     userData.streetAddress_permanent != undefined
+    //       ? userData.streetAddress_permanent
+    //       : "",
+    //   state_permanent:
+    //     userData.state_permanent != null ||
+    //     userData.state_permanent != undefined
+    //       ? userData.state_permanent
+    //       : "",
+    //   city_permanent:
+    //     userData.city_permanent != null || userData.city_permanent != undefined
+    //       ? userData.city_permanent
+    //       : "",
+    //   zipcode_permanent:
+    //     (userData.zipCode_permanent != null ||
+    //       userData.zipCode_permanent != undefined) &&
+    //     userData.zipCode_permanent > 0
+    //       ? userData.zipCode_permanent
+    //       : "",
 
-      country:
-        userData.country != null || userData.country != undefined
-          ? userData.country
-          : "",
-      streetAddress:
-        userData.streetAddress != null || userData.streetAddress != undefined
-          ? userData.streetAddress
-          : "",
-      state:
-        userData.state != null || userData.state != undefined
-          ? userData.state
-          : "",
-      city:
-        userData.city != null || userData.city != undefined
-          ? userData.city
-          : "",
-      zipcode:
-        (userData.zipCode != null || userData.zipCode != undefined) &&
-        userData.zipCode > 0
-          ? userData.zipCode
-          : ""
+    //   country:
+    //     userData.country != null || userData.country != undefined
+    //       ? userData.country
+    //       : "",
+    //   streetAddress:
+    //     userData.streetAddress != null || userData.streetAddress != undefined
+    //       ? userData.streetAddress
+    //       : "",
+    //   state:
+    //     userData.state != null || userData.state != undefined
+    //       ? userData.state
+    //       : "",
+    //   city:
+    //     userData.city != null || userData.city != undefined
+    //       ? userData.city
+    //       : "",
+    //   zipcode:
+    //     (userData.zipCode != null || userData.zipCode != undefined) &&
+    //     userData.zipCode > 0
+    //       ? userData.zipCode
+    //       : ""
     };
-
   }
-  
+
+  async componentDidMount() {
+    let user_id = await AsyncStorage.getItem("userId");
+    clientApi.callPostApi("get_user_profile.php", {user_id}).then(res =>{
+      console.log("RESUSER", res);
+      if(res.success == 1) {
+        this.setState({
+          _id: user_id,
+          name: res.data.name,
+          instructChildren: res.data.instructChildren,
+          country: res.data.country || "",
+          homeLocation: res.data.add1,
+          classLocation: res.data.add2,
+          profilePic: res.data.profilePic
+        })
+      }
+    });
+  }
+
   update = () => {
-    const { userData, updateUserData } = this.props;
+    // const { userData, updateUserData } = this.props;
     const {
       _id,
       base64ProfilePic,
@@ -99,51 +121,78 @@ class ProfileComponent extends React.Component {
       state,
       city,
       zipcode,
-      country
+      country,
+      homeLocation,
+      classLocation
     } = this.state;
 
-    if (name == "") {
-      alert(KeyWords.enter + " " + KeyWords.name);
-    } else {
-      var obj = {};
-      obj.name = name;
-      obj.user_id = _id;
-      obj.lat = "22.7545";
-      obj.long = "75.2454";
-      obj.lat_permanent = "22.7545";
-      obj.long_permanent = "75.2454";
-
-      // permanent address
-      if (country_permanent != "") obj.country_permanent = country_permanent;
-      if (streetAddress_permanent != "")
-        obj.streetAddress_permanent = streetAddress_permanent;
-      if (state_permanent != "") obj.state_permanent = state_permanent;
-      if (city_permanent != "") obj.city_permanent = city_permanent;
-      if (zipcode_permanent != "") obj.zipCode_permanent = zipcode_permanent;
-
-      // class address
-      if (country != "") obj.country = country;
-      if (streetAddress != "") obj.streetAddress = streetAddress;
-      if (state != "") obj.state = state;
-      if (city != "") obj.city = city;
-      if (zipcode != "") obj.zipCode = zipcode;
-
-      if (aboutMe != "") obj.aboutMe = aboutMe;
-      if (instructChildren != "") obj.instructChildren = instructChildren;
-
-      //photo
-      if (base64ProfilePic != "" && base64ProfilePic != undefined)
-        obj.profilePic = base64ProfilePic;
-
-      console.log("profile obj == ", obj);
-      var data = {
-        methodName: "updateInstructorProfile",
-        data: obj,
-        token: userData.api_token != null ? userData.api_token : userData.token
-      };
-
-      updateUserData(data);
+    const obj = {
+      user_id: _id,
+      name,
+      aboutMe,
+      add1: homeLocation,
+      add2: classLocation,
+      instructChildren,
+      country,
     }
+
+    clientApi.callPostApi("update_user_profile.php", {...obj}).then(res =>{
+      console.log(res)
+      if(res.success == 1) {
+        alert(res.message);
+        // this.setState({
+        //   _id: user_id,
+        //   name: res.data.name,
+        //   instructChildren: res.data.instructChildren,
+        //   countryText: res.data.country || "",
+        //   homeLocation: res.data.add1,
+        //   classLocation: res.data.add2
+        // })
+      }
+    });
+
+    // if (name == "") {
+    //   alert(KeyWords.enter + " " + KeyWords.name);
+    // } else {
+    //   var obj = {};
+    //   obj.name = name;
+    //   obj.user_id = _id;
+    //   obj.lat = "22.7545";
+    //   obj.long = "75.2454";
+    //   obj.lat_permanent = "22.7545";
+    //   obj.long_permanent = "75.2454";
+
+    //   // permanent address
+    //   if (country_permanent != "") obj.country_permanent = country_permanent;
+    //   if (streetAddress_permanent != "")
+    //     obj.streetAddress_permanent = streetAddress_permanent;
+    //   if (state_permanent != "") obj.state_permanent = state_permanent;
+    //   if (city_permanent != "") obj.city_permanent = city_permanent;
+    //   if (zipcode_permanent != "") obj.zipCode_permanent = zipcode_permanent;
+
+    //   // class address
+    //   if (country != "") obj.country = country;
+    //   if (streetAddress != "") obj.streetAddress = streetAddress;
+    //   if (state != "") obj.state = state;
+    //   if (city != "") obj.city = city;
+    //   if (zipcode != "") obj.zipCode = zipcode;
+
+    //   if (aboutMe != "") obj.aboutMe = aboutMe;
+    //   if (instructChildren != "") obj.instructChildren = instructChildren;
+
+    //   //photo
+    //   if (base64ProfilePic != "" && base64ProfilePic != undefined)
+    //     obj.profilePic = base64ProfilePic;
+
+    //   console.log("profile obj == ", obj);
+    //   var data = {
+    //     methodName: "updateInstructorProfile",
+    //     data: obj,
+    //     token: userData.api_token != null ? userData.api_token : userData.token
+    //   };
+
+    //   updateUserData(data);
+    // }
   };
 
   takePicture = () => {
@@ -179,27 +228,28 @@ class ProfileComponent extends React.Component {
   };
 
   render() {
-    
-    
     const {
       showDefault,
       profilePic,
       instructChildren,
       name,
-      country_permanent,
+      country,
       aboutMe,
-          zipcode,
-          city,
-          state,
-          streetAddress,
-          zipcode_permanent,
-          city_permanent,
-          state_permanent,
-          streetAddress_permanent
-   
+      zipcode,
+      city,
+      state,
+      streetAddress,
+      zipcode_permanent,
+      city_permanent,
+      state_permanent,
+      streetAddress_permanent,
+      isOpenClass,
+      isOpenHome,
+      homeLocation,
+      classLocation
     } = this.state;
     const { SpinnerVisible } = this.props;
-    var icon = showDefault ? Images.user : profilePic;
+    var icon = showDefault ? Images.user : {uri: profilePic};
     return (
       <Container>
         <Header title={KeyWords.profile} />
@@ -220,7 +270,7 @@ class ProfileComponent extends React.Component {
               </View>
 
               <InputGroup
-                borderType="underline"
+                borderType={"transparent"}
                 style={[GlobalStyle.width60, Styles.marginTop3p]}
               >
                 <Input
@@ -231,156 +281,86 @@ class ProfileComponent extends React.Component {
                 />
               </InputGroup>
               <InputGroup
-                borderType="underline"
-                style={[GlobalStyle.width60, Styles.marginTop3p]}
+                borderType="transparent"
+                style={[GlobalStyle.width60]}
               >
                 <Input
                   style={Styles.countryText}
                   placeholder={KeyWords.enter + " " + KeyWords.country}
                   onChangeText={country =>
-                    this.setState({ country_permanent: country })
+                    this.setState({ country })
                   }
-                  value={country_permanent}
+                  value={country}
                 />
               </InputGroup>
             </View>
-            <View style={Styles.padding20}>
-            
-              <InputComponent
+            <View>
+              <InfoInput
                 title={KeyWords.aboutMe}
                 icon={Images.premiumImg}
                 iconStyle={Styles.icon}
-                placeholder={KeyWords.aboutMe}
-                multiline
-                value={aboutMe}
-                setValues={text => this.setState({ aboutMe: text })}
-                fieldWidth={GlobalStyle.width100p}
-                height={90}
-                maxLength={200}
-              />
-
-              <Text style={Styles.header}>
-                {KeyWords.residence + " " + KeyWords.address}
-              </Text>
-              <View style={[GlobalStyle.divider, GlobalStyle.width100p]} />
-              <InputComponent
-                title={KeyWords.street + " " + KeyWords.address}
-                icon={Images.locationImg}
-                iconStyle={Styles.icon}
-                placeholder={KeyWords.street + " " + KeyWords.address}
-                multiline
-                value={streetAddress_permanent}
-                setValues={text =>
-                  this.setState({ streetAddress_permanent: text })
-                }
-                fieldWidth={GlobalStyle.width100p}
-                height={70}
-                maxLength={100}
-
-              />
-
-              <InputComponent
-                title={KeyWords.state}
-                icon={Images.locationImg}
-                iconStyle={Styles.icon}
-                placeholder={KeyWords.state}
-                multiline={false}
-                value={state_permanent}
-                setValues={text => this.setState({ state_permanent: text })}
-                fieldWidth={GlobalStyle.width100p}
-                height={70}
-                maxLength={100}
-
-              />
-
-              <InputComponent
-                title={KeyWords.city}
-                icon={Images.locationImg}
-                iconStyle={Styles.icon}
-                placeholder={KeyWords.city}
-                multiline={false}
-                value={city_permanent}
-                setValues={text => this.setState({ city_permanent: text })}
-                fieldWidth={GlobalStyle.width100p}
-                height={70}
-                maxLength={100}
-
-              />
-
-              <InputComponent
-                title={KeyWords.zipcode}
-                icon={Images.locationImg}
-                iconStyle={Styles.icon}
-                placeholder={KeyWords.zipcode}
-                multiline={false}
-                value={zipcode_permanent}
-                setValues={text => this.setState({ zipcode_permanent: text })}
-                fieldWidth={GlobalStyle.width100p}
-                height={70}
-                maxLength={10}
-                keyboardType="numeric"
-              />
-
-              <Text style={Styles.header}>
-                {KeyWords.class + " " + KeyWords.location}
-              </Text>
-              <View style={[GlobalStyle.divider, GlobalStyle.width100p]} />
-              <InputComponent
-                title={KeyWords.street + " " + KeyWords.address}
-                icon={Images.locationImg}
-                iconStyle={Styles.icon}
-                placeholder={KeyWords.street + " " + KeyWords.address}
-                multiline
-                value={streetAddress}
-                setValues={text => this.setState({ streetAddress: text })}
-                fieldWidth={GlobalStyle.width100p}
-                height={70}
-                maxLength={100}
-
-              />
-
-              <InputComponent
-                title={KeyWords.state}
-                icon={Images.locationImg}
-                iconStyle={Styles.icon}
-                placeholder={KeyWords.state}
-                multiline={false}
-                value={state}
-                setValues={text => this.setState({ state: text })}
-                fieldWidth={GlobalStyle.width100p}
-                height={70}
-                maxLength={100}
-
-              />
-
-              <InputComponent
-                title={KeyWords.city}
-                icon={Images.locationImg}
-                iconStyle={Styles.icon}
-                placeholder={KeyWords.city}
-                multiline={false}
-                value={city}
-                setValues={text => this.setState({ city: text })}
-                fieldWidth={GlobalStyle.width100p}
-                height={70}
-                maxLength={100}
-
-              />
-
-              <InputComponent
-                title={KeyWords.zipcode}
-                icon={Images.locationImg}
-                iconStyle={Styles.icon}
-                placeholder={KeyWords.zipcode}
-                multiline={false}
-                value={zipcode}
-                setValues={text => this.setState({ zipcode: text })}
-                fieldWidth={GlobalStyle.width100p}
-                height={70}
-                maxLength={10}
-                keyboardType="numeric"
-              />
-
+              >
+                <TextInput
+                  placeholder={KeyWords.aboutMe}
+                  maxLength={200}
+                  multiline
+                  onChangeText={text => this.setState({ aboutMe: text })}
+                  style={{
+                    color: Color.darkGray,
+                    flex: 1,
+                    paddingHorizontal: 0,
+                    paddingVertical: 5
+                  }}
+                  value={aboutMe}
+                />
+              </InfoInput>
+              <View style={{ height: 20 }} />
+              <TouchableOpacity
+                onPress={() => this.setState({ isOpenHome: !isOpenHome })}
+              >
+                <InfoInput
+                  title={KeyWords.residence}
+                  icon={Images.locationImg}
+                  iconStyle={Styles.icon}
+                >
+                  <Text
+                    style={{
+                      color: Color.darkGray,
+                      flex: 1,
+                      paddingHorizontal: 0,
+                      paddingVertical: 10,
+                      borderBottomColor: Color.grayClg,
+                      borderBottomWidth: 0.5
+                    }}
+                  >
+                    {homeLocation || "Type your home location here."}
+                  </Text>
+                </InfoInput>
+              </TouchableOpacity>
+              <View style={{ height: 20 }} />
+              <TouchableOpacity
+                onPress={() => this.setState({ isOpenClass: !isOpenClass })}
+              >
+                <InfoInput
+                  title={KeyWords.class + " " + KeyWords.location}
+                  icon={Images.schoolImg}
+                  iconStyle={Styles.icon}
+                >
+                  <Text
+                    style={{
+                      color: Color.darkGray,
+                      flex: 1,
+                      paddingHorizontal: 0,
+                      paddingVertical: 10,
+                      borderBottomColor: Color.grayClg,
+                      borderBottomWidth: 0.5
+                    }}
+                  >
+                    {classLocation || "Type your class location here."}
+                  </Text>
+                </InfoInput>
+              </TouchableOpacity>
+              <View style={{ height: 20 }} />
               <View style={[GlobalStyle.row]}>
                 <Text style={Styles.lable}>
                   {KeyWords.instructChildren}
@@ -396,14 +376,14 @@ class ProfileComponent extends React.Component {
                 <View style={[GlobalStyle.viewCenter, GlobalStyle.row]}>
                   <CheckBoxComponent
                     title={KeyWords.yes}
-                    value={instructChildren}
-                    setValues={() => this.setState({ instructChildren: true })}
+                    value={instructChildren == 1}
+                    setValues={() => this.setState({ instructChildren: 1 })}
                   />
 
                   <CheckBoxComponent
                     title={KeyWords.no}
-                    value={!instructChildren}
-                    setValues={() => this.setState({ instructChildren: false })}
+                    value={instructChildren == 0}
+                    setValues={() => this.setState({ instructChildren: 0 })}
                   />
                 </View>
               </View>
@@ -416,6 +396,29 @@ class ProfileComponent extends React.Component {
               </View>
             </View>
           </View>
+          <LocationModal
+            isOpen={isOpenHome}
+            title={
+              "Enter " + KeyWords.residence + " address"}
+            onSave={loc =>
+              this.setState({
+                homeLocation: loc.Address,
+                isOpenHome: !isOpenHome
+              })
+            }
+            onClose={() => this.setState({ isOpenHome: !isOpenHome })}
+          />
+          <LocationModal
+            isOpen={isOpenClass}
+            title={"Enter " +KeyWords.class+ " address"}
+            onSave={loc =>
+              this.setState({
+                classLocation: loc.Address,
+                isOpenClass: !isOpenClass
+              })
+            }
+            onClose={() => this.setState({ isOpenClass: !isOpenClass })}
+          />
         </Content>
       </Container>
     );
@@ -429,7 +432,6 @@ ProfileComponent.propTypes = {
 };
 
 const maptoprops = state => {
-  console.log("instructor data === ", state.User.userdata);
   return {
     SpinnerVisible: state.Loader.visible,
     userData: state.User.userdata

@@ -2,115 +2,118 @@ import Util from "../../common/Util";
 import RF from "react-native-responsive-fontsize";
 import Colors from "../../common/Color";
 export default {
-	// tabBarStyle: {
-	// 	height: 60,
-	// 	backgroundColor: "#eee"
-	// },
-	// tabBarSelectedItemStyle: {
-	// 	backgroundColor: "#ddd"
-	// },
-	titleText: {
-		fontSize: RF(2.5),
-		color: "#808080",
-		textAlign: "left",
-		marginLeft: "10%"
-	},
-	titleSelected: {
-		fontSize: RF(2.4),
-		color: "#FFFFFF",
-		textAlign: "left",
-		fontWeight: "bold",
-		marginLeft: "10%"
-	},
-	// tabChatBarStyle: {
-	// 	height: 60,
-	// 	backgroundColor: "#eee"
-	// },
-	// tabChatLableStyle: {
-	// 	height: 60,
-	// 	color: "#000",
-	// 	fontSize: RF(3),
-	// 	fontWeight: "bold"
-	// },
-	
-	rowBg: {
-		height: Util.getHeight(5),
-		justifyContent: "center",
-		marginLeft: 0,
-		backgroundColor: Colors.appDefultColor,
-		marginBottom: '5%',
-	},
-	// rowBgSelected: {
-	// 	height: Util.getHeight(5),
-	// 	justifyContent: "center",
-	// 	marginLeft: 0,
-	// 	backgroundColor: "#C9C9C9"
-	// },
+  // tabBarStyle: {
+  // 	height: 60,
+  // 	backgroundColor: "#eee"
+  // },
+  // tabBarSelectedItemStyle: {
+  // 	backgroundColor: "#ddd"
+  // },
+  titleText: {
+    fontSize: RF(2.5),
+    color: "#AAAAAA",
+    fontFamily: "Poppins",
+    textAlign: "left",
+    marginLeft: "6%"
+  },
+  titleSelected: {
+    fontSize: RF(2.6),
+    color: "#FFFFFF",
+    fontFamily: "Poppins-Medium",
+    textAlign: "left",
+    marginLeft: "6%"
+  },
+  // tabChatBarStyle: {
+  // 	height: 60,
+  // 	backgroundColor: "#eee"
+  // },
+  // tabChatLableStyle: {
+  // 	height: 60,
+  // 	color: "#000",
+  // 	fontSize: RF(3),
+  // 	fontWeight: "bold"
+  // },
 
-	width40: {
-		width: "40%"
-	},
+  rowBg: {
+    justifyContent: "center",
+    paddingVertical: "6%",
+    backgroundColor: Colors.appDefultColor
+  },
+  // rowBgSelected: {
+  // 	height: Util.getHeight(5),
+  // 	justifyContent: "center",
+  // 	marginLeft: 0,
+  // 	backgroundColor: "#C9C9C9"
+  // },
 
-	imageView: {
-		borderRadius: Util.getWidth(11),
-		height: Util.getWidth(22),
-		width: Util.getWidth(22),
-		backgroundColor: "#FFFFFF"
-	},
+  width40: {
+    width: "40%"
+  },
 
-	image: {
-		borderRadius: Util.getWidth(8),
-		height: Util.getWidth(16),
-		width: Util.getWidth(16),
-		marginLeft: '3%',
-		marginTop: '3%',
-	},
+  imageView: {
+    borderRadius: Util.getWidth(11),
+    height: Util.getWidth(22),
+    width: Util.getWidth(22),
+    backgroundColor: "#FFFFFF"
+  },
 
-	userNameView: {
-		alignItems: "flex-start",
-		width: '68%', 
-		justifyContent: 'center',	
-	},
+  image: {
+    borderRadius: Util.getWidth(8),
+    height: Util.getWidth(16),
+    width: Util.getWidth(16),
+    marginLeft: "2%",
+    marginTop: "2%"
+  },
 
-	userName: {
-		marginTop: 10,
-		color: Colors.grayClg,
-		fontWeight: "bold",
-		fontSize: RF(3)
-	},
+  userNameView: {
+    alignItems: "flex-start",
+    width: "68%",
+    justifyContent: "center"
+  },
 
-	borderView: {
-		backgroundColor: Colors.modelBackground,
+  userName: {
+    marginHorizontal: "2%",
+    color: Colors.grayClg,
+    fontFamily: "Poppins-Bold",
+    fontSize: RF(3)
+  },
 
-		height: Util.getHeight(0.1),
-		marginTop: Util.getHeight(1)
-	},
+  borderView: {
+    backgroundColor: Colors.modelBackground,
 
-	menuText: { width: "90%", justifyContent: "center" },
+    height: Util.getHeight(0.1),
+    marginTop: Util.getHeight(1)
+  },
 
-	icons: {
-		width: Util.getWidth(6),
-		height: Util.getWidth(6)
-	},
+  menuText: {
+    width: "90%",
+    justifyContent: "center",
+    fontFamily: "Poppins-Medium"
+  },
 
-	menuItem: {
-		marginHorizontal: 15,
-		flexDirection: "row",
-		paddingLeft: 10,
-		// borderBottomColor: 'red',
-		// borderBottomWidth: 1,
-	},
+  icons: {
+    width: Util.getWidth(6),
+    height: Util.getWidth(6)
+  },
 
-	menuHeader: {
-		padding: 0,
-		height: "20%",
-		marginBottom: "2%",
-		backgroundColor: "#0b5604"
-	},
+  menuItem: {
+    marginLeft: "7%",
+    flexDirection: "row"
 
-	width5p: {width: Util.getWidth(2)},
+    // borderBottomColor: 'red',
+    // borderBottomWidth: 1,
+  },
 
-	width1p: {width: Util.getWidth(5)},
+  menuHeader: {
+    padding: 0,
+    height: "20%",
+    marginBottom: "2%",
+    backgroundColor: "#0b5604"
+  },
 
-	width19p: {width: Util.getWidth(19)},	
+  width5p: { width: Util.getWidth(2) },
+
+  width1p: { width: Util.getWidth(5) },
+
+  width19p: { width: Util.getWidth(19) }
 };

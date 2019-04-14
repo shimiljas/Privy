@@ -44,7 +44,7 @@ class CardComponent extends React.Component {
           <View style={[Styles.imageAreaView, GlobalStyle.viewCenter]}>
             <Image
               source={image}
-              resizeMode="cover"
+              resizeMode="contain"
               style={[Styles.imageView, imageStyle]}
             />
           </View>
@@ -64,7 +64,7 @@ class CardComponent extends React.Component {
             <View style={[GlobalStyle.viewCenter, Styles.bottomImageArea2]}>
               {footerImage != "" ? (
                 <Image
-                  resizeMode="stretch"
+                  resizeMode="contain"
                   opacity={0.6}
                   source={footerImage}
                   style={Styles.bottomImage}
@@ -72,7 +72,15 @@ class CardComponent extends React.Component {
               ) : (
                 <View />
               )}
-              <Text style={[imageValText, { paddingBottom: subTitle== 'Unread'? 5 : null },{ paddingTop: subTitle== 'My Reviews'? 5 : null }]}>{footerValue}</Text>
+              <Text
+                style={[
+                  imageValText,
+                  { paddingBottom: subTitle == "Unread" ? 5 : null },
+                  { paddingTop: subTitle == "My Reviews" ? 5 : null }
+                ]}
+              >
+                {footerValue}
+              </Text>
             </View>
           </View>
         </View>

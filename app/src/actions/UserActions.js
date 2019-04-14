@@ -16,7 +16,7 @@ const getUser = async (dispatch, data) => {
   dispatch({
     type:LOADERON
   })
-  const method = "getUserProfile";
+  const method = "get_user_profile.php";
   console.log("get user == ", data);
   var obj = { user_id: data.user_id };
   var token = data.api_token;
@@ -27,7 +27,7 @@ const getUser = async (dispatch, data) => {
       dispatch({
         type:LOADEROFF
       })
-      if (res.status == "true") {
+      if (res.success == 1) {
         console.log("get user data +++ ", res.data);
         var obj = await prepareData(res.data, token);
         console.log("user data before dispatch -- ", obj);
@@ -70,9 +70,9 @@ export const updateUserData = data => {
 };
 
 prepareData = async (data, token) => {
-  var obj = data.userId;
+  var obj =  {}
   obj.profilePic = {
-    uri: "http://ip5.hiteshi.com:3002/images/profile/" + obj.profilePic
+    uri: "https://pngimage.net/wp-content/uploads/2018/05/dummy-profile-image-png-2.png"
   };
   if (data.instructChildren != null) {
     obj.roleId = 3;

@@ -75,11 +75,11 @@ class Login extends Component {
         }}
       >
         <View style={[{ width: "100%", padding: "2%", marginLeft: "3%" }]}>
-          <Text style={{ fontSize: RF(3), color: Color.black, height: "20%" }}>
+          <Text style={{ fontSize: RF(3), color: Color.black, height: "20%", fontFamily: "Poppins-Regular" }}>
             Success
           </Text>
           <Text
-            style={{ fontSize: RF(2.2), marginTop: 10, marginHorizontal: "3%" }}
+            style={{ fontSize: RF(2.2), marginTop: 10, marginHorizontal: "3%", fontFamily: "Poppins-Regular" }}
           >
             {KeyString.sucessLogin}
           </Text>
@@ -96,7 +96,7 @@ class Login extends Component {
             ]}
             onPress={() => this.clearFields(1)}
           >
-            <Text style={styles.btnText}>Ok</Text>
+            <Text style={[styles.btnText, {fontFamily: "Poppins-Regular"}]}>Ok</Text>
           </Item>
         </View>
       </ModelAlert>
@@ -322,8 +322,8 @@ class Login extends Component {
                 <TouchableOpacity
                   style={{
                     width: "80%",
-                    height:30,
-                    justifyContent:'center',
+                    height: 30,
+                    justifyContent: "center",
                     marginLeft: Util.getWidth(2)
                   }}
                   onPress={() => Actions.Terms()}

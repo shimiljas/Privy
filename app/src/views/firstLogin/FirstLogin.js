@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { Item } from "native-base";
+import { Actions } from "react-native-router-flux";
 import Styles from "./Styles";
 import ClientApi from "../../common/ApiManager";
 import Util from "../../common/Util";
@@ -30,34 +31,29 @@ class FirstLogin extends Component {
   };
 
   _onPressButton = async () => {
-    var i = this.state.type;
-    if (i == "") {
+    if (this.state.type == "") {
       alert("Please select type");
     } else {
       var roleId = 1;
-      if (i == "i") {
+      if (this.state.type == "i") {
         roleId = 3;
       } else {
         roleId = 2;
       }
-
-      var { _id, api_token } = this.state.userData;
-
-      console.log("token ", api_token, _id);
 
       var token =
         this.props.userData.api_token != null
           ? this.props.userData.api_token
           : this.props.userData.token;
 
-      var obj = { user_id: this.state.userData._id, roleId: roleId };
-      var response = await ClientApi.callApi("setUserRole", obj, token);
-      console.log("api response == ", response);
-      if (response.status == "true") {
+      var obj = {  user_id: await AsyncStorage.getItem("userId"), roleId: roleId };
+      var response = await ClientApi.callApi("create_ut.php", obj, token);
+      if (response.success == 1) {
         await AsyncStorage.setItem("roleId", String(roleId));
-        var data = { user_id: this.state.userData._id };
-        data.api_token = token;
-        this.props.getUserInfo(data);
+        Actions.drawer({
+          type: "replace"
+        });
+        // this.props.getUserInfo(data);
       }
     }
   };

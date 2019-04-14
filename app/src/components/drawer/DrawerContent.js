@@ -15,9 +15,7 @@ import { connect } from "react-redux";
 import Styles from "./Styles";
 import Images from "../../common/images";
 import GlobalStyles from "../../common/GlobalStyle";
-import { getUserInfo ,deshHomeValue} from "../../actions";
-
-var localeContext;
+import { getUserInfo, deshHomeValue } from "../../actions";
 
 const routers = [
   // Add your Drawer items here
@@ -27,8 +25,7 @@ const routers = [
     action: Actions.tab_1,
     text: "Dashboard",
     icon_selected: "dashboardActive",
-    icon: "dashboard",
-    
+    icon: "dashboard"
   },
 
   {
@@ -63,6 +60,14 @@ const routers = [
     text: "My Payments",
     icon_selected: "dollarActive",
     icon: "dollar"
+  },
+  {
+    id: 110,
+    key: "TermsNConditionScreen",
+    action: Actions.tab_3,
+    text: "Terms & Conditions",
+    icon_selected: "termsOfConditionActive",
+    icon: "termsOfCondition"
   },
   {
     id: 111,
@@ -101,6 +106,14 @@ const studentsRouters = [
     icon: "user"
   },
   {
+    id: 104,
+    key: "TermsNConditionScreen",
+    action: Actions.tab_3,
+    text: "Terms & Conditions",
+    icon_selected: "termsOfConditionActive",
+    icon: "termsOfCondition"
+  },
+  {
     id: 105,
     key: "SignOutScreen",
     action: Actions.tab_5,
@@ -121,7 +134,7 @@ const styles = StyleSheet.create({
 class DrawerContent extends React.Component {
   constructor(props) {
     super(props);
-    localeContext = this;
+    // this = this;
     const { userData, getUserInfo } = this.props;
     var d = userData;
     console.log("drawer data -- ", d);
@@ -131,51 +144,22 @@ class DrawerContent extends React.Component {
       api_token: d.api_token != null ? d.api_token : d.token
     };
 
-    getUserInfo(data);
+    // getUserInfo(data);
 
-    if (d.name == "") {
-      if (d.roleId == 3) {
-        localeContext.state = {
-          menuItems: routers,
-          selectedMenu: {
-            key: "DashboardScreen",
-            action: Actions.tab_2,
-            text: "Dashboard",
-            icon_selected: "ic_profile_white",
-            icon: "ic_profile"
-          },
-          userData: {},
-          name: ""
-        };
-      } else {
-        localeContext.state = {
-          menuItems: studentsRouters,
-          selectedMenu: {
-            key: "DashboardScreen",
-            action: Actions.tab_1,
-            text: "Dashboard",
-            icon_selected: "ic_dashboard_white",
-            icon: "ic_dashboard"
-          },
-          userData: {},
-          name: ""
-        };
-      }
-    } else {
-      //console.log("ddd --- ",d);
-      localeContext.state = {
-        menuItems: d.roleId == 3 ? routers : studentsRouters,
-        selectedMenu: {
-          key: "DashboardScreen",
-          action: d.roleId == 3 ? Actions.tab_1 : Actions.tab_2,
-          text: "Dashboard",
-          icon_selected: "ic_dashboard_white",
-          icon: "ic_dashboard"
-        },
-        userData: {},
-        name: ""
-      };
+    this.state = {
+      menuItems: routers,
+      selectedMenu: {
+        key: "DashboardScreen",
+        action: Actions.tab_2,
+        text: "Dashboard",
+        icon_selected: "ic_profile_white",
+        icon: "ic_profile"
+      },
+      userData:{},
+      name: ""
     }
+
+    
   }
 
   // updateSelectedMenu=()=>{
@@ -188,27 +172,27 @@ class DrawerContent extends React.Component {
     // alert(data.key);
     switch (data.key) {
       case "DashboardScreen":
-      Actions.drawerClose();
+        Actions.drawerClose();
         Actions.Dashboard({ type: "replace" });
         break;
       case "ProfileScreen":
-      Actions.drawerClose();
+        Actions.drawerClose();
         Actions.Profile({ type: "replace" });
         break;
       case "StudentProfileScreen":
-      Actions.drawerClose();
+        Actions.drawerClose();
         Actions.StudentProfile({ type: "replace" });
         break;
       case "MyAccountScreen":
-      Actions.drawerClose();
+        Actions.drawerClose();
         Actions.MyAccount({ type: "replace" });
         break;
       case "ServicesScreen":
-      Actions.drawerClose();
+        Actions.drawerClose();
         Actions.Services({ type: "replace" });
         break;
       case "PaymentScreen":
-      Actions.drawerClose();
+        Actions.drawerClose();
         Actions.push("BookingScreen", { headerName: "My Payments" });
         break;
       case "ReceiptsScreen":
@@ -223,21 +207,25 @@ class DrawerContent extends React.Component {
         console.log("logout");
         Actions.Login({ type: "reset" });
         break;
+      case "TermsNConditionScreen":
+        Actions.drawerClose();
+        Actions.TermsNConditionScreen();
+        break;
       default:
         alert("Functionality will be implemented later");
         //Actions.Dashboard({ type: "replace" });
         break;
     }
   };
-pressTouchOption=async(data)=>{
-    localeContext.setState({ selectedMenu: data });
-    console.log("sidemenu text", data.key,localeContext.state.selectedMenu.key);
-    await deshHomeValue(data.key);
-    localeContext._navigation(data);
+  pressTouchOption = async data => {
+    this.setState({ selectedMenu: data });
+    console.log("sidemenu text", data.key, this.state.selectedMenu.key);
+    // await deshHomeValue(data.key);
+    this._navigation(data);
     // this.props.deshHomeValueReset(false)
-}
+  };
   _renderItem(data, index) {
-    const{HomeBtn}=this.props;
+    const { HomeBtn } = this.props;
     return (
       <TouchableOpacity
         style={Styles.rowBg}
@@ -248,7 +236,7 @@ pressTouchOption=async(data)=>{
           <Image
             style={Styles.icons}
             source={
-              localeContext.state.selectedMenu.key == data.key
+              this.state.selectedMenu.key == data.key
                 ? Images.sideMenuIcons[data.icon_selected]
                 : Images.sideMenuIcons[data.icon]
             }
@@ -258,9 +246,9 @@ pressTouchOption=async(data)=>{
           <View style={Styles.menuText}>
             <Text
               style={
-                localeContext.state.selectedMenu.key == data.key
+                this.state.selectedMenu.key == data.key
                   ? Styles.titleSelected
-                  : Styles.titleText 
+                  : Styles.titleText
               }
             >
               {data.text}
@@ -271,24 +259,80 @@ pressTouchOption=async(data)=>{
     );
   }
 
-  renderHeader() {
-	Keyboard.dismiss();
-	const { userData } = this.props;
+  async componentDidMount() {
+    let userObj = await AsyncStorage.getItem("USEROBJ");
+    let roleId = await AsyncStorage.getItem("roleId");
+    let userData = JSON.parse(userObj);
+    let d = {
+      name: userData.name,
+      roleId
+    }
+
+    let xState = null;
+    
+    if (d.name == "") {
+      if (d.roleId == 3) {
+       xState = {
+          menuItems: routers,
+          selectedMenu: {
+            key: "DashboardScreen",
+            action: Actions.tab_2,
+            text: "Dashboard",
+            icon_selected: "ic_profile_white",
+            icon: "ic_profile"
+          },
+          userData,
+          name: d.name
+        };
+      } else {
+       xState = {
+          menuItems: studentsRouters,
+          selectedMenu: {
+            key: "DashboardScreen",
+            action: Actions.tab_1,
+            text: "Dashboard",
+            icon_selected: "ic_dashboard_white",
+            icon: "ic_dashboard"
+          },
+          userData,
+          name: d.name
+        };
+      }
+    } else {
+      //console.log("ddd --- ",d);
+     xState = {
+        menuItems: d.roleId == 3 ? routers : studentsRouters,
+        selectedMenu: {
+          key: "DashboardScreen",
+          action: d.roleId == 3 ? Actions.tab_1 : Actions.tab_2,
+          text: "Dashboard",
+          icon_selected: "ic_dashboard_white",
+          icon: "ic_dashboard"
+        },
+        userData,
+        name: d.name
+      };
+    }
+    this.setState({...xState});
+  }
+
+   renderHeader() {
+    
+    Keyboard.dismiss();
+    const { userData } = this.state;
+    console.log("USER ROLE SSS", userData);
     return (
       <View style={Styles.menuHeader}>
         <View style={GlobalStyles.height15} />
-        <View style={GlobalStyles.row}>
+        <View style={[GlobalStyles.row]}>
           <View style={[Styles.width19p, GlobalStyles.viewCenter]}>
-            <Image
-              source={userData.profilePic}
-              style={Styles.image}
-            />
+            <Image source={{uri: userData.profilePic}} style={Styles.image} />
           </View>
-          
+
           <View style={[Styles.userNameView]}>
             <Text numberOfLines={1} style={Styles.userName}>
               {userData.name == ""
-                ? userData.email
+                ? userData.email.split("@")[0].toUpperCase()
                 : userData.name}
             </Text>
           </View>
@@ -301,7 +345,7 @@ pressTouchOption=async(data)=>{
   render() {
     const { menuItems } = this.state;
     return (
-      <View style={styles.container}>
+      <View style={[styles.container]}>
         {this.renderHeader()}
         <FlatList
           data={menuItems ? menuItems : null}
@@ -317,12 +361,11 @@ pressTouchOption=async(data)=>{
 DrawerContent.propTypes = {
   userData: PropTypes.objectOf(PropTypes.any).isRequired,
   //SpinnerVisible: PropTypes.element.isRequired
-  getUserInfo: PropTypes.func.isRequired,
+  getUserInfo: PropTypes.func.isRequired
 };
 
 //export default DrawerContent;
-const maptoprops = state => {
-  console.log("new drawer state", state.DashboardCall.dashBoard);
+const maptoprops =  (state) => {
   return {
     userData: state.User.userdata,
     HomeBtn: state.DashboardCall.dashBoard
@@ -331,5 +374,5 @@ const maptoprops = state => {
 
 export default connect(
   maptoprops,
-  { getUserInfo,deshHomeValue }
+  { getUserInfo, deshHomeValue }
 )(DrawerContent);
