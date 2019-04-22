@@ -7,22 +7,52 @@ import GlobalStyle from "../../../../common/GlobalStyle";
 
 var data = [
   {
-    title: "Search for Service"
+    title: "Booking1",
+    iot:1,
+    inp:0,
+    rec:1,
+    rate:3,
+    date:'21/04/2019'
   },
   {
-    title: "Search for Service"
+    title: "Booking2",
+    iot:1,
+    inp:0,
+    rec:1,
+    rate:1,
+    date:'21/04/2019'
   },
   {
-    title: "Search for Service"
+    title: "Booking3",
+    iot:1,
+    inp:0,
+    rec:1,
+    rate:5,
+    date:'21/04/2019'
   },
   {
-    title: "Search for Service"
+    title: "Booking4",
+    iot:1,
+    inp:0,
+    rec:1,
+    rate:3,
+    date:'21/04/2019'
   },
   {
-    title: "Search for Service"
+    title: "Booking5",
+    iot:1,
+    inp:0,
+    rec:1,
+    rate:2,
+    date:'21/04/2019'
   },
   {
-    title: "Search for Service"
+    title: "Booking1",
+    iot:1,
+    inp:0,
+    rec:1,
+    rate:4,
+    date:'21/04/2019'
   }
 ];
 class ComingBooking extends React.Component {
@@ -31,7 +61,7 @@ class ComingBooking extends React.Component {
   }
   _cellDetailView = item => {
     console.log(item);
-    return <ReviewCard />;
+    return <ReviewCard item ={item}/>;
   };
   render() {
     return (

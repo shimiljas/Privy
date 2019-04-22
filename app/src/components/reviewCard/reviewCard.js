@@ -19,9 +19,9 @@ class ReviewCard extends React.Component {
 		return (
 			<View elevation={10} style={[Styles.cardArea,this.props.btn == undefined ?{}:{height: Util.getHeight(40)}]}>
 				<View style={{ height: "20%", width: "90%",marginHorizontal:'5%',justifyContent:'center',flexDirection: "row"}} >
-						<Text style={Styles.lessonText}>Booking 1</Text>
+						<Text style={Styles.lessonText}>{this.props.item.title}</Text>
 						<View style={Styles.timeView}>
-					    	<Text style={[Styles.timeTextDesign,{alignSelf:'flex-end'}]}>10 Jul 18(1pm - 2pm)</Text>
+					    	<Text style={[Styles.timeTextDesign,{alignSelf:'flex-end'}]}>{this.props.item.date}}</Text>
 						</View>
 					</View>
 				
@@ -43,7 +43,7 @@ class ReviewCard extends React.Component {
 						<StarRating
                                                 disabled={true}
                                                 maxStars={5}
-                                                rating={3}
+                                                rating={this.props.item.rate}
                                                 fullStarColor='#fac917'
                                                 starSize={Util.getHeight(2.5)}
                                                 emptyStarColor={Color.grayClg}                                                
@@ -53,15 +53,15 @@ class ReviewCard extends React.Component {
 				<View style={{ height:this.props.btn == undefined ?  "30%":"25%", width: "100%", justifyContent: "center" }} >
 				  <View style={{  	flex: 1,width: "90%",marginHorizontal:'5%',justifyContent:'center',flexDirection: "row"}} >
 				  <Text style={[Styles.timeText,{ color: Color.grayClg ,flex:1.6}]}>Was the intructor on time</Text>
-						<Text style={Styles.timeText}>YES</Text>
+						<Text style={Styles.timeText}>{this.props.item.iot === 1 ? 'YES' : 'NO'}</Text>
 					</View>
 					<View style={{ 	flex: 1,width: "90%",marginHorizontal:'5%',justifyContent:'center',flexDirection: "row"}} >
-					<Text style={[Styles.timeText,{ color: Color.grayClg ,flex:1.6}]}>Was the instructor Profeesi</Text>
-						<Text style={Styles.timeText}>NO</Text>
+					<Text style={[Styles.timeText,{ color: Color.grayClg ,flex:1.6}]}>Was the instructor Profeesional</Text>
+						<Text style={Styles.timeText}>{this.props.item.inp === 1 ? 'YES' : 'NO'}</Text>
 					</View>
 					<View style={{ flex:1, width: "90%",marginHorizontal:'5%',justifyContent:'center',flexDirection: "row"}} >
 					<Text style={[Styles.timeText,{ color: Color.grayClg ,flex:1.6}]}>Would you Recommend</Text>
-						<Text style={Styles.timeText}>YES</Text>
+						<Text style={Styles.timeText}>{this.props.item.rec === 1 ? 'YES' : 'NO'}</Text>
 					</View>
 				</View>
 				 {this.props.btn != undefined ? <View style={{height: "30%", width: "100%",justifyContent:'center',alignItems:'center'}}>
