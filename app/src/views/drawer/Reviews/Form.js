@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, AsyncStorage } from "react-native";
 import { Container } from "native-base";
 import { connect } from "react-redux";
 import StarRating from "react-native-star-rating";
@@ -11,6 +11,7 @@ import Styles from "./Styles";
 import Color from "../../../common/Color";
 import GlobalStyle from "../../../common/GlobalStyle";
 import KeyWords from "../../../common/Localization";
+import clientApi from "../../../common/ApiManager";
 import {
   SpinnerLoad,
   ButtonComponent,
@@ -19,6 +20,24 @@ import {
 import Header from "../../../components/header/header";
 
 var lessons = [{ id: 1, name: "Language" }, { id: 2, name: "Music" }];
+var reviews = [
+  {
+      "bid": 4,
+      "cid": 2,
+      "iid": 6,
+      "title": "Meditation",
+      "sd": "04/18/2019",
+      "ed": "06/18/2019"
+  },
+  {
+      "bid": 6,
+      "cid": 2,
+      "iid": 6,
+      "title": "Meditation",
+      "sd": "04/18/2019",
+      "ed": "06/18/2019"
+  }
+];
 
 class SubmitReviewComponent extends React.Component {
   constructor(props) {
@@ -27,31 +46,72 @@ class SubmitReviewComponent extends React.Component {
       instructChildren: true,
       instructChildren1: true,
       instructChildren2: true,
+      selectedData: {},
       rating: 0
     };
   }
 
-  selectLesson = () => {};
+  selectLesson = (lesson) => {
+    this.setState({selectedData:lesson});
+    console.log(this.selectedData);
+  };
+
+  componentDidMount = async () => {
+    let data = {
+      role_id: await AsyncStorage.getItem("roleId"),
+      user_id: await AsyncStorage.getItem("userId"),
+      api_token: await AsyncStorage.getItem("apiToken")
+    };
+    this.setState({userData: {roleId: data.role_id, _id: data.user_id, token: data.api_token}});
+    await this.getReviews();
+    this.setState({selectedData:reviews[0]});
+  };
+
+  getReviews = async() => {
+    const { userData } = this.state;
+    var obj = {
+      user_id: +userData._id
+    };
+    var response = await clientApi.callApi(
+      "get_booked_cls4review.php",
+      obj,
+      userData.api_token != null ? userData.api_token : userData.token
+    );
+    if (response.success == 1) {
+      reviews = response.data;
+      console.log("classes == ", reviews);
+
+      this.setState({ reviews: reviews });
+    }
+  } 
 
   submit = async () => {
-    // const { SendReview, userData } = this.props;
-    // const {
-    //   instructChildren,
-    //   instructChildren1,
-    //   instructChildren2,
-    //   rating
-    // } = this.state;
-    // await SendReview({
-    //   user_id: userData._id,
-    //   api_token:
-    //     userData.api_token != null ? userData.api_token : userData.token,
-    //   booking_id: booking_id,
-    //   answer1: instructChildren,
-    //   answer2: instructChildren1,
-    //   answer3: instructChildren2, 
-    //   classId: classId,
-    //   rating: rating
-    // });
+    const {
+      userData,
+      instructChildren,
+      instructChildren1,
+      instructChildren2,
+      rating,
+      selectedData
+    } = this.state;
+    var obj = {
+      user_id: userData._id,
+      bid: selectedData.bid,
+      iot: instructChildren ? 1 : 0,
+      isp: instructChildren1 ? 1 : 0,
+      isr: instructChildren2 ? 1 : 0,
+      iid: selectedData.iid,
+      rate: rating
+    };
+    var response = await clientApi.callApi(
+      "update_review_student.php",
+      obj,
+      userData.api_token != null ? userData.api_token : userData.token
+    );
+    if (response.success == 1) {
+      alert("Review Submitted successfully");
+      console.log(response);
+    }
   };
 
   render() {
@@ -59,7 +119,8 @@ class SubmitReviewComponent extends React.Component {
     const {
       instructChildren,
       instructChildren1,
-      instructChildren2
+      instructChildren2,
+      selectedData
     } = this.state;
     return (
       <Container>
@@ -76,17 +137,21 @@ class SubmitReviewComponent extends React.Component {
             <View>
               <Text style={Styles.lable}>{KeyWords.lesson}</Text>
               <ModalSelector
-                data={lessons}
-                keyExtractor={item => item._id}
-                labelExtractor={item =>
-                  item.name != null ? item.name : item.title
-                }
+                data={reviews}
+                initValue = {selectedData !== undefined ? selectedData.title : ''}
+                keyExtractor={item => item.bid}
+                labelExtractor={item => {item.title !== undefined ? item.title : ''}}
                 onChange={value => this.selectLesson(value)}
                 selectStyle={[
                   GlobalStyle.borderWidth0,
                   GlobalStyle.alignItemsFlexStart
                 ]}
               />
+            </View>
+
+            <View>
+              <Text style={Styles.lable}>{KeyWords.startDate}</Text>
+              <Text style={Styles.datelable}>{selectedData !== undefined ? selectedData.sd : ''}</Text>
             </View>
 
             <View style={Styles.marginTop5p}>

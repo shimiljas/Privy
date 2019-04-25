@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image } from "react-native";
+import { View, Image, AsyncStorage } from "react-native";
 import { Card, CardItem, Body, Text, Item } from "native-base";
 import Styles from "./Styles";
 import RF from "react-native-responsive-fontsize";
@@ -10,18 +10,45 @@ import { Actions } from "react-native-router-flux";
 import styles from "../modelAlert/styles";
 import StarRating from 'react-native-star-rating';
 import Util from "../../common/Util";
+import clientApi from '../../common/ApiManager';
 
 class ReviewCard extends React.Component {
 	constructor(props) {
 		super(props);
 	}
+
+	componentDidMount = async () => {
+    let data = {
+      role_id: await AsyncStorage.getItem("roleId"),
+      user_id: await AsyncStorage.getItem("userId"),
+      api_token: await AsyncStorage.getItem("apiToken")
+    };
+    this.setState({userData: {roleId: data.role_id, _id: data.user_id, token: data.api_token}});
+  };
+
+	approve = async()  => {
+		const {userData} = this.state;
+    var obj = {
+      user_id: userData._id,
+      rid: this.props.item.rid
+    };
+    var response = await clientApi.callApi(
+      "approve_review.php",
+      obj,
+      userData.api_token != null ? userData.api_token : userData.token
+    );
+    if (response.success == 1) {
+      alert("Review Approved successfully");
+      console.log(response);
+    }
+	}
 	render() {
 		return (
 			<View elevation={10} style={[Styles.cardArea,this.props.btn == undefined ?{}:{height: Util.getHeight(40)}]}>
 				<View style={{ height: "20%", width: "90%",marginHorizontal:'5%',justifyContent:'center',flexDirection: "row"}} >
-						<Text style={Styles.lessonText}>{this.props.item.title}</Text>
+						<Text style={Styles.lessonText}>{this.props.item.title !== undefined ? this.props.item.title : 'Booking1'}</Text>
 						<View style={Styles.timeView}>
-					    	<Text style={[Styles.timeTextDesign,{alignSelf:'flex-end'}]}>{this.props.item.date}}</Text>
+					    	<Text style={[Styles.timeTextDesign,{alignSelf:'flex-end'}]}>{'{' + (this.props.item.date !== undefined ? this.props.item.date : '25/04/2019') + '}'}</Text>
 						</View>
 					</View>
 				
@@ -57,20 +84,20 @@ class ReviewCard extends React.Component {
 					</View>
 					<View style={{ 	flex: 1,width: "90%",marginHorizontal:'5%',justifyContent:'center',flexDirection: "row"}} >
 					<Text style={[Styles.timeText,{ color: Color.grayClg ,flex:1.6}]}>Was the instructor Profeesional</Text>
-						<Text style={Styles.timeText}>{this.props.item.inp === 1 ? 'YES' : 'NO'}</Text>
+						<Text style={Styles.timeText}>{this.props.item.isp === 1 ? 'YES' : 'NO'}</Text>
 					</View>
 					<View style={{ flex:1, width: "90%",marginHorizontal:'5%',justifyContent:'center',flexDirection: "row"}} >
 					<Text style={[Styles.timeText,{ color: Color.grayClg ,flex:1.6}]}>Would you Recommend</Text>
-						<Text style={Styles.timeText}>{this.props.item.rec === 1 ? 'YES' : 'NO'}</Text>
+						<Text style={Styles.timeText}>{this.props.item.isr === 1 ? 'YES' : 'NO'}</Text>
 					</View>
 				</View>
 				 {this.props.btn != undefined ? <View style={{height: "30%", width: "100%",justifyContent:'center',alignItems:'center'}}>
 						<Item
 							rounded
 							style={[Styles.btn, GlobalStyle.viewCenter]}
-							onPress={() => console.log("Approved clicked")}
+							onPress={ ()=>this.approve()}
 						>
-							<Text style={Styles.btnText}>Approved</Text>
+							<Text style={Styles.btnText}>Approve</Text>
 						</Item>
 					
 				</View>:null}

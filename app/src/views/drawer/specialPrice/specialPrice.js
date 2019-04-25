@@ -198,7 +198,7 @@ class SpecialPriceComponent extends React.Component {
   getClasses = async () => {
     const { userData } = this.state;
     var obj = {
-      user_id: 6
+      user_id: +userData._id
     };
     var response = await clientApi.callApi(
       "get_classes_ins.php",
@@ -225,8 +225,8 @@ class SpecialPriceComponent extends React.Component {
   };
 
   addAnother () {
-    alert("Add Another Field");
-    this.setState( { selectedClass:{}});
+    alert("Fill the details to add Another Field");
+    this.setState( { selectedClass:{}, specialPrice:'', originalPrice:'', explaination:''});
     }
   submit = async () => {
     const { selectedClass,
@@ -245,6 +245,10 @@ class SpecialPriceComponent extends React.Component {
       bd:beforeDate,
       exp:explaination
     };
+    if (+specialPrice > +originalPrice) {
+      alert('Special price should be lesser than original price');
+      return;
+    }
     console.log(userData);
     var response = await clientApi.callApi(
       "update_special_price.php",
@@ -385,6 +389,7 @@ class SpecialPriceComponent extends React.Component {
             height={90}
             enabled
             minimumDate={new Date()}
+            maximumDate = {new Date(beforeDate)}
             key="startDate"
             mode="date"
             showDateTimePicker={() => this.setState({ showStartDatePicker: true })}

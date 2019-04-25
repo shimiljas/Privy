@@ -12,6 +12,10 @@ export default {
 		fontSize: RF(2.5),
 		color: Color.grayClg
 	},
+	datelable: {
+		fontSize: RF(2.5),
+		color: Color.darkGray
+	},
 
 	btn: {
 		padding: 10,

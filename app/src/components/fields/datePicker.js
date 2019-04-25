@@ -27,6 +27,7 @@ class DatePickerComponent extends React.Component {
       onConfirm,
       onCancel,
       minimumDate,
+      maximumDate,
       titleStyle
     } = this.props;
     return (
@@ -70,6 +71,7 @@ class DatePickerComponent extends React.Component {
                 isVisible={isDateTimePickerVisible}
                 onConfirm={onConfirm}
                 minimumDate={minimumDate}
+                maximumDate = {maximumDate}
                 onCancel={onCancel}
                 mode={mode}
               />
