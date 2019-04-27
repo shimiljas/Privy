@@ -21,7 +21,10 @@ export default {
 
   inputView: { width: "90%" },
   checkBox: { borderRadius: Util.getWidth(3), justifyContent: "center" },
+  radioBtn: { borderRadius: Util.getWidth(3), justifyContent: "center", 
+  activeColor : Color.appDefultColor },
   textTitle: { marginLeft: 20, fontSize: RF(2) },
+  radioBtnTitle: { marginLeft: 10, fontSize: RF(2) },
   pickerItem: {
     fontSize: RF(3),
     fontWeight: "bold",

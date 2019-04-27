@@ -1,6 +1,5 @@
 import React from "react";
-import { View, Text, AsyncStorage } from "react-native";
-import { Container } from "native-base";
+import { View, Text, AsyncStorage, ScrollView } from "react-native";
 import { connect } from "react-redux";
 import StarRating from "react-native-star-rating";
 import ModalSelector from "react-native-modal-selector";
@@ -15,11 +14,11 @@ import clientApi from "../../../common/ApiManager";
 import {
   SpinnerLoad,
   ButtonComponent,
-  CheckBoxComponent
+  PickerComponent,
+  RadioButtonComponent
 } from "../../../components";
 import Header from "../../../components/header/header";
 
-var lessons = [{ id: 1, name: "Language" }, { id: 2, name: "Music" }];
 var reviews = [
   {
       "bid": 4,
@@ -64,7 +63,6 @@ class SubmitReviewComponent extends React.Component {
     };
     this.setState({userData: {roleId: data.role_id, _id: data.user_id, token: data.api_token}});
     await this.getReviews();
-    this.setState({selectedData:reviews[0]});
   };
 
   getReviews = async() => {
@@ -123,7 +121,7 @@ class SubmitReviewComponent extends React.Component {
       selectedData
     } = this.state;
     return (
-      <Container>
+      <ScrollView>
         <Header title="Review" />
         <View padder style={Styles.mainView}>
           <SpinnerLoad spinnerVisible={SpinnerVisible} />
@@ -135,18 +133,15 @@ class SubmitReviewComponent extends React.Component {
             <View style={GlobalStyle.divider} />
 
             <View>
-              <Text style={Styles.lable}>{KeyWords.lesson}</Text>
-              <ModalSelector
-                data={reviews}
-                initValue = {selectedData !== undefined ? selectedData.title : ''}
-                keyExtractor={item => item.bid}
-                labelExtractor={item => {item.title !== undefined ? item.title : ''}}
-                onChange={value => this.selectLesson(value)}
-                selectStyle={[
-                  GlobalStyle.borderWidth0,
-                  GlobalStyle.alignItemsFlexStart
-                ]}
-              />
+              <PickerComponent
+              title={KeyWords.lesson}
+              placeholder={KeyWords.lesson}
+              data={reviews}
+              callFunction={(value) => this.selectLesson(value)}
+              fieldWidth={GlobalStyle.width100p}
+              height={90}
+              enabled
+              key="reviews"/>
             </View>
 
             <View>
@@ -157,7 +152,7 @@ class SubmitReviewComponent extends React.Component {
             <View style={Styles.marginTop5p}>
               <Text style={Styles.lable}>{KeyWords.wasTheInsOnTime}</Text>
               <View style={[GlobalStyle.row, Styles.marginTop2p]}>
-                <CheckBoxComponent
+                <RadioButtonComponent
                   title={KeyWords.yes}
                   value={instructChildren}
                   setValues={() =>
@@ -166,8 +161,8 @@ class SubmitReviewComponent extends React.Component {
                     })
                   }
                 />
-
-                <CheckBoxComponent
+                <View style={ Styles.marginLeft10p}>
+                <RadioButtonComponent
                   title={KeyWords.no}
                   value={!instructChildren}
                   setValues={() =>
@@ -176,6 +171,7 @@ class SubmitReviewComponent extends React.Component {
                     })
                   }
                 />
+                </View>
               </View>
             </View>
 
@@ -184,7 +180,7 @@ class SubmitReviewComponent extends React.Component {
                 {KeyWords.wasTheInstructorProfessional}
               </Text>
               <View style={[GlobalStyle.row, Styles.marginTop2p]}>
-                <CheckBoxComponent
+                <RadioButtonComponent
                   title={KeyWords.yes}
                   value={instructChildren1}
                   setValues={() =>
@@ -194,7 +190,8 @@ class SubmitReviewComponent extends React.Component {
                   }
                 />
 
-                <CheckBoxComponent
+                <View style={ Styles.marginLeft10p}>
+                <RadioButtonComponent
                   title={KeyWords.no}
                   value={!instructChildren1}
                   setValues={() =>
@@ -203,13 +200,14 @@ class SubmitReviewComponent extends React.Component {
                     })
                   }
                 />
+                </View>
               </View>
             </View>
 
             <View style={Styles.marginTop5p}>
               <Text style={Styles.lable}>{KeyWords.wouldYouRecommend}</Text>
               <View style={[GlobalStyle.row, Styles.marginTop2p]}>
-                <CheckBoxComponent
+                <RadioButtonComponent
                   title={KeyWords.yes}
                   value={instructChildren2}
                   setValues={() =>
@@ -218,16 +216,17 @@ class SubmitReviewComponent extends React.Component {
                     })
                   }
                 />
-
-                <CheckBoxComponent
-                  title={KeyWords.no}
-                  value={!instructChildren2}
-                  setValues={() =>
-                    this.setState({
-                      instructChildren2: false
-                    })
-                  }
-                />
+              <View style={ Styles.marginLeft10p}>
+                  <RadioButtonComponent
+                    title={KeyWords.no}
+                    value={!instructChildren2}
+                    setValues={() =>
+                      this.setState({
+                        instructChildren2: false
+                      })
+                    }
+                  />
+                  </View>
               </View>
             </View>
 
@@ -238,7 +237,7 @@ class SubmitReviewComponent extends React.Component {
                   maxStars={5}
                   rating={this.state.rating}
                   fullStarColor="#fac917"
-                  starSize={Util.getHeight(2.5)}
+                  starSize={Util.getHeight(3.5)}
                   emptyStarColor={Color.grayClg}
                   selectedStar={rating => this.setState({ rating: rating })}
                 />
@@ -260,7 +259,7 @@ class SubmitReviewComponent extends React.Component {
             </View>
           </View>
         </View>
-      </Container>
+      </ScrollView>
     );
   }
 }

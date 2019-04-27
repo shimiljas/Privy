@@ -8,6 +8,7 @@ export * from "./myAccountCard/card.js";
 export * from "./roundInput/roundInput.js";
 export * from "./spinner/spinnerLoad.js";
 export * from "./fields/checkbox.js";
+export * from "./fields/radiobutton.js";
 export * from "./fields/input.js";
 export * from "./classCard/classCard.js";
 export * from "./modelAlert/modelAlertBox.js";

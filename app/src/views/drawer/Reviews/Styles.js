@@ -30,6 +30,7 @@ export default {
 		marginBottom: Util.getHeight(4)
 	},
 	marginTop2p: { marginTop: "2%" },
+	marginLeft10p: { marginLeft: "10%" },
 	marginTop5p: { marginTop: "5%" },
 	marginBottom3: { marginBottom: Util.getWidth(3) },
 	margin5: { margin: Util.getWidth(5) },

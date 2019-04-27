@@ -47,6 +47,7 @@ export default {
 
 	anotherBtn: {
 		marginTop: 20,
+		marginBottom: 20,
 		marginLeft: "10%",
 		padding: 15,
 		backgroundColor: Color.grayClg,

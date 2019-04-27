@@ -1,8 +1,6 @@
 import React from "react";
-import { View, AsyncStorage } from "react-native";
-import { Container } from "native-base";
+import { View, AsyncStorage, ScrollView, Text, Image } from "react-native";
 import { connect } from "react-redux";
-import { Actions } from "react-native-router-flux";
 import PropTypes from "prop-types";
 import Util from "../../../common/Util";
 import Styles from "./Styles";
@@ -164,14 +162,6 @@ var classes = [
 //     __v: 0
 //   }
 // ];
-
-var days = [
-  { name: "1 Day", _id: 1 },
-  { name: "2 Days", _id: 2 },
-  { name: "3 Days", _id: 3 },
-  { name: "4 Days", _id: 4 },
-  { name: "5 Days", _id: 5 }
-];
 class SpecialPriceComponent extends React.Component {
   static defaultProps = {
     SpinnerVisible: true
@@ -182,7 +172,7 @@ class SpecialPriceComponent extends React.Component {
     this.state = {
       userData: {},
       classes: classes,
-      selectedClass: classes[0],
+      selectedClass: {},
       pushNotification: true,
       email: true,
       //price: 0,
@@ -221,7 +211,6 @@ class SpecialPriceComponent extends React.Component {
     };
     this.setState({userData: {roleId: data.role_id, _id: data.user_id, token: data.api_token}});
     await this.getClasses();
-    this.setState({selectedClass:classes[0]});
   };
 
   addAnother () {
@@ -301,7 +290,7 @@ class SpecialPriceComponent extends React.Component {
       showStartDatePicker
     } = this.state;
     return (
-      <Container>
+      <ScrollView>
         <Header title={KeyWords.special + " " + KeyWords.price} />
         <View style={Styles.mainView}>
           <SpinnerLoad spinnerVisible={SpinnerVisible} />
@@ -330,7 +319,7 @@ class SpecialPriceComponent extends React.Component {
               >
                 <CheckBoxComponent
                   title={KeyWords.pushNotification}
-                  value={!pushNotification}
+                  value={pushNotification}
                   setValues={() =>
                     this.setState({
                       pushNotification: !pushNotification
@@ -348,24 +337,28 @@ class SpecialPriceComponent extends React.Component {
                 <CheckBoxComponent
                   title={KeyWords.email}
                   value={email}
-                  setValues={() => this.setState({ email: email })}
+                  setValues={() => this.setState({ email: !email })}
                 />
               </View>
             </View>
-
-            <InputComponent
-              title={KeyWords.original + " " + KeyWords.price}
-              icon={Images.sideMenuIcons.dollar}
-              iconStyle={Styles.menuIcon}
-              placeholder="$00.00"
-              multiline={false}
-              value={originalPrice}
-              setValues={text => this.setState({ originalPrice: text })}
-              fieldWidth={GlobalStyle.width100p}
-              height={90}
-              maxLength={200}
-              keyboardType="numeric"
-            />
+            <View style={Styles.marginBottom3}>
+              <Text style={Styles.lable}>{KeyWords.original}</Text>
+            </View>
+            <View style={[GlobalStyle.row]}>
+            <View
+            style={[
+              GlobalStyle.viewCenter,
+              GlobalStyle.width10p,
+              GlobalStyle.alignItemsFlexStart,
+              Styles.marginTop5p
+            ]}
+          >
+            <Image source={Images.sideMenuIcons.dollar} style={Styles.menuIcon} />
+          </View>
+            <View>
+              <Text style={Styles.lable}>{originalPrice}</Text>
+            </View>
+            </View>
             <InputComponent
               title={KeyWords.special + " " + KeyWords.price}
               icon={Images.sideMenuIcons.dollar}
@@ -427,7 +420,7 @@ class SpecialPriceComponent extends React.Component {
             />
           </View>
         </View>
-      </Container>
+      </ScrollView>
     );
   }
 }

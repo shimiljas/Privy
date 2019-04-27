@@ -5,6 +5,25 @@ import { Text } from "native-base";
 import Styles from "./Styles";
 import GlobalStyle from "../../common/GlobalStyle";
 
+class IconComponent extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    const {  icon, iconStyle } = this.props;
+    return (
+        <View
+          style={[
+            GlobalStyle.viewCenter,
+            GlobalStyle.width10p,
+            GlobalStyle.alignItemsFlexStart
+          ]}
+        >
+        <Image source={icon} style={iconStyle} />
+        </View>
+    );
+  }
+}
 class PickerComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -17,13 +36,13 @@ class PickerComponent extends React.Component {
     return (
       <View>
         <View style={[GlobalStyle.row]}>
-          <View style={[GlobalStyle.viewCenter, GlobalStyle.width10p]} />
+          <View style={ icon ? [GlobalStyle.viewCenter, GlobalStyle.width10p] :[]} />
           <View style={Styles.inputView}>
             <Text style={Styles.inputText}>{title}</Text>
           </View>
         </View>
         <View style={[GlobalStyle.row]}>
-          <View
+          {/* <View
             style={[
               GlobalStyle.viewCenter,
               GlobalStyle.width10p,
@@ -31,7 +50,8 @@ class PickerComponent extends React.Component {
             ]}
           >
             <Image source={icon} style={iconStyle} />
-          </View>
+          </View> */}
+          {icon ? <IconComponent icon={icon} iconStyle={iconStyle}/> : null}
           <View style={Styles.inputView}>
             <ModalSelector
               data={data}
