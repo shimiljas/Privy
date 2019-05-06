@@ -38,6 +38,7 @@ import CalenderScreen from "./views/drawer/Calender/Calender";
 import InstructorProfileScreen from "./views/drawer/instructorProfile/Profile";
 import SubmitReviewScreen from "./views/drawer/Reviews/Form";
 import InstructorStudentProfileScreen from "./views/drawer/studentProfile/StudentProfile";
+import CalendarList from "./views/calendar/calendarList";
 //Common files
 import Images from "./common/images";
 import Colors from "./common/Color";
@@ -363,6 +364,12 @@ class PrivyApp extends Component {
                   title="Student Profile"
                 />
               </Stack>
+              <Scene
+                key="CalendarList"
+                component={() => this._renderScene(CalendarList)}
+                title="Calendar"
+                panHandlers={null}
+              />
             </Scene>
           </Drawer>
         </Scene>

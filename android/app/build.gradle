@@ -170,6 +170,7 @@ subprojects {
     }
 }
 dependencies {
+    compile project(':react-native-vector-icons')
     compile project(':react-native-firebase')
     compile project(':react-native-braintree-xplat')
     compile project(':react-native-localization')

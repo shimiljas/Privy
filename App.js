@@ -28,7 +28,7 @@ export default class App extends Component {
     super(props);
     YellowBox.ignoreWarnings(["Warning: isMounted(...) is deprecated"]);
   }
-  
+
   // async componentDidMount() {
   //   firebase
   //     .messaging()
@@ -139,6 +139,9 @@ export default class App extends Component {
   //     this.notificationOpenedListener();
   // }
   render() {
+    console.ignoredYellowBox = ["Warning: Each", "Warning: Failed"];
+    console.disableYellowBox = true;
+
     const store = createStore(reducer, {}, applyMiddleware(Reduxthunk));
     return (
       <Provider store={store}>

@@ -24,10 +24,66 @@ class CalenderCard extends React.Component {
               style={Styles.dataImage}
             />
             <View style={Styles.dataText}>
-              <Text style={[Styles.nameStyle, { color: Color.whiteClr }]}>30</Text>
+              <Text style={[Styles.nameStyle, { color: Color.whiteClr }]}>
+                30
+              </Text>
             </View>
           </View>
-          <View style={Styles.LeftArea}>
+
+          <View style={{ flex: 1, justifyContent: "center" }}>
+            <View style={{ alignItems: "flex-start" }}>
+              <Text style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}>
+                Category
+              </Text>
+              <Text style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}>
+                English
+              </Text>
+            </View>
+            <View style={{ marginTop: 10, alignItems: "flex-start" }}>
+              <Text style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}>
+                Limit
+              </Text>
+              <Text style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}>
+                30
+              </Text>
+            </View>
+          </View>
+          <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            <Image
+              resizeMode="contain"
+              source={Images.scienceImg}
+              style={{ width: 50, height: 50 }}
+            />
+          </View>
+          <View style={{ flex: 1, justifyContent: "center" }}>
+            <View style={{ alignItems: "flex-start" }}>
+              <Text style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}>
+                Time
+              </Text>
+              <Text style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}>
+                01PM-2PM
+              </Text>
+            </View>
+            <View style={{ marginTop: 10, alignItems: "flex-start" }}>
+              <Text style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}>
+                Bookings
+              </Text>
+              <Text style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}>
+                22
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    );
+  }
+}
+export { CalenderCard };
+
+/*
+<View style={Styles.LeftArea}>
             <Text style={[Styles.nameStyle2]}>{KeyWords.category}</Text>
             <Text style={[Styles.nameStyle, Styles.paddingBottom5]}>English</Text>
             <Text style={[Styles.nameStyle2]}>{KeyWords.limit}</Text>
@@ -46,9 +102,5 @@ class CalenderCard extends React.Component {
             <Text style={[Styles.nameStyle2]}>{KeyWords.titleBooking}</Text>
             <Text style={[Styles.nameStyle]}>22</Text>
           </View>
-        </View>
-      </View>
-    );
-  }
-}
-export { CalenderCard };
+
+          */
