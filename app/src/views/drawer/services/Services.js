@@ -5,7 +5,7 @@ import {
   Alert,
   FlatList,
   Modal,
-  
+  SafeAreaView,
   AsyncStorage,
   TouchableOpacity
 } from "react-native";
@@ -23,7 +23,6 @@ import styles from "../../../components/header/styles";
 import KeyWords from "../../../common/Localization";
 import clientApi from "../../../common/ApiManager";
 
-
 class ServicesComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -32,10 +31,13 @@ class ServicesComponent extends React.Component {
       modalVisible: false,
       category: {},
       selectedData: [],
-      lessons:[],
-      services:[],
+      lessons: [],
+      services: [],
       editItemDetails: {},
-      modifiedModelVisible: false, pids: "EXIT", lIds: [],cIds: []
+      modifiedModelVisible: false,
+      pids: "EXIT",
+      lIds: [],
+      cIds: []
     };
   }
 
@@ -49,8 +51,7 @@ class ServicesComponent extends React.Component {
     const { selectedData } = this.state;
     this.setState({
       category: value,
-      selectedData: [],
-      
+      selectedData: []
     });
     console.log("called fun ===1", selectedData);
   }
@@ -58,13 +59,15 @@ class ServicesComponent extends React.Component {
   getLessons = async () => {
     let response = await clientApi.callPostApi("get_lessons.php");
     if (response.success == 1) {
-      console.log("LESSONS", response.data)
-      this.setState({lessons : response.data});
+      console.log("LESSONS", response.data);
+      this.setState({ lessons: response.data });
     }
   };
 
   getCategories = async () => {
-    let response = await clientApi.callPostApi("get_categories.php", {pid: null});
+    let response = await clientApi.callPostApi("get_categories.php", {
+      pid: null
+    });
     if (response.success == 1) {
       categories = response.data;
       this.setState({
@@ -77,19 +80,26 @@ class ServicesComponent extends React.Component {
     let obj = {
       user_id: await AsyncStorage.getItem("userId")
     };
-    let response = await clientApi.callPostApi(
-      "get_services_ins.php",
-      {...obj}
-    );
+    let response = await clientApi.callPostApi("get_services_ins.php", {
+      ...obj
+    });
     if (response.success == 1) {
       console.log(" ffh ser res == ", response);
-      this.setState({ services: response.data.data, helperCats: response.data.cats });
+      this.setState({
+        services: response.data.data,
+        helperCats: response.data.cats
+      });
     }
   };
 
   setModalVisible = () => {
     const { modalVisible } = this.state;
-    this.setState({ modalVisible: !modalVisible, pids: "EXIT", lIds: [], cIds: [] });
+    this.setState({
+      modalVisible: !modalVisible,
+      pids: "EXIT",
+      lIds: [],
+      cIds: []
+    });
   };
 
   updateSelectedValue = data => {
@@ -101,10 +111,21 @@ class ServicesComponent extends React.Component {
   save = async () => {
     const { cIds, lIds } = this.state;
     const user_id = await AsyncStorage.getItem("userId");
-    const result  = await clientApi.callPostApi("update_services_ins.php", {user_id, cid: cIds.join(","), lid: lIds.join(","), pid: cIds[0]})
-    console.log("SERVICE ADD RESULT " , result);
-    if(result.success == 1) {
-      this.setState({services: result.data.data, modalVisible: false, pids: "EXIT", lIds: [], cIds: []});
+    const result = await clientApi.callPostApi("update_services_ins.php", {
+      user_id,
+      cid: cIds.join(","),
+      lid: lIds.join(","),
+      pid: cIds[0]
+    });
+    console.log("SERVICE ADD RESULT ", result);
+    if (result.success == 1) {
+      this.setState({
+        services: result.data.data,
+        modalVisible: false,
+        pids: "EXIT",
+        lIds: [],
+        cIds: []
+      });
       // this.setModalVisible();
     }
   };
@@ -273,52 +294,54 @@ class ServicesComponent extends React.Component {
   checkBoxClick = (itemId, stateType, pid = undefined) => {
     const data = this.state[stateType];
     let d = [...data];
-    if(pid == null && stateType == "cIds") {
-      d = []
+    if (pid == null && stateType == "cIds") {
+      d = [];
     }
     if (d.find(k => k == itemId)) {
       d = d.filter(k => k !== itemId);
     } else {
       d.push(itemId);
     }
-    this.setState({[stateType]: d})
+    this.setState({ [stateType]: d });
   };
-  subcategoryList = ( item ) => {
-    const {cIds} = this.state;
+  subcategoryList = item => {
+    const { cIds } = this.state;
     let isTick = cIds.find(x => x == item.id);
     return (
       <View style={[GlobalStyle.row]}>
         <CheckBox
-          checked={ isTick ? true : false }
+          checked={isTick ? true : false}
           color="green"
           onPress={() => this.checkBoxClick(item.id, "cIds", item.parent_id)}
           style={Styles.btnPadding}
         />
-        <TouchableOpacity onPress={() =>  this.getSubCategories(item.id, false)}>
+        <TouchableOpacity onPress={() => this.getSubCategories(item.id, false)}>
           <View style={{ padding: 5 }}>
-            <Text style={[Styles.text, {fontFamily: "Poppins"}]}>{item.name}</Text>
+            <Text style={[Styles.text, { fontFamily: "Poppins" }]}>
+              {item.name}
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
     );
   };
   lessonsList = ({ item }) => {
-    const {lIds} = this.state;
+    const { lIds } = this.state;
     let isTick = lIds.find(x => x == item.id);
     return (
       <View style={{ padding: 5 }}>
         <View style={[GlobalStyle.row, Styles.marginTop2p, { width: 180 }]}>
           <CheckBox
-            checked={
-              isTick ? true : false
-            }
+            checked={isTick ? true : false}
             color="green"
             onPress={() => {
               this.checkBoxClick(item.id, "lIds");
             }}
             style={Styles.btnPadding}
           />
-          <Text style={[Styles.text, {fontFamily: "Poppins"}]}>{item.name}</Text>
+          <Text style={[Styles.text, { fontFamily: "Poppins" }]}>
+            {item.name}
+          </Text>
         </View>
       </View>
     );
@@ -335,7 +358,7 @@ class ServicesComponent extends React.Component {
     // return (
     //   <Modal
     //     animationType="fade"
-        
+
     //     visible={
     //       data == 2 ? modalVisible : data == 1 ? modifiedModelVisible : false
     //     }
@@ -400,7 +423,7 @@ class ServicesComponent extends React.Component {
 
     //         <View style={{ paddingVertical: 10 }}>
     //           <Text style={Styles.subTitle}>{KeyWords.subCategories}</Text>
-                                                                                                       
+
     //           <FlatList
     //             keyExtractor={item => item._id}
     //             data={category.subcategory}
@@ -424,7 +447,7 @@ class ServicesComponent extends React.Component {
     //           />
     //           {/* <GridView
     //             data={data}
-                
+
     //             itemsPerRow={itemsPerRow}
     //             renderItem={this.lessonsList()}
     //           /> */}
@@ -447,66 +470,118 @@ class ServicesComponent extends React.Component {
   };
   showAddService = () => {
     const { modalVisible } = this.state;
-    return(
-      <Modal 
+    return (
+      <Modal
         animationType="fade"
         visible={modalVisible}
         onRequestClose={() => this.setModalVisible()}
       >
-        <View style={{backgroundColor:"whitesmoke", flex:1, flexDirection: 'column'}}>
-          <View style={{flexDirection: 'row',padding: 5, justifyContent: "space-between", alignItems: 'center', backgroundColor: Color.inputBg}}>
-            <TouchableOpacity onPress={() => this.getSubCategories(null, true)}>
-            <View style={{ padding:"5%", borderRadius: 20}}>
-              <Text style={{fontFamily: "Poppins-Medium", textAlign: 'center'}}>{'< Back'}</Text></View>
-            </TouchableOpacity>
-            <TouchableOpacity  onPress={() => this.save()}>
-              <View style={{ padding:"5%", backgroundColor: Color.appDefultColor, borderRadius: 20, elevation: 3}}>
-                <Text style={{ fontFamily: "Poppins-Medium", color: "white", textAlign: 'center' }}>Save</Text>
-              </View>
-            </TouchableOpacity>
+        <SafeAreaView style={{ flex: 1 }}>
+          <View
+            style={{
+              backgroundColor: "white",
+              flex: 1,
+              flexDirection: "column"
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                padding: 5,
+                justifyContent: "space-between",
+                alignItems: "center",
+                backgroundColor: Color.inputBg
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => this.getSubCategories(null, true)}
+              >
+                <View style={{ padding: "5%", borderRadius: 20 }}>
+                  <Text
+                    style={{
+                      fontFamily: "Poppins-Medium",
+                      textAlign: "center"
+                    }}
+                  >
+                    {"< Back"}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.save()}>
+                <View
+                  style={{
+                    padding: "5%",
+                    backgroundColor: Color.appDefultColor,
+                    borderRadius: 20,
+                    elevation: 3
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "Poppins-Medium",
+                      color: "white",
+                      textAlign: "center"
+                    }}
+                  >
+                    Save
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View
+              style={{
+                padding: 10,
+                justifyContent: "space-between",
+                flexDirection: "column",
+                backgroundColor: "white",
+                flex: 1
+              }}
+            >
+              {this.showCategories()}
+              {this.showLessons()}
+            </View>
           </View>
-          <View style={{padding: 10, justifyContent: 'space-between', flexDirection: "column", flex:1}}>            
-            {this.showCategories()}
-            {this.showLessons()}
-          </View>
-        </View>
+        </SafeAreaView>
       </Modal>
-    )
-  }
+    );
+  };
 
   showCategories = () => {
     const { categoryData } = this.state;
     return (
       <View style={{ paddingVertical: 5 }}>
-        <Text style={[Styles.lessonTitle, {fontFamily: "Poppins-Medium"}]}>
+        <Text style={[Styles.lessonTitle, { fontFamily: "Poppins-Medium" }]}>
           {"Categories"}
         </Text>
-        <View style={{height: 10}} />
-        <FlatList 
-            data={categoryData} keyExtractor={item => item.id} extraData={this.state.cIds}
-            renderItem={({ item }) => this.subcategoryList(item)}
+        <View style={{ height: 10 }} />
+        <FlatList
+          data={categoryData}
+          keyExtractor={item => item.id}
+          extraData={this.state.cIds}
+          renderItem={({ item }) => this.subcategoryList(item)}
         />
       </View>
-    )
-  }
+    );
+  };
 
   async getSubCategories(pid, back = false) {
-    let { pids , categoryData } = this.state;
-    if(back) {
-      if(pids == "EXIT") {
+    let { pids, categoryData } = this.state;
+    if (back) {
+      if (pids == "EXIT") {
         this.setModalVisible();
         return;
       }
       pid = pids;
       pids = pid == null ? "EXIT" : categoryData[0].parent_id;
     } else {
-      pids = categoryData[0].parent_id
+      pids = categoryData[0].parent_id;
     }
-    let response = await clientApi.callPostApi("get_categories.php", {pid});
+    let response = await clientApi.callPostApi("get_categories.php", { pid });
     if (response.success == 1 && response.data.length > 0) {
       let categories = response.data;
       this.setState({
-        categoryData: categories, pids
+        categoryData: categories,
+        pids
       });
     } else {
       // alert(response.message);
@@ -516,9 +591,12 @@ class ServicesComponent extends React.Component {
   async deleteService(service) {
     console.log(service);
     const user_id = await AsyncStorage.getItem("userId");
-    let response = await clientApi.callPostApi("del_service_ins.php", {user_id, pid: service.pid});
+    let response = await clientApi.callPostApi("del_service_ins.php", {
+      user_id,
+      pid: service.pid
+    });
     if (response.success == 1) {
-      console.log("RESPONSE DELTE SERIVCE", response)
+      console.log("RESPONSE DELTE SERIVCE", response);
       this.getAllServices();
       // let categories = response.data;
       // this.setState({
@@ -530,13 +608,13 @@ class ServicesComponent extends React.Component {
   }
 
   showLessons = () => {
-    console.log(this.state.lessons, this.state.lIds, "HI THERE")
-    return(
+    console.log(this.state.lessons, this.state.lIds, "HI THERE");
+    return (
       <View style={{ paddingVertical: 10 }}>
-        <Text style={[Styles.lessonTitle, {fontFamily: "Poppins-Medium"}]}>
+        <Text style={[Styles.lessonTitle, { fontFamily: "Poppins-Medium" }]}>
           {KeyWords.typeOfLessonsProvided}
         </Text>
-        <View style={{height: 10}} />
+        <View style={{ height: 10 }} />
         <FlatList
           keyExtractor={item => item.id}
           data={this.state.lessons}
@@ -545,8 +623,8 @@ class ServicesComponent extends React.Component {
           renderItem={item => this.lessonsList(item)}
         />
       </View>
-    )
-  }
+    );
+  };
 
   _editModelBtn = () => {
     return (
@@ -586,8 +664,13 @@ class ServicesComponent extends React.Component {
     return this._modelShow(2);
   };
   render() {
-    const { modalVisible, modifiedModelVisible, services, helperCats } = this.state;
-    console.log("SERVICESSSS " , services);
+    const {
+      modalVisible,
+      modifiedModelVisible,
+      services,
+      helperCats
+    } = this.state;
+    console.log("SERVICESSSS ", services);
     return (
       <Container>
         <Header title={KeyWords.services} />
@@ -605,7 +688,10 @@ class ServicesComponent extends React.Component {
 
               <TouchableOpacity
                 onPress={() => {
-                  this.setState({ selectedData: [], modalVisible: !modalVisible });
+                  this.setState({
+                    selectedData: [],
+                    modalVisible: !modalVisible
+                  });
                 }}
               >
                 <Image
@@ -627,24 +713,25 @@ class ServicesComponent extends React.Component {
                     let subCats = [];
                     let sLessons = [];
                     let foundItem = null;
-                    let cids = item.cid.split(",").filter(x => x != item.pid)
+                    let cids = item.cid.split(",").filter(x => x != item.pid);
                     // let lids = item.lid.split(",").filter(x => x != item.pid)
-                    for(let id of cids) {
-                      foundItem = helperCats.find(x => x.id == id)
-                      if(foundItem) {
-                        subCats.push(foundItem)
+                    for (let id of cids) {
+                      foundItem = helperCats.find(x => x.id == id);
+                      if (foundItem) {
+                        subCats.push(foundItem);
                       }
                     }
-                    for(let id of item.lid.split(",")) {
-                      foundItem = this.state.lessons.find(x => x.id == id)
-                      if(foundItem) {
-                        sLessons.push(foundItem)
+                    for (let id of item.lid.split(",")) {
+                      foundItem = this.state.lessons.find(x => x.id == id);
+                      if (foundItem) {
+                        sLessons.push(foundItem);
                       }
                     }
                     const cardData = {
                       category: helperCats.find(x => x.id == item.pid),
-                      subCats, sLessons
-                    }
+                      subCats,
+                      sLessons
+                    };
                     return (
                       <CardComponentSer
                         click={() => this._modifyBtnClick(cardData)}
@@ -653,17 +740,17 @@ class ServicesComponent extends React.Component {
                             cIds: item.cid.split(",").map(x => parseInt(x)),
                             lIds: item.lid.split(",").map(x => parseInt(x)),
                             modalVisible: true
-                          })
+                          });
                         }}
                         onDelete={() => {
-                          this.deleteService({pid: item.pid});
+                          this.deleteService({ pid: item.pid });
                         }}
                         data={cardData}
                       />
                     );
                   }}
                   listKey="categories"
-                  keyExtractor={category => category.id+"s"}
+                  keyExtractor={category => category.id + "s"}
                 />
               ) : (
                 <View style={[Styles.margin15, GlobalStyle.marginLeft15]}>

@@ -19,8 +19,8 @@ class DashboardComponent extends React.Component {
     super(props);
     console.log("dash ", props);
     this.state = {
-      userData: {},
-    }
+      userData: {}
+    };
   }
   componentDidMount = async () => {
     const { deshBoardValue } = this.props;
@@ -29,11 +29,17 @@ class DashboardComponent extends React.Component {
       user_id: await AsyncStorage.getItem("userId"),
       api_token: await AsyncStorage.getItem("apiToken")
     };
-    this.setState({userData: {roleId: data.role_id, _id: data.user_id, token: data.api_token}});
+    this.setState({
+      userData: {
+        roleId: data.role_id,
+        _id: data.user_id,
+        token: data.api_token
+      }
+    });
     await deshBoardValue(data);
   };
   openScreen = async title => {
-    const {  AllClasses } = this.props;
+    const { AllClasses } = this.props;
     const { userData } = this.state;
     switch (title) {
       case "Messages":
@@ -130,10 +136,10 @@ class DashboardComponent extends React.Component {
   };
 
   render() {
-    const {  DashboardCall } = this.props;
+    const { DashboardCall } = this.props;
     const { userData } = this.state;
     console.log("USERDATA < DASHBOARD CALL");
-    console.log({userData, DashboardCall});
+    console.log({ userData, DashboardCall });
     console.log("USERDATA < DASHBOARD CALL");
     var instructor = [
       {
@@ -142,7 +148,7 @@ class DashboardComponent extends React.Component {
         value: `$ ${DashboardCall.earnings || 0}`,
         subTitle: "My Reviews",
         footerImage: Images.starImg,
-        footerValue:`$ ${DashboardCall.reviews || 0}`
+        footerValue: `$ ${DashboardCall.reviews || 0}`
       },
       {
         title: "Bookings",
@@ -158,7 +164,7 @@ class DashboardComponent extends React.Component {
         value: `$ ${DashboardCall.lesson_price || 0}`,
         subTitle: "Special Price",
         footerImage: Images.specialImg,
-        footerValue:  `$ ${DashboardCall.sp_price || 0}`
+        footerValue: `$ ${DashboardCall.sp_price || 0}`
       },
       {
         title: "Messages",

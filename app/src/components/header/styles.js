@@ -5,7 +5,6 @@ import Util from "../../common/Util";
 
 export default {
   container: {
-    height: 50,
     flexDirection: "row",
     backgroundColor: Color.inputBg
     // borderBottomWidth: 1,

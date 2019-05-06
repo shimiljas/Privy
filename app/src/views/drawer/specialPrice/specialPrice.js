@@ -22,17 +22,17 @@ import Header from "../../../components/header/header";
 // temprary json response will remove it.
 var classes = [
   {
-    id:1,
-    title:"Mathematics"
+    id: 1,
+    title: "Mathematics"
   },
   {
-    id:2,
-    title:"Physics"
+    id: 2,
+    title: "Physics"
   },
   {
-    id:3,
-    title:"Chemistry"
-  },
+    id: 3,
+    title: "Chemistry"
+  }
 ];
 // var classes = [
 //   {
@@ -168,7 +168,7 @@ class SpecialPriceComponent extends React.Component {
   };
   constructor(props) {
     super(props);
-    console.log('user data', this.props);
+    console.log("user data", this.props);
     this.state = {
       userData: {},
       classes: classes,
@@ -209,41 +209,59 @@ class SpecialPriceComponent extends React.Component {
       user_id: await AsyncStorage.getItem("userId"),
       api_token: await AsyncStorage.getItem("apiToken")
     };
-    this.setState({userData: {roleId: data.role_id, _id: data.user_id, token: data.api_token}});
+    this.setState({
+      userData: {
+        roleId: data.role_id,
+        _id: data.user_id,
+        token: data.api_token
+      }
+    });
     await this.getClasses();
   };
 
-  addAnother () {
+  addAnother() {
     alert("Fill the details to add Another Field");
-    this.setState( { selectedClass:{}, specialPrice:'', originalPrice:'', explaination:''});
-    }
+    this.setState({
+      selectedClass: {},
+      specialPrice: "",
+      originalPrice: "",
+      explaination: ""
+    });
+  }
   submit = async () => {
-    const { selectedClass,
+    const {
+      selectedClass,
       userData,
       pushNotification,
       email,
       specialPrice,
       beforeDate,
-      explaination} = this.state;
-    var obj = {
+      explaination,
+      originalPrice
+    } = this.state;
+    let obj = {
       user_id: +userData._id,
-      cid: selectedClass.id,
-      isp:+pushNotification,
-      ise:+email,
-      spfee:specialPrice,
-      bd:beforeDate,
-      exp:explaination
+      cid: selectedClass.rid,
+      isp: +pushNotification,
+      ise: +email,
+      spfee: specialPrice,
+      bd: beforeDate,
+      exp: explaination
     };
+    if (selectedClass.spid != null) {
+      obj.spid = selectedClass.spid;
+    }
     if (+specialPrice > +originalPrice) {
-      alert('Special price should be lesser than original price');
+      alert("Special price should be lesser than original price");
       return;
     }
-    console.log(userData);
+    console.log(obj, selectedClass);
     var response = await clientApi.callApi(
       "update_special_price.php",
       obj,
       userData.api_token != null ? userData.api_token : userData.token
     );
+    console.log("RESPONSE", response);
     if (response.success == 1) {
       alert("Special Price added successfully");
       console.log(response);
@@ -253,19 +271,25 @@ class SpecialPriceComponent extends React.Component {
   _handleDatePicked(date) {
     var d = new Date(date);
     this.setState({
-      beforeDate: d.getFullYear() + "/" + (d.getMonth()  + 1) + "/" + d.getDate(),
+      beforeDate:
+        d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate(),
       showStartDatePicker: false,
       minimumDate: new Date(date)
     });
-}
+  }
 
   getSelectedValue = (value, key) => {
     switch (key) {
       case "class":
-        this.setState({ selectedClass: value, specialPrice: "" + value.spfee,
-          explaination:value.exp, pushNotification :(value.isp === 1) ? true:false,
-          email:(value.ise === 1) ? true:false,  
-          originalPrice: "" + value.fee, beforeDate:value.bd});
+        this.setState({
+          selectedClass: value,
+          specialPrice: "" + value.spfee,
+          explaination: value.exp,
+          pushNotification: value.isp === 1 ? true : false,
+          email: value.ise === 1 ? true : false,
+          originalPrice: "" + value.fee,
+          beforeDate: value.bd
+        });
         break;
       case "date":
         this.setState({ beforeDate: value });
@@ -279,7 +303,7 @@ class SpecialPriceComponent extends React.Component {
 
   render() {
     const { SpinnerVisible } = this.props;
-    const {
+    let {
       classes,
       pushNotification,
       email,
@@ -289,6 +313,9 @@ class SpecialPriceComponent extends React.Component {
       beforeDate,
       showStartDatePicker
     } = this.state;
+    if (specialPrice === null || specialPrice === "null") specialPrice = 0;
+    if (explaination === null) explaination = "";
+    if (beforeDate === null) beforeDate = "Start Date";
     return (
       <ScrollView>
         <Header title={KeyWords.special + " " + KeyWords.price} />
@@ -301,7 +328,7 @@ class SpecialPriceComponent extends React.Component {
               iconStyle={Styles.menuIcon}
               placeholder={KeyWords.class}
               data={classes}
-              callFunction={(value) => this.getSelectedValue(value, "class")}
+              callFunction={value => this.getSelectedValue(value, "class")}
               fieldWidth={GlobalStyle.width100p}
               height={90}
               enabled
@@ -345,19 +372,22 @@ class SpecialPriceComponent extends React.Component {
               <Text style={Styles.lable}>{KeyWords.original}</Text>
             </View>
             <View style={[GlobalStyle.row]}>
-            <View
-            style={[
-              GlobalStyle.viewCenter,
-              GlobalStyle.width10p,
-              GlobalStyle.alignItemsFlexStart,
-              Styles.marginTop5p
-            ]}
-          >
-            <Image source={Images.sideMenuIcons.dollar} style={Styles.menuIcon} />
-          </View>
-            <View>
-              <Text style={Styles.lable}>{originalPrice}</Text>
-            </View>
+              <View
+                style={[
+                  GlobalStyle.viewCenter,
+                  GlobalStyle.width10p,
+                  GlobalStyle.alignItemsFlexStart,
+                  Styles.marginTop5p
+                ]}
+              >
+                <Image
+                  source={Images.sideMenuIcons.dollar}
+                  style={Styles.menuIcon}
+                />
+              </View>
+              <View>
+                <Text style={Styles.lable}>{originalPrice}</Text>
+              </View>
             </View>
             <InputComponent
               title={KeyWords.special + " " + KeyWords.price}
@@ -373,23 +403,25 @@ class SpecialPriceComponent extends React.Component {
               keyboardType="numeric"
             />
             <DatePickerComponent
-            title={KeyWords.book + " " + KeyWords.before}
-            icon={Images.premiumImg}
-            iconStyle={Styles.premium}
-            placeholder={KeyWords.startDate}
-            data={beforeDate}
-            fieldWidth={Styles.width100p}
-            height={90}
-            enabled
-            minimumDate={new Date()}
-            maximumDate = {new Date(beforeDate)}
-            key="startDate"
-            mode="date"
-            showDateTimePicker={() => this.setState({ showStartDatePicker: true })}
-            value={beforeDate}
-            isDateTimePickerVisible={showStartDatePicker}
-            onConfirm={value => this._handleDatePicked( value)}
-          />
+              title={KeyWords.book + " " + KeyWords.before}
+              icon={Images.premiumImg}
+              iconStyle={Styles.premium}
+              placeholder={KeyWords.startDate}
+              data={beforeDate}
+              fieldWidth={Styles.width100p}
+              height={90}
+              enabled
+              minimumDate={new Date()}
+              maximumDate={new Date(beforeDate)}
+              key="startDate"
+              mode="date"
+              showDateTimePicker={() =>
+                this.setState({ showStartDatePicker: true })
+              }
+              value={beforeDate}
+              isDateTimePickerVisible={showStartDatePicker}
+              onConfirm={value => this._handleDatePicked(value)}
+            />
             <View style={[GlobalStyle.divider, Styles.dividerStyle]} />
 
             <InputComponent
