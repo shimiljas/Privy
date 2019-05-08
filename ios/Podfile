@@ -10,7 +10,7 @@ target 'PrivyApp' do
   target 'PrivyApp-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
-    pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+   ## pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   end
   pod 'Firebase'
