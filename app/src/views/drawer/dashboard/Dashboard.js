@@ -1,5 +1,5 @@
 import React from "react";
-import { View, FlatList, AsyncStorage } from "react-native";
+import { View, FlatList, AsyncStorage, TouchableOpacity } from "react-native";
 import { Container, Text, Item } from "native-base";
 import { connect } from "react-redux";
 import { Actions } from "react-native-router-flux";
@@ -242,6 +242,16 @@ class DashboardComponent extends React.Component {
             )}
           </View>
         </View>
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center"
+          }}
+          onPress={() => Actions.CalendarList()}
+        >
+          <Text>Goto calendar</Text>
+        </TouchableOpacity>
       </Container>
     );
   }

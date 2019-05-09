@@ -1,3 +1,4 @@
+/* eslint-disable react/sort-comp */
 import React from "react";
 import { View, Text, Image } from "react-native";
 import { Container, Content } from "native-base";
@@ -76,6 +77,11 @@ class AddEditScheduleComponent extends React.Component {
         categories: [],
         minimumDate: "",
         subcategories: [],
+        allcategory: [],
+        subcategories_level2: [],
+        subcategories_level3: [],
+        subcategory_level2: { name: "Select Category", _id: 0 },
+        subCategory_level3: { name: "Select Category", _id: 0 },
         title: schedule.title,
         description: schedule.description,
         startDate: startDate,
@@ -104,7 +110,12 @@ class AddEditScheduleComponent extends React.Component {
         lessons: [],
         categories: [],
         subcategories: [],
+        subcategories_level2: [],
+        subcategories_level3: [],
+        subcategory_level2: { name: "Select Category", _id: 0 },
+        subCategory_level3: { name: "Select Category", _id: 0 },
         title: "",
+        allcategory: [],
         description: "",
         startDate: "Start Date",
         endDate: "End Date",
@@ -128,8 +139,24 @@ class AddEditScheduleComponent extends React.Component {
     }
     //console.log("editData === ",this.props);
     this.getLessons();
+    this.getCategory();
     this.getInstructorCategoriesLesson();
   }
+
+  getCategory = async () => {
+    categories = [];
+    var response = await clientApi.callPostApi("get_all_category.php", {});
+    console.log(response, "response");
+    if (response.success == 1) {
+      let categories = response.data.cats.filter(x => x.pid == null);
+      console.log(categories, "categories");
+      this.setState({
+        categories: categories,
+        lessons: response.data.lessons,
+        allcategory: response.data.cats
+      });
+    }
+  };
 
   componentWillReceiveProps(nextProps) {
     console.log("new props===", nextProps);
@@ -169,14 +196,16 @@ class AddEditScheduleComponent extends React.Component {
       user_id: userData._id
     };
     categories = [];
-    var response = await clientApi.callApi(
-      "getInstructorCategoriesLesson",
-      obj,
-      userData.api_token != null ? userData.api_token : userData.token
+    var response = await clientApi.callPostApi(
+      "getInstructorCategoriesLesson.php",
+      {}
     );
+    console.log("all services == ", response);
+
     if (response.status == "true") {
       services = response.data;
-      //console.log("all services == ",services);
+      console.log("all services == ", services);
+
       services.forEach(function(service) {
         categories.push(service.categoryId);
       });
@@ -185,7 +214,6 @@ class AddEditScheduleComponent extends React.Component {
   };
 
   getSelectedData = (name, value) => {
-    console.log("selected service == ", services);
     var indexes = services
       .map(function(obj, index) {
         console.log();
@@ -194,6 +222,43 @@ class AddEditScheduleComponent extends React.Component {
         }
       })
       .filter(isFinite);
+    if (name == "category" && value) {
+      let subcategories = this.state.allcategory.filter(x => x.pid == value.id);
+
+      this.setState({ subcategories: subcategories, category: value });
+      return;
+    }
+
+    if (name == "subCategory" && value) {
+      console.log(this.state.allcategory, "this.state.allcategory", value);
+      let subcategories_level2 = this.state.allcategory.filter(
+        x => x.pid == value.id
+      );
+
+      this.setState({
+        subcategories_level2: subcategories_level2,
+        subCategory: value
+      });
+      return;
+    }
+
+    if (name == "subcategory_level2" && value) {
+      let subcategories_level3 = this.state.allcategory.filter(
+        x => x.pid == value.id
+      );
+      this.setState({
+        subcategories_level3: subcategories_level3,
+        subcategory_level2: value
+      });
+      return;
+    }
+
+    if (name == "subCategory_level3") {
+      this.setState({
+        subCategory_level3: value
+      });
+      return;
+    }
 
     console.log("selected category == ", indexes[0]);
     if (name == "category" && indexes[0] >= 0) {
@@ -212,7 +277,7 @@ class AddEditScheduleComponent extends React.Component {
         lessons: serviceLessons
       });
     } else if (name == "sub-category") {
-      this.setState({ subCategory: value });
+      //this.setState({ subCategory: value });
     } else if (name == "lesson") {
       this.setState({ lesson: value });
     } else if (name == "duration") {
@@ -230,6 +295,150 @@ class AddEditScheduleComponent extends React.Component {
     var timeDiff = date2.getTime() - date1.getTime();
     console.log("date compaire", Math.ceil(timeDiff / (1000 * 3600 * 24)));
     return Math.ceil(timeDiff / (1000 * 3600 * 24));
+  };
+
+  submitdata = () => {
+    const { userData, addSchedule, schedule } = this.props;
+    const {
+      title,
+      description,
+      category,
+      subCategory,
+      lesson,
+      startDate,
+      endDate,
+      startTime,
+      duration,
+      price,
+      sizeLimit,
+      day,
+      unLimit,
+
+      subcategory_level2,
+      subCategory_level3
+    } = this.state;
+
+    console.log(userData);
+
+    var error = true;
+    if (title == "") {
+      error = false;
+      alert("Please enter title");
+    } else if (description == "") {
+      error = false;
+      alert("Please enter description");
+    } else if (
+      (category != null && category._id == 0) ||
+      (category == null || category == undefined || category == "")
+    ) {
+      error = false;
+      alert("Please select category");
+    } else if (
+      (subcategory_level2 != null && subcategory_level2._id == 0) ||
+      (subcategory_level2 == null ||
+        subcategory_level2 == undefined ||
+        subcategory_level2 == "")
+    ) {
+      error = false;
+      alert("Please select sub category");
+    } else if (
+      (subCategory_level3 != null && subCategory_level3._id == 0) ||
+      (subCategory_level3 == null ||
+        subCategory_level3 == undefined ||
+        subCategory_level3 == "")
+    ) {
+      error = false;
+      alert("Please select sub category");
+    } else if (
+      (lesson != null && lesson.id == 0) ||
+      (lesson == null || lesson == undefined || lesson == "")
+    ) {
+      error = false;
+      alert("Please select lesson type");
+    } else if (
+      (day.length == 0 || day == "") &&
+      (startDate == "Start Date" || endDate == "End Date")
+    ) {
+      if (startDate == "Start Date") {
+        error = false;
+        alert("Please select start date");
+      } else {
+        if (endDate == "End Date") {
+          error = false;
+          alert("Please select end date");
+        }
+      }
+    } else if (
+      startDate != "Start Date" &&
+      endDate != "End Date" &&
+      this.calcDateDiff(startDate, endDate) < 1
+    ) {
+      error = false;
+      alert("End date should not be greater than start date");
+    } else if (startTime == "Start Time") {
+      error = false;
+      alert("Please select start time");
+    } else if (duration == "" || duration == undefined) {
+      error = false;
+      alert("Please select class duration");
+    } else if (sizeLimit == "") {
+      error = false;
+      alert("Please select sizeLimit");
+    } else if ((unLimit == false || unLimit == undefined) && sizeLimit == 0) {
+      //if(sizeLimit==0){
+      error = false;
+      alert("Please enter class size or unlimited option");
+      //}
+    } else if (price == "" || price == null || price == undefined) {
+      error = false;
+      alert("Please enter price");
+    }
+
+    const body = {
+      user_id: userData._id,
+      title: title,
+      des: description,
+      lid: lesson.id,
+      pid: category.id,
+      cid: `${subCategory.id},${subcategory_level2.id},${
+        subCategory_level3.id
+      }`,
+      sd: startDate,
+      ed: endDate,
+      st: startTime,
+      token: userData.api_token != null ? userData.api_token : userData.token,
+      dhours: duration._id,
+      size: sizeLimit,
+      isu: unLimit ? "1" : "0",
+      fee: price
+    };
+    console.log(
+      title,
+      description,
+      category,
+      subCategory,
+      subcategory_level2,
+      subCategory_level3,
+      lesson,
+      startDate,
+      endDate,
+      startTime,
+      duration,
+      unLimit,
+      price,
+      body
+    );
+
+    var methodName = "create_class_ins.php";
+
+    var data = {
+      methodName: methodName,
+      data: body,
+      token: userData.api_token != null ? userData.api_token : userData.token
+    };
+    console.log("class data - ", data);
+
+    addSchedule(data);
   };
 
   submit = () => {
@@ -252,7 +461,8 @@ class AddEditScheduleComponent extends React.Component {
       state,
       country,
       zipcode,
-      unLimit
+      unLimit,
+      subcategories_level3
     } = this.state;
     var error = true;
 
@@ -278,7 +488,7 @@ class AddEditScheduleComponent extends React.Component {
       error = false;
       alert("Please select sub-category");
     } else if (
-      (lesson != null && lesson._id == 0) ||
+      (lesson != null && lesson.id == 0) ||
       (lesson == null || lesson == undefined || lesson == "")
     ) {
       error = false;
@@ -335,20 +545,22 @@ class AddEditScheduleComponent extends React.Component {
       alert("Please enter zip code");
     }
 
-
-
     //alert(parseInt(startTime)+parseInt(duration));
 
     if (error == true) {
-      let splited_time =startTime.split(":");  
+      let splited_time = startTime.split(":");
       //alert(parseInt(splited_time[0])+parseInt(duration)+':'+splited_time[1]);
       obj = {
         user_id: userData._id,
-        categoryId: category._id,
-        subCategoryId: subCategory._id,
-        lessonType: lesson.lessonNumber,
+        categoryId: category.id,
+        subCategoryId: subCategory.id,
+        lessonType: lesson.id,
         time: startTime,
-        end_time: (parseInt(splited_time[0])+parseInt(duration)+':'+splited_time[1]),
+        end_time:
+          parseInt(splited_time[0]) +
+          parseInt(duration) +
+          ":" +
+          splited_time[1],
         price: price,
         streetAddress: streetAddress,
         city: city,
@@ -377,9 +589,9 @@ class AddEditScheduleComponent extends React.Component {
       } else {
         obj.day = day._id;
       }
-      var methodName = "addClass";
+      var methodName = "addClass.php";
       if (schedule != null) {
-        methodName = "updateClass";
+        methodName = "updateClass.php";
         obj.class_id = schedule._id;
       }
 
@@ -389,6 +601,7 @@ class AddEditScheduleComponent extends React.Component {
         token: userData.api_token != null ? userData.api_token : userData.token
       };
       console.log("class data - ", data);
+
       addSchedule(data);
     }
   };
@@ -501,7 +714,11 @@ class AddEditScheduleComponent extends React.Component {
       minimumDate,
       state,
       zipcode,
-      selectedDuration
+      selectedDuration,
+      subcategories_level2,
+      subcategory_level2,
+      subcategories_level3,
+      subCategory_level3
     } = this.state;
     return (
       <Container>
@@ -561,13 +778,54 @@ class AddEditScheduleComponent extends React.Component {
               fieldWidth={Styles.width100p}
               height={90}
               enabled
-              callFunction={value =>
-                this.getSelectedData("sub-category", value)
-              }
+              callFunction={value => this.getSelectedData("subCategory", value)}
               key="sub-categories"
               initValue={subCategory.name}
             />
             <View style={[GlobalStyle.divider, Styles.dividerStyle]} />
+            {subcategories_level2.length > 0 ? (
+              <View>
+                <PickerComponent
+                  title={KeyWords.subCategory}
+                  icon={Images.catalogImg}
+                  iconStyle={Styles.icon1}
+                  placeholder={KeyWords.subCategory}
+                  data={subcategories_level2}
+                  selectedValue={subcategory_level2}
+                  fieldWidth={Styles.width100p}
+                  height={90}
+                  enabled
+                  callFunction={value =>
+                    this.getSelectedData("subcategory_level2", value)
+                  }
+                  key="sub-categories"
+                  initValue={subcategory_level2.name}
+                />
+                <View style={[GlobalStyle.divider, Styles.dividerStyle]} />
+              </View>
+            ) : null}
+
+            {subcategories_level3.length > 0 ? (
+              <View>
+                <PickerComponent
+                  title={KeyWords.subCategory}
+                  icon={Images.catalogImg}
+                  iconStyle={Styles.icon1}
+                  placeholder={KeyWords.subCategory}
+                  data={subcategories_level3}
+                  selectedValue={subCategory_level3}
+                  fieldWidth={Styles.width100p}
+                  height={90}
+                  enabled
+                  callFunction={value =>
+                    this.getSelectedData("subCategory_level3", value)
+                  }
+                  key="sub-categories"
+                  initValue={subCategory_level3.name}
+                />
+                <View style={[GlobalStyle.divider, Styles.dividerStyle]} />
+              </View>
+            ) : null}
 
             <PickerComponent
               title={KeyWords.lessonType}
@@ -729,7 +987,7 @@ class AddEditScheduleComponent extends React.Component {
               keyboardType="numeric"
             />
 
-            <InputComponent
+            {/* <InputComponent
               title={KeyWords.street + " " + KeyWords.address}
               icon={Images.locationImg}
               iconStyle={Styles.icon}
@@ -780,12 +1038,12 @@ class AddEditScheduleComponent extends React.Component {
               height={70}
               maxLength={100}
               keyboardType="numeric"
-            />
+            /> */}
 
             <ButtonComponent
               btnText={KeyWords.submit}
               btnStyle={Styles.btn}
-              callFunction={() => this.submit()}
+              callFunction={() => this.submitdata()}
             />
           </View>
         </Content>
@@ -802,7 +1060,7 @@ AddEditScheduleComponent.propTypes = {
 
 const maptoprops = state => {
   //alert(state.Schedule.schedule.title);
-  console.log("edit class state == ", state.Schedule);
+  console.log("edit class state == ", state.User.userdata);
   return {
     SpinnerVisible: state.Loader.visible,
     userData: state.User.userdata,

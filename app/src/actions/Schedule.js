@@ -37,7 +37,7 @@ const sendClassDataOpenForm = async (dispatch, data) => {
 const getSchedules = async (dispatch, data) => {
   console.log("getAllClasses == ", data);
   dispatch({
-    type: LOADERON,
+    type: LOADERON
     // visible: true
   });
   const method = "get_classes_ins.php";
@@ -47,26 +47,25 @@ const getSchedules = async (dispatch, data) => {
     .then(res => res.json())
     .then(async res => {
       dispatch({
-        type: LOADEROFF,
-      })
+        type: LOADEROFF
+      });
       if (res.success == 1) {
         dispatch({
           type: SCHEDULES,
           payload: res.data
         });
-    //     dispatch({
-    //       type: LOADEROFF,
-    //       // visible: false
-		// });
-		dispatch({
-			type: APIRESPONSE,
-			payload: {"success": false}
-		});
+        //     dispatch({
+        //       type: LOADEROFF,
+        //       // visible: false
+        // });
+        dispatch({
+          type: APIRESPONSE,
+          payload: { success: false }
+        });
         Actions.Schedules({
           type: "replace"
         });
       } else {
-
         if (res.code == 405) {
           Actions.Login({ type: "replace" });
         } else {
@@ -74,7 +73,6 @@ const getSchedules = async (dispatch, data) => {
           //   type: LOADERON,
           //   // visible: false
           // });
-      
         }
       }
     });
@@ -88,11 +86,12 @@ const addClass = async (dispatch, data) => {
   await API.callPostApiWithToken(data.methodName, data.data, data.token)
     .then(res => res.json())
     .then(async res => {
+      console.log("=== == prepared data +++ ", res);
       if (res.status === "true") {
-		var obj = res.data;
+        var obj = res.data;
         obj.successMessage = res.message;
         console.log("=== == prepared data +++ ", obj);
-		Alert.alert(
+        Alert.alert(
           KeyWords.successs,
           obj.successMessage,
           [
@@ -105,8 +104,8 @@ const addClass = async (dispatch, data) => {
                 });
 
                 dispatch({
-                    type: APIRESPONSE,
-                    payload: {"success": true}
+                  type: APIRESPONSE,
+                  payload: { success: true }
                 });
               }
             }
