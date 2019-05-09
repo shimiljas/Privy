@@ -39,6 +39,7 @@ import InstructorProfileScreen from "./views/drawer/instructorProfile/Profile";
 import SubmitReviewScreen from "./views/drawer/Reviews/Form";
 import InstructorStudentProfileScreen from "./views/drawer/studentProfile/StudentProfile";
 import CalendarList from "./views/calendar/calendarList";
+import EditScheduleScreen from "./views/drawer/schedules/EditScheduleScreen";
 //Common files
 import Images from "./common/images";
 import Colors from "./common/Color";
@@ -259,6 +260,19 @@ class PrivyApp extends Component {
                   key="AddEditSchedule"
                   component={() => this._renderScene(AddEditScheduleScreen)}
                   title="Add Classes"
+                />
+              </Stack>
+
+              <Stack
+                key="EditScheduleScreen"
+                title="Edit Classes"
+                tabBarLabel="Privy"
+              >
+                <Scene
+                  hideNavBar
+                  key="EditScheduleScreen"
+                  component={EditScheduleScreen}
+                  title="Edit Classes"
                 />
               </Stack>
 
