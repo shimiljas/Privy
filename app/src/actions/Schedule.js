@@ -87,7 +87,7 @@ const addClass = async (dispatch, data) => {
     .then(res => res.json())
     .then(async res => {
       console.log("=== == prepared data +++ ", res);
-      if (res.status === "true") {
+      if (res.success === 1) {
         var obj = res.data;
         obj.successMessage = res.message;
         console.log("=== == prepared data +++ ", obj);
@@ -98,6 +98,7 @@ const addClass = async (dispatch, data) => {
             {
               text: KeyWords.ok,
               onPress: () => {
+                Actions.pop();
                 dispatch({
                   type: LOADEROFF,
                   visible: false

@@ -16,7 +16,7 @@ class CalenderCard extends React.Component {
   render() {
     return (
       <View style={Styles.cardArea}>
-        <View style={Styles.container}>
+        <View style={[Styles.container]}>
           <View style={Styles.dataView}>
             <Image
               resizeMode="stretch"
@@ -29,50 +29,77 @@ class CalenderCard extends React.Component {
               </Text>
             </View>
           </View>
-
-          <View style={{ flex: 1, justifyContent: "center" }}>
-            <View style={{ alignItems: "flex-start" }}>
-              <Text style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}>
-                Category
-              </Text>
-              <Text style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}>
-                English
-              </Text>
-            </View>
-            <View style={{ marginTop: 10, alignItems: "flex-start" }}>
-              <Text style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}>
-                Limit
-              </Text>
-              <Text style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}>
-                30
-              </Text>
-            </View>
-          </View>
           <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+            style={{
+              flex: 1,
+
+              flexDirection: "row"
+            }}
           >
-            <Image
-              resizeMode="contain"
-              source={Images.scienceImg}
-              style={{ width: 50, height: 50 }}
-            />
-          </View>
-          <View style={{ flex: 1, justifyContent: "center" }}>
-            <View style={{ alignItems: "flex-start" }}>
-              <Text style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}>
-                Time
-              </Text>
-              <Text style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}>
-                01PM-2PM
-              </Text>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <View style={{ alignItems: "flex-start" }}>
+                <Text
+                  style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}
+                >
+                  Category
+                </Text>
+                <Text
+                  style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}
+                >
+                  English
+                </Text>
+              </View>
+              <View style={{ marginTop: 10, alignItems: "flex-start" }}>
+                <Text
+                  style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}
+                >
+                  Limit
+                </Text>
+                <Text
+                  style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}
+                >
+                  30
+                </Text>
+              </View>
             </View>
-            <View style={{ marginTop: 10, alignItems: "flex-start" }}>
-              <Text style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}>
-                Bookings
-              </Text>
-              <Text style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}>
-                22
-              </Text>
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                source={Images.scienceImg}
+                style={{ width: 50, height: 50 }}
+              />
+            </View>
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <View style={{ alignItems: "flex-start" }}>
+                <Text
+                  style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}
+                >
+                  Time
+                </Text>
+                <Text
+                  style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}
+                >
+                  01PM-2PM
+                </Text>
+              </View>
+              <View style={{ marginTop: 10, alignItems: "flex-start" }}>
+                <Text
+                  style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}
+                >
+                  Bookings
+                </Text>
+                <Text
+                  style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}
+                >
+                  22
+                </Text>
+              </View>
             </View>
           </View>
         </View>

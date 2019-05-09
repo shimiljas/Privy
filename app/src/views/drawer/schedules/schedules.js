@@ -168,6 +168,20 @@ class SchedulesComponent extends React.Component {
   render() {
     const { SpinnerVisible } = this.props;
     const { title, classes } = this.state;
+    console.log(title, classes, "dfsffd---------<><><><");
+    let tempdata = [];
+    if (title === "1 On 1" && classes.length > 0) {
+      tempdata = classes.filter(x => x.lid == "1");
+    }
+
+    if (title === "Camp") {
+      tempdata = classes.filter(x => x.lid == "2");
+    }
+    if (title === "Group Lesson") {
+      tempdata = classes.filter(x => x.lid == "3");
+    }
+    console.log(tempdata, "tempdatatempdatatempdata");
+
     return (
       <Container>
         <Header title={KeyWords.scheduleTitle} />
@@ -193,12 +207,12 @@ class SchedulesComponent extends React.Component {
             </View>
             <MenuProvider style={{ flex: 1, paddingTop: 5 }}>
               <View>
-                {classes.length > 0 ? (
+                {tempdata.length > 0 ? (
                   <FlatList
                     contentContainerStyle={Styles.margin15}
                     horizontal={false}
                     numColumns={1}
-                    data={classes}
+                    data={tempdata}
                     renderItem={({ item }) => {
                       console.log(item);
                       return (
@@ -212,7 +226,9 @@ class SchedulesComponent extends React.Component {
                     listKey="classes"
                   />
                 ) : (
-                  <Text style={[Styles.margin15, {fontFamily: "Poppins"}]}>{KeyWords.noClassesAdded}</Text>
+                  <Text style={[Styles.margin15, { fontFamily: "Poppins" }]}>
+                    {KeyWords.noClassesAdded}
+                  </Text>
                 )}
               </View>
             </MenuProvider>

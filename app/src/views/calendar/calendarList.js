@@ -1,6 +1,6 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { Calendar } from "react-native-calendars";
 import PropTypes from "prop-types";
 import moment from "moment";
@@ -15,7 +15,7 @@ class CalendarList extends Component {
   }
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: "white" }}>
+      <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
         <Header title="Calendar" />
 
         <Calendar
@@ -64,7 +64,7 @@ class CalendarList extends Component {
           <CalenderCard />
           <CalenderCard />
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
