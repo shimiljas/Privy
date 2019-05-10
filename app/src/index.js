@@ -198,6 +198,17 @@ class PrivyApp extends Component {
                   title="Booking"
                 />
               </Stack>
+
+              <Stack key="CalendarList" title="Booking" tabBarLabel="Privy">
+                <Scene
+                  hideNavBar
+                  key="CalendarList"
+                  component={() => this._renderScene(CalendarList)}
+                  title="Calendar"
+                  panHandlers={null}
+                />
+              </Stack>
+
               <Stack key="ReviewScreen" title="Review" tabBarLabel="Privy">
                 <Scene
                   hideNavBar
@@ -378,12 +389,6 @@ class PrivyApp extends Component {
                   title="Student Profile"
                 />
               </Stack>
-              <Scene
-                key="CalendarList"
-                component={() => this._renderScene(CalendarList)}
-                title="Calendar"
-                panHandlers={null}
-              />
             </Scene>
           </Drawer>
         </Scene>

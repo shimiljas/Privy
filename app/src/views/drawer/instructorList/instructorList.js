@@ -16,6 +16,7 @@ import Header from "../../../components/header/header";
 import Util from "../../../common/Util";
 import Color from "../../../common/Color";
 import KeyWords from "../../../common/Localization";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 var sortList = [
   { _id: 1, name: KeyWords.price },
@@ -31,6 +32,8 @@ class InstructorComponent extends React.Component {
   instructorProfile = async data => {
     const { SelectedUser } = this.props;
     await SelectedUser(data);
+
+    // Actions.InstructorProfile({ type: "replace", data });
   };
 
   bookNow = async data => {
@@ -46,25 +49,29 @@ class InstructorComponent extends React.Component {
   _cellDetailView = data => {
     return (
       <Card style={[GlobalStyle.row, Styles.cardStyle]}>
-        <View style={Styles.profileImageView}>
-          <Image
-            resizeMode="contain"
-            source={Images.userImg}
-            style={Styles.profileImageStyle}
-          />
-        </View>
+        <TouchableOpacity
+          style={Styles.profileImageView}
+          onPress={() => this.instructorProfile(data)}
+        >
+          <FontAwesome name="user-circle" size={70} />
+        </TouchableOpacity>
         <View style={Styles.userDetailsView}>
           <TouchableOpacity onPress={() => this.instructorProfile(data)}>
-            <Text style={Styles.userName}>{data.userId.name}</Text>
+            <Text style={{ fontWeight: "bold", color: "black" }}>
+              {data.iname}
+            </Text>
           </TouchableOpacity>
           <View>
-            <Text numberOfLines={1} style={Styles.name}>{data.title}</Text>
+            <Text numberOfLines={1} style={Styles.name}>
+              {data.des}
+            </Text>
           </View>
-          <Text style={Styles.name}>
+          <View style={{ width: "100%", height: 20 }} />
+          {/* <Text style={Styles.name}>
             {KeyWords.distance}
             <Text>: 1</Text>
             {KeyWords.mile}
-          </Text>
+          </Text> */}
           <View style={GlobalStyle.width15p}>
             <StarRating
               disabled
@@ -74,9 +81,7 @@ class InstructorComponent extends React.Component {
               starSize={Util.getHeight(2.5)}
             />
           </View>
-          <TouchableOpacity
-            onPress={() => Actions.CalenderScreen({ type: "replace" })}
-          >
+          <TouchableOpacity onPress={() => Actions.CalendarList()}>
             <Text style={[Styles.link, { marginTop: Util.getHeight(1.5) }]}>
               {KeyWords.calendar}
             </Text>
@@ -87,11 +92,11 @@ class InstructorComponent extends React.Component {
           <Text style={Styles.name}>
             {KeyWords.price}
             <Text>: </Text>
-            <Text style={{ color: Color.darkGray }}>
-              $ {data.price == undefined ? 0 : data.price + 1}
+            <Text style={{ color: Color.darkGray, fontWeight: "bold" }}>
+              $ {data.spfee == undefined ? 0 : data.spfee + 1}
             </Text>
           </Text>
-          {data.price != undefined ? (
+          {data.spfee != undefined ? (
             <TouchableOpacity onPress={() => this.bookNow(data)}>
               <Text style={[Styles.link, { marginTop: Util.getHeight(8.5) }]}>
                 {KeyWords.book + " " + KeyWords.now}
@@ -153,8 +158,7 @@ class InstructorComponent extends React.Component {
                     selectStyle={[
                       GlobalStyle.borderWidth0,
                       GlobalStyle.alignItemsFlexStart,
-                      GlobalStyle.justifyContentCenter,
-                      
+                      GlobalStyle.justifyContentCenter
                     ]}
                   />
                 </View>

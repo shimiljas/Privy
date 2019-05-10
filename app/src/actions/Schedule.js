@@ -98,7 +98,12 @@ const addClass = async (dispatch, data) => {
             {
               text: KeyWords.ok,
               onPress: () => {
-                Actions.pop();
+                if (data.update) {
+                  Actions.SchedulesScreen();
+                } else {
+                  Actions.pop();
+                }
+
                 dispatch({
                   type: LOADEROFF,
                   visible: false

@@ -29,7 +29,6 @@ class SchedulesComponent extends React.Component {
   }
 
   componentDidMount() {
-    console.log("sch did mount called");
     this.getLessons();
     this.getSchedules();
   }
@@ -247,7 +246,7 @@ SchedulesComponent.propTypes = {
 };
 
 const maptoprops = state => {
-  console.log("schedules data = ", state.Schedule.schedules);
+  console.log("schedules data = ", state.Schedule.loader);
   return {
     userData: state.User.userdata,
     schedules: state.Schedule.schedules

@@ -79,7 +79,7 @@ const hours = [
     name: 5
   }
 ];
-export default class EditScheduleScreen extends React.Component {
+class EditScheduleScreen extends React.Component {
   static defaultProps = {
     SpinnerVisible: false
   };
@@ -174,13 +174,9 @@ export default class EditScheduleScreen extends React.Component {
     if (response.status == "true") {
       lessons = response.data;
       console.log("all lessons == ", lessons);
-      if (!isNaN(this.state.lesson)) {
-        var obj = {
-          _id: lessons[this.state.lesson - 1]._id,
-          name: lessons[this.state.lesson - 1].name
-        };
-        this.setState({ lesson: obj });
-      }
+
+      this.setState({ lessons });
+
       //console.log("lessons == ", lessons);
     }
   };
@@ -192,6 +188,254 @@ export default class EditScheduleScreen extends React.Component {
       this.setState({ subcategories: subcategories, category: value });
       return;
     }
+    if (name == "subCategory" && value) {
+      console.log(this.state.allcategory, "this.state.allcategory", value);
+      let subcategories_level2 = this.state.allcategory.filter(
+        x => x.pid == value.id
+      );
+
+      this.setState({
+        subcategories_level2: subcategories_level2,
+        subCategory: value
+      });
+      return;
+    }
+
+    if (name == "subcategory_level2" && value) {
+      let subcategories_level3 = this.state.allcategory.filter(
+        x => x.pid == value.id
+      );
+      this.setState({
+        subcategories_level3: subcategories_level3,
+        subcategory_level2: value
+      });
+      return;
+    }
+
+    if (name == "subCategory_level3") {
+      this.setState({
+        subCategory_level3: value
+      });
+      return;
+    }
+
+    if (name == "lesson") {
+      this.setState({ lesson: value });
+      return;
+    }
+
+    if (name == "duration") {
+      console.log("duration === ", value);
+      this.setState({ duration: value });
+      return;
+    }
+    if (name == "duration") {
+      this.setState({ day: value });
+      return;
+    }
+  };
+
+  _showDateTimePicker = name => {
+    switch (name) {
+      case "startDate":
+        this.setState({ showStartDatePicker: true });
+        break;
+      case "endDate":
+        this.setState({ showEndDatePicker: true });
+        break;
+      case "startTime":
+        this.setState({ showStartTimePicker: true });
+        break;
+    }
+  };
+
+  _handleDatePicked = (name, date) => {
+    // console.log("sadfsa",date);
+    // this.setState({minimumDate:date})
+    console.log("minimumDate", this.state.minimumDate);
+
+    var d = new Date(date);
+    switch (name) {
+      case "startDate":
+        this.setState({
+          startDate:
+            d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(),
+          showStartDatePicker: false,
+          minimumDate: new Date(date)
+        });
+
+        break;
+      case "endDate":
+        this.setState({
+          endDate:
+            d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(),
+          showEndDatePicker: false
+        });
+        break;
+      case "startTime":
+        this.setState({
+          startTime: d.getHours() + ":" + d.getMinutes(),
+          showStartTimePicker: false
+        });
+        break;
+    }
+  };
+
+  submitdata = async () => {
+    const userID = await AsyncStorage.getItem("userId");
+    const apiToken = await AsyncStorage.getItem("apiToken");
+
+    const { userData, addSchedule, schedule } = this.props;
+    const {
+      title,
+      description,
+      category,
+      subCategory,
+      lesson,
+      startDate,
+      endDate,
+      startTime,
+      duration,
+      price,
+      sizeLimit,
+      day,
+      unLimit,
+
+      subcategory_level2,
+      subCategory_level3
+    } = this.state;
+
+    console.log(userData);
+
+    var error = true;
+    if (title == "") {
+      error = false;
+      alert("Please enter title");
+    } else if (description == "") {
+      error = false;
+      alert("Please enter description");
+    } else if (
+      (category != null && category._id == 0) ||
+      (category == null || category == undefined || category == "")
+    ) {
+      error = false;
+      alert("Please select category");
+    } else if (
+      (subcategory_level2 != null && subcategory_level2._id == 0) ||
+      (subcategory_level2 == null ||
+        subcategory_level2 == undefined ||
+        subcategory_level2 == "")
+    ) {
+      error = false;
+      alert("Please select sub category");
+    } else if (
+      (subCategory_level3 != null && subCategory_level3._id == 0) ||
+      (subCategory_level3 == null ||
+        subCategory_level3 == undefined ||
+        subCategory_level3 == "")
+    ) {
+      error = false;
+      alert("Please select sub category");
+    } else if (
+      (lesson != null && lesson.id == 0) ||
+      (lesson == null || lesson == undefined || lesson == "")
+    ) {
+      error = false;
+      alert("Please select lesson type");
+    } else if (startDate == "Start Date") {
+      error = false;
+      alert("Please select start date");
+    } else if (endDate == "End Date") {
+      error = false;
+      alert("Please select end date");
+    } else if (
+      startDate != "Start Date" &&
+      endDate != "End Date" &&
+      this.calcDateDiff(startDate, endDate) < 1
+    ) {
+      error = false;
+      alert("End date should not be greater than start date");
+    } else if (startTime == "Start Time") {
+      error = false;
+      alert("Please select start time");
+    } else if (duration == "" || duration == undefined) {
+      error = false;
+      alert("Please select class duration");
+    } else if (sizeLimit == "") {
+      error = false;
+      alert("Please select sizeLimit");
+    } else if ((unLimit == false || unLimit == undefined) && sizeLimit == 0) {
+      //if(sizeLimit==0){
+      error = false;
+      alert("Please enter class size or unlimited option");
+      //}
+    } else if (price == "" || price == null || price == undefined) {
+      error = false;
+      alert("Please enter price");
+    }
+
+    let cid = "";
+    if (
+      (subCategory.name !== "Select Category" &&
+        subcategory_level2.name === "Select Category",
+      subCategory_level3.name === "Select Category")
+    ) {
+      cid = `${subCategory.id}`;
+    }
+    if (
+      subCategory.name !== "Select Category" &&
+      subcategory_level2.name !== "Select Category" &&
+      subCategory_level3.name === "Select Category"
+    ) {
+      cid = `${subCategory.id},${subcategory_level2.id}`;
+    }
+
+    if (
+      subCategory.name !== "Select Category" &&
+      subcategory_level2.name !== "Select Category" &&
+      subCategory_level3.name !== "Select Category"
+    ) {
+      cid = `${subCategory.id},${subcategory_level2.id},${
+        subCategory_level3.id
+      }`;
+    }
+
+    const body = {
+      rid: this.props.data.rid,
+      user_id: userID,
+      title: title,
+      des: description,
+      lid: lesson.id,
+      pid: category.id,
+      cid: cid,
+      sd: startDate,
+      ed: endDate,
+      st: startTime,
+      token: apiToken,
+      dhours: duration._id,
+      size: sizeLimit,
+      isu: unLimit ? "1" : "0",
+      fee: price
+    };
+    console.log(body);
+
+    var methodName = "create_class_ins.php";
+
+    var data = {
+      methodName: methodName,
+      data: body,
+      token: "",
+      update: true
+    };
+
+    addSchedule(data);
+  };
+  calcDateDiff = (startDate, endDate) => {
+    var date1 = new Date(startDate);
+    var date2 = new Date(endDate);
+    var timeDiff = date2.getTime() - date1.getTime();
+    console.log("date compaire", Math.ceil(timeDiff / (1000 * 3600 * 24)));
+    return Math.ceil(timeDiff / (1000 * 3600 * 24));
   };
 
   render() {
@@ -203,6 +447,7 @@ export default class EditScheduleScreen extends React.Component {
       subCategory,
       subcategories,
       lesson,
+      lessons,
       startDate,
       endDate,
       startTime,
@@ -496,9 +741,31 @@ export default class EditScheduleScreen extends React.Component {
               maxLength={200}
               keyboardType="numeric"
             />
+
+            <ButtonComponent
+              btnText={KeyWords.submit}
+              btnStyle={Styles.btn}
+              callFunction={() => this.submitdata()}
+            />
           </View>
         </Content>
       </Container>
     );
   }
 }
+
+const maptoprops = state => {
+  //alert(state.Schedule.schedule.title);
+  console.log("edit class state == ", state.User.userdata);
+  return {
+    SpinnerVisible: state.Loader.visible,
+    userData: state.User.userdata,
+    schedule: state.Schedule.schedule,
+    apiResponse: state.Schedule.response
+  };
+};
+
+export default connect(
+  maptoprops,
+  { addSchedule, getAllSchedules }
+)(EditScheduleScreen);

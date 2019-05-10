@@ -25,7 +25,37 @@ var categories = [
 class ProfileComponent extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { sendMessage: false, message: "" };
+    this.state = {
+      sendMessage: false,
+      message: "",
+      category: {},
+      subCategory: {},
+      subcategory_level2: {},
+      subCategory_level3: {}
+    };
+  }
+
+  componentWillMount() {
+    const { SpinnerVisible, SelectedUser } = this.props;
+    let category = SelectedUser.cat.find(x => x.id == SelectedUser.pid);
+    console.log(SelectedUser);
+
+    let cat = SelectedUser.cid.split(",");
+    if (cat[0]) {
+      let subCategory = SelectedUser.cat.find(x => x.id == cat[0]);
+      this.setState({ subCategory });
+    }
+
+    if (cat[1]) {
+      let subcategory_level2 = SelectedUser.cat.find(x => x.id == cat[1]);
+      this.setState({ subcategory_level2 });
+    }
+    if (cat[2]) {
+      let subCategory_level3 = SelectedUser.cat.find(x => x.id == cat[2]);
+      this.setState({ subCategory_level3 });
+    }
+
+    this.setState({ category });
   }
 
   bookNow = () => {
@@ -85,7 +115,7 @@ class ProfileComponent extends React.Component {
 
           <View style={[GlobalStyle.justifyContentCenter, Styles.modelBtnView]}>
             <View style={{ flexDirection: "row" }}>
-              <View style={{ flex: 1,alignItems:'center' }}>
+              <View style={{ flex: 1, alignItems: "center" }}>
                 <Item
                   rounded
                   style={[Styles.modelBtn, GlobalStyle.viewCenter]}
@@ -95,7 +125,7 @@ class ProfileComponent extends React.Component {
                 </Item>
               </View>
 
-              <View style={{ flex: 1,alignItems:'center' }}>
+              <View style={{ flex: 1, alignItems: "center" }}>
                 <Item
                   rounded
                   style={[Styles.modelBtn, GlobalStyle.viewCenter]}
@@ -145,6 +175,7 @@ class ProfileComponent extends React.Component {
               </Text>
             </View>
           </View>
+
           <View style={Styles.listArea}>
             <Card>
               <View style={[GlobalStyle.row, Styles.basicDetailsView]}>
@@ -156,7 +187,7 @@ class ProfileComponent extends React.Component {
                   />
                 </View>
                 <View style={Styles.userDetailsView}>
-                  <Text style={Styles.name}>{SelectedUser.userId.name}</Text>
+                  <Text style={Styles.name}>{SelectedUser.iname}</Text>
                   <View style={[GlobalStyle.row, GlobalStyle.width100p]}>
                     <View
                       style={[
@@ -189,9 +220,9 @@ class ProfileComponent extends React.Component {
                         <Text>: </Text>
                         <Text style={{ color: Color.darkGray }}>
                           ${" "}
-                          {SelectedUser.price == undefined
+                          {SelectedUser.fee == undefined
                             ? 0
-                            : SelectedUser.price + 1}
+                            : SelectedUser.fee + 1}
                         </Text>
                       </Text>
                     </View>
@@ -244,25 +275,45 @@ class ProfileComponent extends React.Component {
               <View style={[GlobalStyle.divider, Styles.marginTop2]} />
               <View style={Styles.descriptionView}>
                 <Text style={Styles.subCategoryTitle}>
-                  {SelectedUser.instructorProfileId.aboutMe == ""
-                    ? "aboutMe"
-                    : SelectedUser.instructorProfileId.aboutMe}
+                  {SelectedUser.exp == "" ? "aboutMe" : SelectedUser.exp}
                 </Text>
               </View>
               <View style={Styles.padding5}>
                 <Text style={Styles.categoryTitle}>{KeyWords.categories}</Text>
-                <FlatList
-                  data={categories}
-                  renderItem={({ item }) => this._cellDetailView(item)}
-                  keyExtractor={this._keyExtractor}
-                  listKey={categories[0].id}
-                />
+                <View style={Styles.marginTop2}>
+                  <Text style={[Styles.lable, { fontSize: 14 }]}>
+                    {this.state.category.name}
+                  </Text>
+                </View>
+              </View>
+              <View style={Styles.padding5}>
+                <View style={Styles.marginTop2}>
+                  {this.state.subCategory ? (
+                    <Text style={Styles.lable}>
+                      {this.state.subCategory.name}
+                    </Text>
+                  ) : null}
+                </View>
+                <View style={Styles.marginTop2}>
+                  {this.state.subcategory_level2 ? (
+                    <Text style={Styles.lable}>
+                      {this.state.subcategory_level2.name}
+                    </Text>
+                  ) : null}
+                </View>
+                <View style={Styles.marginTop2}>
+                  {this.state.subCategory_level3 ? (
+                    <Text style={Styles.lable}>
+                      {this.state.subCategory_level3.name}
+                    </Text>
+                  ) : null}
+                </View>
               </View>
               <View style={[GlobalStyle.row, Styles.btnView]}>
                 <View
                   style={[
                     GlobalStyle.alignItemsCenter,
-                    SelectedUser.price != undefined
+                    SelectedUser.fee != undefined
                       ? GlobalStyle.width50p
                       : GlobalStyle.width75
                   ]}
@@ -273,7 +324,7 @@ class ProfileComponent extends React.Component {
                     callFunction={() => this.sendMessage()}
                   />
                 </View>
-                {SelectedUser.price != undefined ? (
+                {SelectedUser.fee != undefined ? (
                   <View
                     style={[GlobalStyle.alignItemsCenter, GlobalStyle.width50p]}
                   >
