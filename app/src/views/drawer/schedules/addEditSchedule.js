@@ -1,6 +1,6 @@
 /* eslint-disable react/sort-comp */
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, AsyncStorage } from "react-native";
 import { Container, Content } from "native-base";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -297,7 +297,10 @@ class AddEditScheduleComponent extends React.Component {
     return Math.ceil(timeDiff / (1000 * 3600 * 24));
   };
 
-  submitdata = () => {
+  submitdata = async () => {
+    const userID = await AsyncStorage.getItem("userId");
+    const apiToken = await AsyncStorage.getItem("apiToken");
+
     const { userData, addSchedule, schedule } = this.props;
     const {
       title,
@@ -393,9 +396,18 @@ class AddEditScheduleComponent extends React.Component {
       error = false;
       alert("Please enter price");
     }
-
+    if (sizeLimit > 100) {
+      error = false;
+      alert("sizeLimit should be less than 100");
+      return;
+    }
+    if (price > 100) {
+      error = false;
+      alert("Price should be less than 100");
+      return;
+    }
     const body = {
-      user_id: userData._id,
+      user_id: userID,
       title: title,
       des: description,
       lid: lesson.id,
@@ -406,7 +418,7 @@ class AddEditScheduleComponent extends React.Component {
       sd: startDate,
       ed: endDate,
       st: startTime,
-      token: userData.api_token != null ? userData.api_token : userData.token,
+      token: apiToken,
       dhours: duration._id,
       size: sizeLimit,
       isu: unLimit ? "1" : "0",
@@ -434,7 +446,7 @@ class AddEditScheduleComponent extends React.Component {
     var data = {
       methodName: methodName,
       data: body,
-      token: userData.api_token != null ? userData.api_token : userData.token
+      token: ""
     };
     console.log("class data - ", data);
 

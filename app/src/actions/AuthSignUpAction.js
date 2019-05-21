@@ -41,7 +41,7 @@ export const PasswordModel = data => {
 };
 const getChangePass = async (dispatch, data) => {
   dispatch({
-    type: LOADERON,
+    type: LOADERON
     // visible: true
   });
   const changePass = "sendResetPasswordOTP";
@@ -61,7 +61,7 @@ const getChangePass = async (dispatch, data) => {
             "Thanks. A OTP verification email has been sent to address you mentioned."
         });
         dispatch({
-          type: LOADEROFF,
+          type: LOADEROFF
           // visible: false
         });
       } else {
@@ -71,7 +71,7 @@ const getChangePass = async (dispatch, data) => {
           message: res.message
         });
         dispatch({
-          type: LOADEROFF,
+          type: LOADEROFF
           // visible: false
         });
       }
@@ -82,7 +82,7 @@ const getChangePass = async (dispatch, data) => {
 };
 const resetPassword = async (dispatch, data) => {
   dispatch({
-    type: LOADERON,
+    type: LOADERON
     // visible: true
   });
   const changePass = "resetPassword";
@@ -97,7 +97,7 @@ const resetPassword = async (dispatch, data) => {
         message: res.message
       });
       dispatch({
-        type: LOADEROFF,
+        type: LOADEROFF
         // visible: false
       });
       // if (res.status == "true") {
@@ -121,11 +121,11 @@ const resetPassword = async (dispatch, data) => {
       //     type: LOADEROFF,
       //     // visible: false
       //   });
-     // }
+      // }
     })
     .catch(err => {
       dispatch({
-        type: LOADEROFF,
+        type: LOADEROFF
         // visible: false
       });
       console.log("resetPassword error:", err);
@@ -150,7 +150,7 @@ const hidePasswordModel = (dispatch, data) => {
 };
 const SignMe = (dispatch, data) => {
   dispatch({
-    type: LOADERON,
+    type: LOADERON
   });
   dispatch({
     type: FORMCHANGE,
@@ -161,9 +161,9 @@ const SignMe = (dispatch, data) => {
     .then(res => res.json())
     .then(res => {
       dispatch({
-        type: LOADEROFF,
+        type: LOADEROFF
       });
-      console.log("RESULT FOR REGISTER", res)
+      console.log("RESULT FOR REGISTER", res);
       if (res.success == 1) {
         dispatch({
           type: FORMCHANGE,
@@ -177,7 +177,7 @@ const SignMe = (dispatch, data) => {
     })
     .catch(err => {
       dispatch({
-        type: LOADEROFF,
+        type: LOADEROFF
       });
       console.log("SignMe error:", err);
     });
@@ -191,22 +191,21 @@ export const LoginUser = data => {
 
 const LogMeIn = async (dispatch, data) => {
   dispatch({
-    type: LOADERON,
+    type: LOADERON
     // visible: true
   });
   const signin = "login.php";
   await API.callPostApi(signin, data)
     .then(async res => {
       console.log("response signIn :", res);
-     
+
       if (res.success == 1) {
-        
         await AsyncStorage.setItem("userId", String(res.data._id));
         await AsyncStorage.setItem("apiToken", String(res.data.api_token));
         await AsyncStorage.setItem("roleId", String(res.data.roleId));
         await AsyncStorage.setItem("USEROBJ", JSON.stringify(res.data));
         res.data.profilePic = {
-          uri: Url + "images/profile/" + res.data.profilePic+""
+          uri: Url + "images/profile/" + res.data.profilePic + ""
         };
         dispatch({
           type: USERAUTH,
@@ -222,12 +221,11 @@ const LogMeIn = async (dispatch, data) => {
               });
         }
         dispatch({
-          type: LOADEROFF,
+          type: LOADEROFF
         });
-      } 
+      }
       // else if(res.message == "User not found."){
-        
-      
+
       //   dispatch({
       //     type: LOADEROFF,
       //   });
@@ -235,15 +233,15 @@ const LogMeIn = async (dispatch, data) => {
 
       //   console.log("login error--", res);
       // }
-      else{
+      else {
         dispatch({
-          type: LOADEROFF,
+          type: LOADEROFF
         });
       }
     })
     .catch(err => {
       dispatch({
-        type: LOADEROFF,
+        type: LOADEROFF
       });
       console.log("login error:", err);
     });
