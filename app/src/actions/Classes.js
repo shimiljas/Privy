@@ -12,31 +12,41 @@ export const AllClasses = data => {
   };
 };
 
+export const BookClass = data => {
+  return dispatch => {
+    BookClassByID(dispatch, data);
+  };
+};
+
+export const cancelClasses = data => {
+  return dispatch => {
+    cancelClassesForId(dispatch, data);
+  };
+};
+
 const getAllClasses = async (dispatch, data) => {
   dispatch({
     type: ALLCLASSES,
-    allClasses: undefined
+    allClasses: []
   });
-  dispatch({
-    type: LOADERON,
-  });
-  const method = "get_classes_ins.php";
-  console.log(method, "getAllClasses data", data.api_token);
+
+  const method = "get_booked_classes.php";
+  console.log(method, "getAllClasses data", data);
   //changed on 6 december
-  var obj = { user_id: 6, status: data.status  };
-  console.log("final booking obj == ",obj);
+  dispatch({ type: "STATE_CANCEL" });
+  console.log("final booking obj == ");
   var token = data.api_token;
-   await API.callPostApiWithToken(method, obj, token)
+  await API.callPostApiWithToken(method, data, token)
     .then(res => res.json())
     .then(async res => {
-      console.log(method, "getAllClasses ", res);
-      if (res.status == "true") {
+      console.log(method, "getAllClasses ", res, data);
+      if (res.success == 1) {
         console.log(method, "getAllClasses true", res.status);
         dispatch({
           type: ALLCLASSES,
-          allClasses: res.data
+          payload: res.data
         });
-      } else if(res.code == 405) {
+      } else {
         Alert.alert(
           "Error",
           res.message,
@@ -45,26 +55,97 @@ const getAllClasses = async (dispatch, data) => {
               text: "OK",
               onPress: () => {
                 dispatch({
-                  type: LOADEROFF,
+                  type: LOADEROFF
                 });
               }
             }
           ],
           { cancelable: false }
         );
-       
-       
-      }
-      else{
-        dispatch({
-          type: LOADEROFF,
-        });
-        console.log("getAllClasses error", res.status);
       }
     })
-    .then(()=>{
-      console.log("vishesh here..")
-      
+    .catch(res => {
+      console.log("getAllClasses error wewr", res);
+    });
+};
+
+const cancelClassesForId = async (dispatch, data) => {
+  // dispatch({
+  //   type: ALLCLASSES,
+  //   allClasses: []
+  // });
+  console.log(data);
+
+  const method = "cancel_class.php";
+
+  //changed on 6 december
+  dispatch({ type: "STATE_CANCEL" });
+  var token = data.api_token;
+  await API.callPostApiWithToken(method, data, token)
+    .then(res => res.json())
+    .then(async res => {
+      console.log(method, "getAllClasses true", res);
+      if (res.success == 1) {
+        dispatch({ type: "CANCEL_CLASS", payload: data.bid });
+      } else {
+        Alert.alert(
+          "Error",
+          res.message,
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                dispatch({
+                  type: LOADEROFF
+                });
+              }
+            }
+          ],
+          { cancelable: false }
+        );
+      }
+    })
+    .catch(res => {
+      console.log("getAllClasses error wewr", res);
+    });
+};
+
+const BookClassByID = async (dispatch, data) => {
+  // dispatch({
+  //   type: ALLCLASSES,
+  //   allClasses: []
+  // });
+  console.log(data);
+
+  const method = "book_class.php";
+  dispatch({ type: "STATE_CANCEL" });
+  //changed on 6 december
+
+  var token = data.api_token;
+  await API.callPostApiWithToken(method, data, token)
+    .then(res => res.json())
+    .then(async res => {
+      console.log(method, "getAllClasses true", res);
+      if (res.success == 1) {
+        alert(res.message);
+        dispatch({ type: "BOOK_CLASS", payload: data.cid });
+      } else {
+        Alert.alert(
+          "Error",
+          res.message,
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                dispatch({
+                  type: LOADEROFF
+                });
+              }
+            }
+          ],
+          { cancelable: false }
+        );
+      }
     })
     .catch(res => {
       console.log("getAllClasses error wewr", res);

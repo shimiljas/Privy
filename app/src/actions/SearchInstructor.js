@@ -34,8 +34,7 @@ const setSelectedUser = async (dispatch, data) => {
 };
 const getSearchInstructor = async (dispatch, data) => {
   dispatch({
-    type: LOADERON,
-   
+    type: LOADERON
   });
   const serachUrlKey = "getServiceProvidersList";
   // console.log("data getSearchInstructor", data.lessonType);
@@ -52,18 +51,12 @@ const getSearchInstructor = async (dispatch, data) => {
     // toTime: data.toTime,
     // daysRange: data.daysRange
   };
-  if(data.subCategoryId != undefined)
-  obj.subCategoryId=data.subCategoryId
-  if(data.lessonType != undefined)
-  obj.lessonType=data.lessonType
-  if(data.startDate != 'Start Date')
-  obj.startDate=data.startDate
-  if(data.fromTime != 'Start Time')
-  obj.fromTime=data.fromTime
-  if(data.toTime != 'End Time')
-  obj.toTime=data.toTime
-  if((data.daysRange).length != 0)
-  obj.daysRange=data.daysRange
+  if (data.subCategoryId != undefined) obj.subCategoryId = data.subCategoryId;
+  if (data.lessonType != undefined) obj.lessonType = data.lessonType;
+  if (data.startDate != "Start Date") obj.startDate = data.startDate;
+  if (data.fromTime != "Start Time") obj.fromTime = data.fromTime;
+  if (data.toTime != "End Time") obj.toTime = data.toTime;
+  if (data.daysRange.length != 0) obj.daysRange = data.daysRange;
 
   var token = data.api_token;
   console.log(token, "getSearchInstructor data", obj);
@@ -77,8 +70,7 @@ const getSearchInstructor = async (dispatch, data) => {
           searchedList: res.data
         });
         dispatch({
-          type: LOADEROFF,
-         
+          type: LOADEROFF
         });
         Actions.InstructorList({ type: "replace", nm: "pppp" });
       } else {
@@ -90,7 +82,7 @@ const getSearchInstructor = async (dispatch, data) => {
               text: "OK",
               onPress: () => {
                 dispatch({
-                  type: LOADEROFF,
+                  type: LOADEROFF
                   // visible: false
                 });
               }
@@ -109,7 +101,7 @@ const getSearchInstructor = async (dispatch, data) => {
             text: "OK",
             onPress: () => {
               dispatch({
-                type: LOADEROFF,
+                type: LOADEROFF
                 // visible: false
               });
             }
@@ -117,5 +109,29 @@ const getSearchInstructor = async (dispatch, data) => {
         ],
         { cancelable: false }
       );
+    });
+};
+
+export const searchedInsturctorWihCategory = obj => async dispatch => {
+  await API.callPostApi("search_instructor_list.php", obj)
+    .then(res => {
+      console.log(res, "sdffd");
+      if (res.success === 1) {
+        res.data.instructors.map(item => {
+          item["cat"] = res.data.cats;
+        });
+        dispatch({
+          type: SERACHLIST,
+          searchedList: res.data.instructors
+        });
+        dispatch({
+          type: LOADEROFF
+        });
+        Actions.InstructorList({ type: "replace", data: res.data });
+      }
+    })
+
+    .catch(err => {
+      console.log(err);
     });
 };

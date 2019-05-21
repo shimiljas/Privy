@@ -39,6 +39,7 @@ import InstructorProfileScreen from "./views/drawer/instructorProfile/Profile";
 import SubmitReviewScreen from "./views/drawer/Reviews/Form";
 import InstructorStudentProfileScreen from "./views/drawer/studentProfile/StudentProfile";
 import CalendarList from "./views/calendar/calendarList";
+import EditScheduleScreen from "./views/drawer/schedules/EditScheduleScreen";
 //Common files
 import Images from "./common/images";
 import Colors from "./common/Color";
@@ -197,6 +198,17 @@ class PrivyApp extends Component {
                   title="Booking"
                 />
               </Stack>
+
+              <Stack key="CalendarList" title="Booking" tabBarLabel="Privy">
+                <Scene
+                  hideNavBar
+                  key="CalendarList"
+                  component={() => this._renderScene(CalendarList)}
+                  title="Calendar"
+                  panHandlers={null}
+                />
+              </Stack>
+
               <Stack key="ReviewScreen" title="Review" tabBarLabel="Privy">
                 <Scene
                   hideNavBar
@@ -259,6 +271,19 @@ class PrivyApp extends Component {
                   key="AddEditSchedule"
                   component={() => this._renderScene(AddEditScheduleScreen)}
                   title="Add Classes"
+                />
+              </Stack>
+
+              <Stack
+                key="EditScheduleScreen"
+                title="Edit Classes"
+                tabBarLabel="Privy"
+              >
+                <Scene
+                  hideNavBar
+                  key="EditScheduleScreen"
+                  component={EditScheduleScreen}
+                  title="Edit Classes"
                 />
               </Stack>
 
@@ -364,12 +389,6 @@ class PrivyApp extends Component {
                   title="Student Profile"
                 />
               </Stack>
-              <Scene
-                key="CalendarList"
-                component={() => this._renderScene(CalendarList)}
-                title="Calendar"
-                panHandlers={null}
-              />
             </Scene>
           </Drawer>
         </Scene>

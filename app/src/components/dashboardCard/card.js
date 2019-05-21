@@ -48,14 +48,20 @@ class CardComponent extends React.Component {
               style={[Styles.imageView, imageStyle]}
             />
           </View>
-          <View
-            style={[Styles.amountAreaText, GlobalStyle.viewCenter, restyle]}
-          >
-            <Text style={amountText}>{value}</Text>
-          </View>
+          {value ? (
+            <View
+              style={[Styles.amountAreaText, GlobalStyle.viewCenter, restyle]}
+            >
+              <Text style={amountText}>{value}</Text>
+            </View>
+          ) : null}
 
           <TouchableOpacity
-            style={[Styles.valueAreaText, restyle]}
+            style={[
+              Styles.valueAreaText,
+              restyle,
+              { marginTop: subTitle == "My Reviews" ? 10 : 0 }
+            ]}
             onPress={onClickOfSubtitle}
           >
             <Text style={valueText}>{subTitle}</Text>
@@ -75,8 +81,7 @@ class CardComponent extends React.Component {
               <Text
                 style={[
                   imageValText,
-                  { paddingBottom: subTitle == "Unread" ? 5 : null },
-                  { paddingTop: subTitle == "My Reviews" ? 5 : null }
+                  { paddingBottom: subTitle == "Unread" ? 5 : null }
                 ]}
               >
                 {footerValue}

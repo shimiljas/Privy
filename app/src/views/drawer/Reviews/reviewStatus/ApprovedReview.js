@@ -101,6 +101,7 @@ class ComingBooking extends React.Component {
     return <ReviewCard item={item} />;
   };
   render() {
+    console.log(this.props.reviews);
     return (
       <Container>
         <FlatList

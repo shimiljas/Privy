@@ -396,25 +396,40 @@ class AddEditScheduleComponent extends React.Component {
       error = false;
       alert("Please enter price");
     }
-    if (sizeLimit > 100) {
-      error = false;
-      alert("sizeLimit should be less than 100");
-      return;
+
+    let cid = "";
+    if (
+      (subCategory.name !== "Select Category" &&
+        subcategory_level2.name === "Select Category",
+      subCategory_level3.name === "Select Category")
+    ) {
+      cid = `${subCategory.id}`;
     }
-    if (price > 100) {
-      error = false;
-      alert("Price should be less than 100");
-      return;
+    if (
+      subCategory.name !== "Select Category" &&
+      subcategory_level2.name !== "Select Category" &&
+      subCategory_level3.name === "Select Category"
+    ) {
+      cid = `${subCategory.id},${subcategory_level2.id}`;
     }
+
+    if (
+      subCategory.name !== "Select Category" &&
+      subcategory_level2.name !== "Select Category" &&
+      subCategory_level3.name !== "Select Category"
+    ) {
+      cid = `${subCategory.id},${subcategory_level2.id},${
+        subCategory_level3.id
+      }`;
+    }
+
     const body = {
       user_id: userID,
       title: title,
       des: description,
       lid: lesson.id,
       pid: category.id,
-      cid: `${subCategory.id},${subcategory_level2.id},${
-        subCategory_level3.id
-      }`,
+      cid: cid,
       sd: startDate,
       ed: endDate,
       st: startTime,

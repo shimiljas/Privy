@@ -11,10 +11,13 @@ import styles from "../modelAlert/styles";
 import StarRating from "react-native-star-rating";
 import Util from "../../common/Util";
 import clientApi from "../../common/ApiManager";
-
+import _ from "lodash";
 class ReviewCard extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      userData: {}
+    };
   }
 
   componentDidMount = async () => {
@@ -49,6 +52,9 @@ class ReviewCard extends React.Component {
     }
   };
   render() {
+    if (_.isEmpty(this.state.userData)) return null;
+    console.log(this.state.userData.roleId);
+
     return (
       <View
         elevation={10}
@@ -188,7 +194,7 @@ class ReviewCard extends React.Component {
             </Text>
           </View>
         </View>
-        {this.props.btn != undefined ? (
+        {this.props.btn != undefined && this.state.userData.roleId != 2 ? (
           <View
             style={{
               height: "30%",

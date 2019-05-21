@@ -39,24 +39,24 @@ class CalenderCard extends React.Component {
             <View style={{ flex: 1, justifyContent: "center" }}>
               <View style={{ alignItems: "flex-start" }}>
                 <Text
-                  style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}
+                  style={{ fontSize: 14, color: "grey", fontWeight: "bold" }}
                 >
                   Category
                 </Text>
                 <Text
-                  style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}
+                  style={{ fontSize: 11, marginTop: 8, fontWeight: "bold" }}
                 >
                   English
                 </Text>
               </View>
               <View style={{ marginTop: 10, alignItems: "flex-start" }}>
                 <Text
-                  style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}
+                  style={{ fontSize: 14, color: "grey", fontWeight: "bold" }}
                 >
                   Limit
                 </Text>
                 <Text
-                  style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}
+                  style={{ fontSize: 11, marginTop: 8, fontWeight: "bold" }}
                 >
                   30
                 </Text>
@@ -78,24 +78,24 @@ class CalenderCard extends React.Component {
             <View style={{ flex: 1, justifyContent: "center" }}>
               <View style={{ alignItems: "flex-start" }}>
                 <Text
-                  style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}
+                  style={{ fontSize: 14, color: "grey", fontWeight: "bold" }}
                 >
                   Time
                 </Text>
                 <Text
-                  style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}
+                  style={{ fontSize: 11, marginTop: 8, fontWeight: "bold" }}
                 >
                   01PM-2PM
                 </Text>
               </View>
               <View style={{ marginTop: 10, alignItems: "flex-start" }}>
                 <Text
-                  style={{ fontSize: 16, color: "grey", fontWeight: "bold" }}
+                  style={{ fontSize: 14, color: "grey", fontWeight: "bold" }}
                 >
                   Bookings
                 </Text>
                 <Text
-                  style={{ fontSize: 16, marginTop: 8, fontWeight: "bold" }}
+                  style={{ fontSize: 11, marginTop: 8, fontWeight: "bold" }}
                 >
                   22
                 </Text>

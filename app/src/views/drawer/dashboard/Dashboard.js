@@ -36,6 +36,7 @@ class DashboardComponent extends React.Component {
         token: data.api_token
       }
     });
+
     await deshBoardValue(data);
   };
   openScreen = async title => {
@@ -202,12 +203,11 @@ class DashboardComponent extends React.Component {
         footerValue: DashboardCall.unread_messages
       },
       {
-        title: "Submit Review for Your Lessons",
+        title: "Submit Review ",
         image: Images.submitrfylImg,
-        value: "",
-        subTitle: "",
-        footerImage: "",
-        footerValue: ""
+        subTitle: "My Reviews",
+        footerImage: Images.starImg,
+        footerValue: `$ ${DashboardCall.reviews || 0}`
       }
     ];
 

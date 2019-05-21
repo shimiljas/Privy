@@ -10,6 +10,7 @@ import {
   MenuContext
 } from "react-native-popup-menu";
 import Styles from "./Styles";
+import { Actions } from "react-native-router-flux";
 import Images from "../../common/images";
 import GlobalStyle from "../../common/GlobalStyle";
 import { ButtonComponent } from "..";
@@ -25,8 +26,10 @@ class CardComponentClass extends React.Component {
   };
 
   optionClicked = value => {
+    const { data } = this.props;
+    console.log(data, "DFsdfsdffsd");
     const { editSelected, deleteSelected } = this.props;
-    if (value == 1) editSelected();
+    if (value == 1) Actions.EditScheduleScreen({ data });
     else deleteSelected();
   };
 
