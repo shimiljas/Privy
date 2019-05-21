@@ -1,25 +1,65 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  AsyncStorage,
+  FlatList
+} from "react-native";
 import { Container, Tab, Tabs } from "native-base";
 import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { AllClasses } from "../../../actions";
+import { AllClasses, cancelClasses, BookClass } from "../../../actions";
 import Header from "../../../components/header/header";
 import Styles from "./bookingStatus/Styles";
 import CancelBooking from "./bookingStatus/CancelBooking";
 import ComingBooking from "./bookingStatus/ComingBooking";
 import KeyWords from "../../../common/Localization";
 import RF from "react-native-responsive-fontsize";
+import BookingCard from "./components/BookingCard";
 
 class BookingScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       // tabStatus:0
-      sIndex: 0
+      sIndex: 0,
+      bookings: [],
+      allClasses: []
     };
     //his.getAllClasses();
+  }
+
+  async componentWillMount() {
+    let ut = await AsyncStorage.getItem("roleId");
+    const { userData, AllClasses } = this.props;
+    let object = {
+      ut: ut,
+      user_id: userData._id,
+      api_token: userData.api_token
+    };
+
+    AllClasses(object);
+  }
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps.changed, "nextPropsnextPropsnextProps");
+    if (
+      this.state.sIndex == 0 &&
+      nextProps.allClasses &&
+      nextProps.allClasses.length > 0
+    ) {
+      const data = nextProps.allClasses.filter(data => data.cancel === 0);
+      this.setState({ bookings: data, allClasses: nextProps.allClasses });
+    } else if (
+      this.state.sIndex == 1 &&
+      nextProps.allClasses &&
+      nextProps.allClasses.length > 0
+    ) {
+      let data = nextProps.allClasses.filter(data => data.cancel === 1);
+      this.setState({ bookings: data, allClasses: nextProps.allClasses });
+    }
   }
 
   // getAllClasses=()=>{
@@ -35,6 +75,17 @@ class BookingScreen extends Component {
   //    } );
   // }
 
+  tabChange = index => {
+    this.setState({ sIndex: index }, () => {
+      if (this.state.sIndex == 0) {
+        let data = this.state.allClasses.filter(data => data.cancel === 0);
+        this.setState({ bookings: data });
+      } else {
+        let data = this.state.allClasses.filter(data => data.cancel === 1);
+        this.setState({ bookings: data });
+      }
+    });
+  };
   onScrollEnd(e) {
     let contentOffset = e.nativeEvent.contentOffset;
     let viewSize = e.nativeEvent.layoutMeasurement;
@@ -43,6 +94,28 @@ class BookingScreen extends Component {
     let pageNum = Math.floor(contentOffset.x / viewSize.width);
     console.log("scrolled to page ", pageNum);
   }
+  actionclick = item => {
+    return;
+    if (this.state.sIndex == 0) {
+      const { userData, cancelClasses } = this.props;
+      const object = {
+        bid: item.bid,
+        user_id: userData._id,
+        api_token: userData.api_token
+      };
+
+      cancelClasses(object);
+    } else {
+      const { userData, BookClass } = this.props;
+      const object = {
+        cid: item.cid,
+        user_id: userData._id,
+        api_token: userData.api_token
+      };
+      BookClass(object);
+      // this.props.cancelClassesForId();
+    }
+  };
 
   render() {
     const { userData } = this.props;
@@ -57,7 +130,7 @@ class BookingScreen extends Component {
         />
         <View>
           <TabBar
-            onSelect={sIndex => this.setState({ sIndex })}
+            onSelect={sIndex => this.tabChange(sIndex)}
             selected={this.state.sIndex}
             data={[
               userData.roleId == 3
@@ -69,64 +142,20 @@ class BookingScreen extends Component {
             ]}
           />
         </View>
-        <View>
-          <ScrollView
-            contentContainerStyle={{ flex: 1 }}
-            horizontal={true}
-            pagingEnabled={true}
-          >
-            <View style={{ flex: 1, backgroundColor: "yellow" }}>
-              <View style={{ flex: 1, backgroundColor: "yellow" }} />
-            </View>
-            <View style={{ flex: 1, backgroundColor: "crimson" }}>
-              <View style={{ flex: 1, backgroundColor: "crimson" }} />
-            </View>
-          </ScrollView>
+        <View style={{ flex: 1 }}>
+          <FlatList
+            style={{ padding: 10 }}
+            data={this.state.bookings}
+            renderItem={({ item }) => (
+              <BookingCard
+                Item={item}
+                roleId={userData.roleId}
+                tab={this.state.sIndex}
+                action={item => this.actionclick(item)}
+              />
+            )}
+          />
         </View>
-        {/* <Tabs 
-          tabBarUnderlineStyle={Styles.tabsView}
-          onChangeTab={(tab)=>{
-     
-            console.log('tab object ', tab)
-            if (tab.from == 0) {
-              {this.setState({tabStatus:1})}
-              // this.getAllClasses();
-            
-            } else {
-              {this.setState({tabStatus:0})}
-              // this.getAllClasses();
-          
-            }
-          }}
-        >
-          <Tab
-           
-            heading={
-              userData.roleId == 3
-                ? KeyWords.booked + " " + KeyWords.scheduleTitle
-                : KeyWords.upcoming
-            }
-            tabStyle={Styles.tabStyle}
-            textStyle={Styles.textStyle}
-            activeTabStyle={Styles.activeTabStyle}
-            activeTextStyle={Styles.activeTextStyle}
-          >
-            <ComingBooking />
-          </Tab>
-          <Tab
-            heading={
-              userData.roleId == 3
-                ? KeyWords.cancelled + " " + KeyWords.scheduleTitle
-                : KeyWords.previousL
-            }
-            tabStyle={Styles.tabStyle}
-            textStyle={Styles.textStyle}
-            activeTabStyle={Styles.activeTabStyle}
-            activeTextStyle={Styles.activeTextStyle}
-          >
-            <CancelBooking />
-          </Tab>
-        </Tabs> */}
       </Container>
     );
   }
@@ -188,11 +217,14 @@ BookingScreen.propTypes = {
 };
 
 const maptoprops = state => {
+  console.log(state.AllClasses, "state=======<>");
   return {
-    userData: state.User.userdata
+    userData: state.User.userdata,
+    allClasses: state.AllClasses.allClasses,
+    changed: state.AllClasses.changed
   };
 };
 export default connect(
   maptoprops,
-  { AllClasses }
+  { AllClasses, cancelClasses, BookClass }
 )(BookingScreen);
