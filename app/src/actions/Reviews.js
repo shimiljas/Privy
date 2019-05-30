@@ -1,6 +1,8 @@
 import { Alert } from "react-native";
 import { SENDREVIEWS, LOADEROFF, SENDAPPROVEREVIEW,LOADERON, ALLPENDINGREVIEWS,ALLAPPROVEREVIEWS } from "./Types";
 import API from "../common/ApiManager";
+import Util from "../common/Util";
+import Color from "../common/Color";
 
 export const SendReview = data => {
   return dispatch => {
@@ -35,7 +37,7 @@ export const SendApprovedReview = data => {
       .then(res => res.json())
       .then(async res => {
         console.log("getSendApprovedReview pass :", res);
-        if (res.status == "true") {
+        if (res.success == 1) {
           dispatch({
             type: SENDAPPROVEREVIEW,
             reviewApproveStatus: res.data
@@ -45,6 +47,7 @@ export const SendApprovedReview = data => {
             visible: false
           });
         } else {
+          Util.ShowToast(res.message, 2000, Color.whiteClr, Color.red);
           dispatch({
             type: LOADEROFF,
             visible: false

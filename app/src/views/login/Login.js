@@ -247,6 +247,7 @@ class Login extends Component {
               width: Util.getWidth(75)
             }}
           >
+          /*
             <TouchableOpacity
               style={{}}
               onPress={() => {
@@ -262,6 +263,7 @@ class Login extends Component {
                 {KeyString.resetPassword}
               </Text>
             </TouchableOpacity>
+            */
           </View>
         </View>
       </View>

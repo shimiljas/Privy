@@ -38,23 +38,6 @@ class StudentProfileComponent extends React.Component {
         userData.country != null || userData.country != undefined
           ? userData.country
           : "",
-      streetAddress:
-        userData.streetAddress != null || userData.streetAddress != undefined
-          ? userData.streetAddress
-          : "",
-      state:
-        userData.state != null || userData.state != undefined
-          ? userData.state
-          : "",
-      city:
-        userData.city != null || userData.city != undefined
-          ? userData.city
-          : "",
-      zipcode:
-        (userData.zipCode != null || userData.zipCode != undefined) &&
-        userData.zipCode > 0
-          ? userData.zipCode
-          : ""
     };
   }
 
@@ -80,26 +63,6 @@ class StudentProfileComponent extends React.Component {
   
   inputClick = (text, key) => {
     this.setState({[key]: text})
-    // switch (key) {
-    //   case "email":
-    //     this.setState({ email: text });
-    //     break;
-    //   case "streetAddress":
-    //     this.setState({ streetAddress: text });
-    //     break;
-    //   case "state":
-    //     this.setState({ state: text });
-    //     break;
-    //   case "city":
-    //     this.setState({ city: text });
-    //     break;
-    //   case "zipcode":
-    //     this.setState({ zipcode: text });
-    //     break;
-
-    //   default:
-    //     break;
-    // }
   };
   componentCall = data => {
     return (
@@ -150,135 +113,24 @@ class StudentProfileComponent extends React.Component {
     });
   };
 
-  // async update() {
-  //   const { userData, updateUserData } = this.props;
-  //   const {
-  //     name,
-  //     user_id,
-  //     country,
-  //     streetAddress,
-  //     state,
-  //     city,
-  //     age,
-  //     zipcode,
-  //     base64ProfilePic
-  //   } = this.state;
-  //   if (name == "") {
-  //     alert(KeyWords.enter + " " + KeyWords.name);
-  //   } else {
-  //     var obj = {};
-  //     obj.name = name;
-  //     obj.user_id = user_id;
-  //     obj.lat = "22.7545";
-  //     obj.long = "75.2454";
-
-  //     if (country != "") obj.country = country;
-  //     if (streetAddress != "") obj.streetAddress = streetAddress;
-  //     if (state != "") obj.state = state;
-  //     if (city != "") obj.city = city;
-  //     if (zipcode != "") obj.zipCode = zipcode;
-  //     if (age != "") obj.age = age;
-
-  //     if (base64ProfilePic != "" && base64ProfilePic != undefined)
-  //       obj.profilePic = base64ProfilePic;
-  //     var data = {
-  //       methodName: "updateStudentProfile",
-  //       data: obj,
-  //       token: userData.api_token != null ? userData.api_token : userData.token
-  //     };
-
-  //     console.log("before calling api", userData, data);
-  //     updateUserData(data);
-  //   }
-  // }
-
   update = () => {
-    // const { userData, updateUserData } = this.props;
-    const {
-      _id,
-      base64ProfilePic,
-      instructChildren,
-      name,
-      country_permanent,
-      aboutMe,
-      streetAddress_permanent,
-      state_permanent,
-      city_permanent,
-      zipcode_permanent,
-      streetAddress,
-      state,
-      city,
-      zipcode,
-      country,
-      homeLocation,
-    } = this.state;
-
     const obj = {
       user_id: _id,
       name,
+      email,
+      country,
       aboutMe,
+      age,
       add1: homeLocation,
       instructChildren,
-      country,
     }
 
     clientApi.callPostApi("update_user_profile.php", {...obj}).then(res =>{
       console.log(res)
+      alert(res.message);
       if(res.success == 1) {
-        alert(res.message);
-        // this.setState({
-        //   _id: user_id,
-        //   name: res.data.name,
-        //   instructChildren: res.data.instructChildren,
-        //   countryText: res.data.country || "",
-        //   homeLocation: res.data.add1,
-        //   classLocation: res.data.add2
-        // })
       }
     });
-
-    // if (name == "") {
-    //   alert(KeyWords.enter + " " + KeyWords.name);
-    // } else {
-    //   var obj = {};
-    //   obj.name = name;
-    //   obj.user_id = _id;
-    //   obj.lat = "22.7545";
-    //   obj.long = "75.2454";
-    //   obj.lat_permanent = "22.7545";
-    //   obj.long_permanent = "75.2454";
-
-    //   // permanent address
-    //   if (country_permanent != "") obj.country_permanent = country_permanent;
-    //   if (streetAddress_permanent != "")
-    //     obj.streetAddress_permanent = streetAddress_permanent;
-    //   if (state_permanent != "") obj.state_permanent = state_permanent;
-    //   if (city_permanent != "") obj.city_permanent = city_permanent;
-    //   if (zipcode_permanent != "") obj.zipCode_permanent = zipcode_permanent;
-
-    //   // class address
-    //   if (country != "") obj.country = country;
-    //   if (streetAddress != "") obj.streetAddress = streetAddress;
-    //   if (state != "") obj.state = state;
-    //   if (city != "") obj.city = city;
-    //   if (zipcode != "") obj.zipCode = zipcode;
-
-    //   if (aboutMe != "") obj.aboutMe = aboutMe;
-    //   if (instructChildren != "") obj.instructChildren = instructChildren;
-
-    //   //photo
-    //   if (base64ProfilePic != "" && base64ProfilePic != undefined)
-    //     obj.profilePic = base64ProfilePic;
-
-    //   console.log("profile obj == ", obj);
-    //   var data = {
-    //     methodName: "updateInstructorProfile",
-    //     data: obj,
-    //     token: userData.api_token != null ? userData.api_token : userData.token
-    //   };
-
-    //   updateUserData(data);
-    // }
   };
 
   render() {
@@ -289,10 +141,8 @@ class StudentProfileComponent extends React.Component {
       country,
       age,
       email,
-      streetAddress,
-      zipcode,
-      city,homeLocation,
-      state,isOpenHome
+      homeLocation,
+      isOpenHome
     } = this.state;
     return (
       <Container>

@@ -171,7 +171,6 @@ const SignMe = (dispatch, data) => {
         });
       } else {
         Util.ShowToast(res.message, 2000, Color.whiteClr, Color.red);
-
         console.log("error sighup", res.message);
       }
     })
@@ -224,16 +223,8 @@ const LogMeIn = async (dispatch, data) => {
           type: LOADEROFF
         });
       }
-      // else if(res.message == "User not found."){
-
-      //   dispatch({
-      //     type: LOADEROFF,
-      //   });
-      //   Util.ShowToast(res.message, 2000, Color.whiteClr, Color.red);
-
-      //   console.log("login error--", res);
-      // }
       else {
+        Util.ShowToast(res.message, 2000, Color.whiteClr, Color.red);
         dispatch({
           type: LOADEROFF
         });

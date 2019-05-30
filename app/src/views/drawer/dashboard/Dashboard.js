@@ -242,16 +242,6 @@ class DashboardComponent extends React.Component {
             )}
           </View>
         </View>
-        <TouchableOpacity
-          style={{
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center"
-          }}
-          onPress={() => Actions.CalendarList()}
-        >
-          <Text>Goto calendar</Text>
-        </TouchableOpacity>
       </Container>
     );
   }
