@@ -170,7 +170,8 @@ const SignMe = (dispatch, data) => {
           successData: true
         });
       } else {
-        Util.ShowToast(res.message, 2000, Color.whiteClr, Color.red);
+        alert(res.message);
+        //Util.ShowToast(res.message, 2000, Color.whiteClr, Color.red);
         console.log("error sighup", res.message);
       }
     })
@@ -224,7 +225,8 @@ const LogMeIn = async (dispatch, data) => {
         });
       }
       else {
-        Util.ShowToast(res.message, 2000, Color.whiteClr, Color.red);
+        alert(res.message);
+        //Util.ShowToast(res.message, 2000, Color.whiteClr, Color.red);
         dispatch({
           type: LOADEROFF
         });

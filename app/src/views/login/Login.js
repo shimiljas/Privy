@@ -121,7 +121,6 @@ class Login extends Component {
         <View style={styles.errorView}>
           <Text style={styles.errorText}>{emailError}</Text>
         </View>
-
         <RoundInput
           placeValue={KeyString.password}
           changeValue={password => {
@@ -247,7 +246,6 @@ class Login extends Component {
               width: Util.getWidth(75)
             }}
           >
-          /*
             <TouchableOpacity
               style={{}}
               onPress={() => {
@@ -263,7 +261,6 @@ class Login extends Component {
                 {KeyString.resetPassword}
               </Text>
             </TouchableOpacity>
-            */
           </View>
         </View>
       </View>

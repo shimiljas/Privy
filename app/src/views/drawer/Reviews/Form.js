@@ -1,10 +1,11 @@
 import React from "react";
 import { View, Text, AsyncStorage, ScrollView } from "react-native";
+import { Actions } from "react-native-router-flux";
 import { connect } from "react-redux";
 import StarRating from "react-native-star-rating";
 import ModalSelector from "react-native-modal-selector";
 import PropTypes from "prop-types";
-import { SendReview } from "../../../actions";
+import { deshHomeValue, SendReview } from "../../../actions";
 import Util from "../../../common/Util";
 import Styles from "./Styles";
 import Color from "../../../common/Color";
@@ -54,7 +55,10 @@ class SubmitReviewComponent extends React.Component {
     this.setState({selectedData:lesson});
     console.log(this.selectedData);
   };
-
+  homeBtnClick = async () => {
+    const { deshHomeValue } = this.props;
+    Actions.Dashboard({ type: "replace" });
+  };
   componentDidMount = async () => {
     let data = {
       role_id: await AsyncStorage.getItem("roleId"),
@@ -106,9 +110,10 @@ class SubmitReviewComponent extends React.Component {
       obj,
       userData.api_token != null ? userData.api_token : userData.token
     );
+    console.log(response);
+    alert(response.message);
     if (response.success == 1) {
-      alert("Review Submitted successfully");
-      console.log(response);
+      this.homeBtnClick()
     }
   };
 

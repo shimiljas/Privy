@@ -44,11 +44,11 @@ class ProfileComponent extends React.Component {
         this.setState({
           _id: user_id,
           name: res.data.name,
-          aboutMe: res.data.aboutMe,
+          aboutMe: res.data.aboutMe || "",
           instructChildren: res.data.instructChildren,
           country: res.data.country || "",
-          homeLocation: res.data.add1,
-          classLocation: res.data.add2,
+          homeLocation: res.data.add1 || "",
+          classLocation: res.data.add2 || "",
           profilePic: res.data.profilePic
         })
       }

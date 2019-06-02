@@ -8,6 +8,7 @@ import Header from "../../../components/header/header";
 import Styles from "./Styles";
 import KeyWords from "../../../common/Localization";
 import clientApi from "../../../common/ApiManager";
+
 class ReviewScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -32,7 +33,10 @@ class ReviewScreen extends React.Component {
     });
     await this.getReviews();
   };
-
+  componentWillReceiveProps(nextProps) {
+    this.getReviews();
+  }
+  
   getReviews = async () => {
     const { userData } = this.state;
     var obj = {

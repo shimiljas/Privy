@@ -78,7 +78,7 @@ class DashboardComponent extends React.Component {
       case "My Reviews":
         Actions.ReviewScreen({ type: "replace" });
         break;
-      case "Submit Review for Your Lessons":
+      case "Submit Review":
         Actions.SubmitReview({ type: "replace" });
         break;
       default:
@@ -203,11 +203,11 @@ class DashboardComponent extends React.Component {
         footerValue: DashboardCall.unread_messages
       },
       {
-        title: "Submit Review ",
+        title: "Submit Review",
         image: Images.submitrfylImg,
         subTitle: "My Reviews",
         footerImage: Images.starImg,
-        footerValue: `$ ${DashboardCall.reviews || 0}`
+        footerValue: `${DashboardCall.reviews || 0}`
       }
     ];
 

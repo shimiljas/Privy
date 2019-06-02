@@ -51,9 +51,9 @@ class StudentProfileComponent extends React.Component {
           name: res.data.name,
           instructChildren: res.data.instructChildren,
           country: res.data.country || "",
-          email: res.data.email,
-          homeLocation: res.data.add1,
-          classLocation: res.data.add2,
+          email: res.data.email || "",
+          homeLocation: res.data.add1 || "",
+          classLocation: res.data.add2 || "",
           profilePic: res.data.profilePic,
           age: res.data.age || 0
         })

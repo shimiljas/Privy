@@ -109,14 +109,6 @@ class Header extends React.Component {
           ) : (
             <View style={Styles.backBg} />
           )}
-
-          {backIcon == undefined ? (
-            <TouchableOpacity style={Styles.backBg}>
-              <Image source={Images.message_Image} style={Styles.imageSize2} />
-            </TouchableOpacity>
-          ) : (
-            <View style={Styles.backBg} />
-          )}
         </View>
       </SafeAreaView>
     );
