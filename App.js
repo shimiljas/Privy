@@ -12,6 +12,7 @@ import { Root } from "native-base";
 import { Provider } from "react-redux";
 //middleware
 import Reduxthunk from "redux-thunk";
+import logger from "redux-logger";
 import { createStore, applyMiddleware } from "redux";
 // import firebase, { Notification } from "react-native-firebase";
 // import { Notification } from 'react-native-firebase';
@@ -141,8 +142,11 @@ export default class App extends Component {
   render() {
     console.ignoredYellowBox = ["Warning: Each", "Warning: Failed"];
     console.disableYellowBox = true;
+    const middleware = [];
+    middleware.push(Reduxthunk);
+    middleware.push(logger);
 
-    const store = createStore(reducer, {}, applyMiddleware(Reduxthunk));
+    const store = createStore(reducer, {}, applyMiddleware(...middleware));
     return (
       <Provider store={store}>
         <Root>
