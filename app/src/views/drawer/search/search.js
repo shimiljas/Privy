@@ -102,7 +102,8 @@ class SearchComponent extends React.Component {
     if (name == "category" && value) {
       let subcategories = this.state.allcategory.filter(x => x.pid == value.id);
 
-      this.setState({ subcategories: subcategories, category: value });
+      this.setState({ subcategories: subcategories, category: value,subCategory:{}, subCategory_level3:{},
+        subcategory_level2:{} });
       return;
     }
 
@@ -114,7 +115,9 @@ class SearchComponent extends React.Component {
 
       this.setState({
         subcategories_level2: subcategories_level2,
-        subCategory: value
+        subCategory: value,
+        subCategory_level3:{},
+        subcategory_level2:{}
       });
       return;
     }
@@ -125,7 +128,9 @@ class SearchComponent extends React.Component {
       );
       this.setState({
         subcategories_level3: subcategories_level3,
-        subcategory_level2: value
+        subcategory_level2: value,
+        subCategory_level3:{},
+    
       });
       return;
     }

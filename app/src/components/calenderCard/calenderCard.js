@@ -1,19 +1,20 @@
-import React from "react";
-import { View, Image } from "react-native";
-import { Text } from "native-base";
-import Styles from "./Styles";
-import Images from "../../common/images";
-import Color from "../../common/Color";
-import KeyWords from "../../common/Localization";
+import React from 'react';
+import {View, Image} from 'react-native';
+import {Text} from 'native-base';
+import Styles from './Styles';
+import Images from '../../common/images';
+import Color from '../../common/Color';
+import KeyWords from '../../common/Localization';
+import moment from 'moment';
 
 class CalenderCard extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super (props);
   }
 
-  test() {}
+  test () {}
 
-  render() {
+  render () {
     return (
       <View style={Styles.cardArea}>
         <View style={[Styles.container]}>
@@ -24,8 +25,8 @@ class CalenderCard extends React.Component {
               style={Styles.dataImage}
             />
             <View style={Styles.dataText}>
-              <Text style={[Styles.nameStyle, { color: Color.whiteClr }]}>
-                30
+              <Text style={[Styles.nameStyle, {color: Color.whiteClr}]}>
+                {moment (this.props.date, 'YYYY-MM-DD').month ()}
               </Text>
             </View>
           </View>
@@ -33,70 +34,62 @@ class CalenderCard extends React.Component {
             style={{
               flex: 1,
 
-              flexDirection: "row"
+              flexDirection: 'row',
             }}
           >
-            <View style={{ flex: 1, justifyContent: "center" }}>
-              <View style={{ alignItems: "flex-start" }}>
-                <Text
-                  style={{ fontSize: 14, color: "grey", fontWeight: "bold" }}
-                >
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <View style={{alignItems: 'flex-start'}}>
+                <Text style={{fontSize: 14, color: 'grey', fontWeight: 'bold'}}>
                   Category
                 </Text>
-                <Text
-                  style={{ fontSize: 11, marginTop: 8, fontWeight: "bold" }}
-                >
-                  English
+                <Text style={{fontSize: 11, marginTop: 8, fontWeight: 'bold'}}>
+                  {this.props.data && this.props.data.cname
+                    ? this.props.data.cname
+                    : ''}
                 </Text>
               </View>
-              <View style={{ marginTop: 10, alignItems: "flex-start" }}>
-                <Text
-                  style={{ fontSize: 14, color: "grey", fontWeight: "bold" }}
-                >
+              <View style={{marginTop: 10, alignItems: 'flex-start'}}>
+                <Text style={{fontSize: 14, color: 'grey', fontWeight: 'bold'}}>
                   Limit
                 </Text>
-                <Text
-                  style={{ fontSize: 11, marginTop: 8, fontWeight: "bold" }}
-                >
-                  30
+                <Text style={{fontSize: 11, marginTop: 8, fontWeight: 'bold'}}>
+                  {this.props.data && this.props.data.size
+                    ? this.props.data.size
+                    : ''}
                 </Text>
               </View>
             </View>
             <View
               style={{
                 flex: 1,
-                alignItems: "center",
-                justifyContent: "center"
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <Image
                 resizeMode="contain"
                 source={Images.scienceImg}
-                style={{ width: 50, height: 50 }}
+                style={{width: 50, height: 50}}
               />
             </View>
-            <View style={{ flex: 1, justifyContent: "center" }}>
-              <View style={{ alignItems: "flex-start" }}>
-                <Text
-                  style={{ fontSize: 14, color: "grey", fontWeight: "bold" }}
-                >
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <View style={{alignItems: 'flex-start'}}>
+                <Text style={{fontSize: 14, color: 'grey', fontWeight: 'bold'}}>
                   Time
                 </Text>
-                <Text
-                  style={{ fontSize: 11, marginTop: 8, fontWeight: "bold" }}
-                >
-                  01PM-2PM
+                <Text style={{fontSize: 11, marginTop: 8, fontWeight: 'bold'}}>
+                  {this.props.data && this.props.data.dhours
+                    ? this.props.data.dhours
+                    : ''}
+                  {' '}
+                  Hr
                 </Text>
               </View>
-              <View style={{ marginTop: 10, alignItems: "flex-start" }}>
-                <Text
-                  style={{ fontSize: 14, color: "grey", fontWeight: "bold" }}
-                >
+              <View style={{marginTop: 10, alignItems: 'flex-start'}}>
+                <Text style={{fontSize: 14, color: 'grey', fontWeight: 'bold'}}>
                   Bookings
                 </Text>
-                <Text
-                  style={{ fontSize: 11, marginTop: 8, fontWeight: "bold" }}
-                >
+                <Text style={{fontSize: 11, marginTop: 8, fontWeight: 'bold'}}>
                   22
                 </Text>
               </View>
@@ -107,7 +100,7 @@ class CalenderCard extends React.Component {
     );
   }
 }
-export { CalenderCard };
+export {CalenderCard};
 
 /*
 <View style={Styles.LeftArea}>

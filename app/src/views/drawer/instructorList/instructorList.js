@@ -1,49 +1,49 @@
-import React from "react";
-import { View, Text, Image, TouchableOpacity, FlatList } from "react-native";
-import { Container, Content, Card } from "native-base";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { Actions } from "react-native-router-flux";
-import StarRating from "react-native-star-rating";
-import ModalSelector from "react-native-modal-selector";
-import { SelectedUser, Booknow } from "../../../actions";
-import Styles from "./Styles";
-import GlobalStyle from "../../../common/GlobalStyle";
-import Images from "../../../common/images";
+import React from 'react';
+import {View, Text, Image, TouchableOpacity, FlatList} from 'react-native';
+import {Container, Content, Card} from 'native-base';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import {Actions} from 'react-native-router-flux';
+import StarRating from 'react-native-star-rating';
+import ModalSelector from 'react-native-modal-selector';
+import {SelectedUser, Booknow} from '../../../actions';
+import Styles from './Styles';
+import GlobalStyle from '../../../common/GlobalStyle';
+import Images from '../../../common/images';
 //import clientApi from "../../../common/ApiManager";
-import { SpinnerLoad } from "../../../components";
-import Header from "../../../components/header/header";
-import Util from "../../../common/Util";
-import Color from "../../../common/Color";
-import KeyWords from "../../../common/Localization";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import {SpinnerLoad} from '../../../components';
+import Header from '../../../components/header/header';
+import Util from '../../../common/Util';
+import Color from '../../../common/Color';
+import KeyWords from '../../../common/Localization';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 var sortList = [
-  { _id: 1, name: KeyWords.price },
-  { _id: 2, name: KeyWords.distance },
-  { _id: 3, name: KeyWords.alpha }
+  {_id: 1, name: KeyWords.price},
+  {_id: 2, name: KeyWords.distance},
+  {_id: 3, name: KeyWords.alpha},
 ];
 
 class InstructorComponent extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super (props);
   }
 
   instructorProfile = async data => {
-    const { SelectedUser } = this.props;
-    await SelectedUser(data);
+    const {SelectedUser} = this.props;
+    await SelectedUser (data);
 
     // Actions.InstructorProfile({ type: "replace", data });
   };
 
   bookNow = async data => {
-    const { Booknow } = this.props;
-    await Booknow(data);
-    Actions.BookNow({ type: "replace" });
+    const {Booknow} = this.props;
+    await Booknow (data);
+    Actions.BookNow ({type: 'replace'});
   };
 
   sortList = value => {
-    console.log(value);
+    console.log (value);
   };
 
   _cellDetailView = data => {
@@ -51,13 +51,13 @@ class InstructorComponent extends React.Component {
       <Card style={[GlobalStyle.row, Styles.cardStyle]}>
         <TouchableOpacity
           style={Styles.profileImageView}
-          onPress={() => this.instructorProfile(data)}
+          onPress={() => this.instructorProfile (data)}
         >
           <FontAwesome name="user-circle" size={70} />
         </TouchableOpacity>
         <View style={Styles.userDetailsView}>
-          <TouchableOpacity onPress={() => this.instructorProfile(data)}>
-            <Text style={{ fontWeight: "bold", color: "black" }}>
+          <TouchableOpacity onPress={() => this.instructorProfile (data)}>
+            <Text style={{fontWeight: 'bold', color: 'black'}}>
               {data.iname}
             </Text>
           </TouchableOpacity>
@@ -66,7 +66,7 @@ class InstructorComponent extends React.Component {
               {data.des}
             </Text>
           </View>
-          <View style={{ width: "100%", height: 20 }} />
+          <View style={{width: '100%', height: 20}} />
           {/* <Text style={Styles.name}>
             {KeyWords.distance}
             <Text>: 1</Text>
@@ -78,11 +78,17 @@ class InstructorComponent extends React.Component {
               maxStars={5}
               rating={data.id}
               fullStarColor="#fac917"
-              starSize={Util.getHeight(2.5)}
+              starSize={Util.getHeight (2.5)}
             />
           </View>
-          <TouchableOpacity onPress={() => Actions.CalendarList()}>
-            <Text style={[Styles.link, { marginTop: Util.getHeight(1.5) }]}>
+          <TouchableOpacity
+            onPress={() =>
+              Actions.CalendarList ({
+                data: this.props.InstructorList,
+                selected: data,
+              })}
+          >
+            <Text style={[Styles.link, {marginTop: Util.getHeight (1.5)}]}>
               {KeyWords.calendar}
             </Text>
           </TouchableOpacity>
@@ -92,17 +98,17 @@ class InstructorComponent extends React.Component {
           <Text style={Styles.name}>
             {KeyWords.price}
             <Text>: </Text>
-            <Text style={{ color: Color.darkGray, fontWeight: "bold" }}>
+            <Text style={{color: Color.darkGray, fontWeight: 'bold'}}>
               $ {data.spfee == undefined ? 0 : data.spfee + 1}
             </Text>
           </Text>
-          {data.spfee != undefined ? (
-            <TouchableOpacity onPress={() => this.bookNow(data)}>
-              <Text style={[Styles.link, { marginTop: Util.getHeight(8.5) }]}>
-                {KeyWords.book + " " + KeyWords.now}
-              </Text>
-            </TouchableOpacity>
-          ) : null}
+          {data.spfee != undefined
+            ? <TouchableOpacity onPress={() => this.bookNow (data)}>
+                <Text style={[Styles.link, {marginTop: Util.getHeight (8.5)}]}>
+                  {KeyWords.book + ' ' + KeyWords.now}
+                </Text>
+              </TouchableOpacity>
+            : null}
         </View>
       </Card>
     );
@@ -110,8 +116,8 @@ class InstructorComponent extends React.Component {
 
   _keyExtractor = item => item._id;
 
-  render() {
-    const { SpinnerVisible, InstructorList } = this.props;
+  render () {
+    const {SpinnerVisible, InstructorList} = this.props;
     return (
       <Container>
         <Header title={KeyWords.instructors} />
@@ -123,11 +129,11 @@ class InstructorComponent extends React.Component {
               style={[
                 GlobalStyle.width45p,
                 GlobalStyle.alignItemsFlexStart,
-                GlobalStyle.justifyContentCenter
+                GlobalStyle.justifyContentCenter,
               ]}
             >
               <Text style={Styles.title}>
-                <Text onPress={() => Actions.Search({ type: "replace" })}>
+                <Text onPress={() => Actions.Search ({type: 'replace'})}>
                   {KeyWords.search}
                 </Text>
                 <Text>/ </Text>
@@ -138,7 +144,7 @@ class InstructorComponent extends React.Component {
               style={[
                 GlobalStyle.width55p,
                 GlobalStyle.alignItemsFlexEnd,
-                GlobalStyle.justifyContentCenter
+                GlobalStyle.justifyContentCenter,
               ]}
             >
               <View style={[GlobalStyle.row]}>
@@ -152,13 +158,12 @@ class InstructorComponent extends React.Component {
                     data={sortList}
                     keyExtractor={item => item._id}
                     labelExtractor={item =>
-                      item.name != null ? item.name : item.title
-                    }
-                    onChange={value => this.sortList(value)}
+                      item.name != null ? item.name : item.title}
+                    onChange={value => this.sortList (value)}
                     selectStyle={[
                       GlobalStyle.borderWidth0,
                       GlobalStyle.alignItemsFlexStart,
-                      GlobalStyle.justifyContentCenter
+                      GlobalStyle.justifyContentCenter,
                     ]}
                   />
                 </View>
@@ -176,7 +181,7 @@ class InstructorComponent extends React.Component {
           <View style={Styles.listArea}>
             <FlatList
               data={InstructorList}
-              renderItem={({ item }) => this._cellDetailView(item)}
+              renderItem={({item}) => this._cellDetailView (item)}
               keyExtractor={this._keyExtractor}
               listKey="instructorsList"
             />
@@ -190,20 +195,19 @@ class InstructorComponent extends React.Component {
 
 InstructorComponent.propTypes = {
   //userData: PropTypes.element.isRequired,
-  SpinnerVisible: PropTypes.element.isRequired
+  SpinnerVisible: PropTypes.element.isRequired,
   //mode: PropTypes.element.toText,
 };
 
 const maptoprops = state => {
-  console.log("maptoprops==", state.SearchIntructor.searchedList);
+  console.log ('maptoprops==', state.SearchIntructor.searchedList);
   return {
     SpinnerVisible: state.Loader.visible,
     userData: state.User.userdata,
-    InstructorList: state.SearchIntructor.searchedList
+    InstructorList: state.SearchIntructor.searchedList,
   };
 };
 
-export default connect(
-  maptoprops,
-  { SelectedUser, Booknow }
-)(InstructorComponent);
+export default connect (maptoprops, {SelectedUser, Booknow}) (
+  InstructorComponent
+);

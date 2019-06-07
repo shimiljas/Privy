@@ -3,6 +3,7 @@ import { SENDREVIEWS, LOADEROFF, SENDAPPROVEREVIEW,LOADERON, ALLPENDINGREVIEWS,A
 import API from "../common/ApiManager";
 import Util from "../common/Util";
 import Color from "../common/Color";
+import clientApi from "../common/ApiManager";
 
 export const SendReview = data => {
   return dispatch => {
@@ -79,30 +80,50 @@ const getAllReview = async (dispatch, data) => {
   //   type: LOADERON,
   //   visible: false
   // });
-  const reviewUrlKey = "getAllReviews";
-  var token = data.api_token;
-  var obj = {
-    user_id: data.user_id,
-    status:data.status
-  };
+  const reviewUrlKey = "get_reviews.php";
+  var token = data.token;
+  
   console.log("getAllReviews data", data);
-  await API.callPostApiWithToken(reviewUrlKey, obj, token)
-    .then(res => res.json())
-    .then(async res => {
-      console.log("getAllReviews pass :", res);
-      if (res.status == "true") {
-          if (data.status == 1) {
-            dispatch({
-                type: ALLAPPROVEREVIEWS,
-                reviewApproveList: res.data
-              });
+  await clientApi.callApi(
+       "get_reviews.php",
+       data,
+      token
+     )
+    .then( response => {
+      const approvedReviews = [];
+      const pendingReviews = [];
+      if (response.success == 1) {
+        reviews = response.data;
+        for (let review of reviews) {
+          if (review.approve == 1) {
+            approvedReviews.push(review);
+          } else {
+            pendingReviews.push(review);
           }
-          else if (data.status == 0){
-            dispatch({
-                type: ALLPENDINGREVIEWS,
-                reviewPendingList: res.data
+        }
+
+         dispatch({
+                   type: ALLAPPROVEREVIEWS,
+                  reviewApproveList: approvedReviews
+           });
+          dispatch({
+               type: ALLPENDINGREVIEWS,
+                reviewPendingList: pendingReviews
               });
-          }
+
+      // if (res.status == "true") {
+      //     if (data.status == 1) {
+      //       dispatch({
+      //           type: ALLAPPROVEREVIEWS,
+      //           reviewApproveList: res.data
+      //         });
+      //     }
+      //     else if (data.status == 0){
+      //       dispatch({
+      //           type: ALLPENDINGREVIEWS,
+      //           reviewPendingList: res.data
+      //         });
+      //     }
        
         dispatch({
           type: LOADEROFF,

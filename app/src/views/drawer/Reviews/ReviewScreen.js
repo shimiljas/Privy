@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import ApprovedReview from "./reviewStatus/ApprovedReview";
 import PenddingReview from "./reviewStatus/PendingReview";
 import Header from "../../../components/header/header";
+import {AllReview} from "../../../actions/Reviews"
 import Styles from "./Styles";
 import KeyWords from "../../../common/Localization";
 import clientApi from "../../../common/ApiManager";
@@ -19,6 +20,7 @@ class ReviewScreen extends React.Component {
   }
 
   componentDidMount = async () => {
+    
     let data = {
       role_id: await AsyncStorage.getItem("roleId"),
       user_id: await AsyncStorage.getItem("userId"),
@@ -32,6 +34,9 @@ class ReviewScreen extends React.Component {
       }
     });
     await this.getReviews();
+
+
+
   };
   componentWillReceiveProps(nextProps) {
     this.getReviews();
@@ -40,29 +45,31 @@ class ReviewScreen extends React.Component {
   getReviews = async () => {
     const { userData } = this.state;
     var obj = {
-      user_id: +userData._id,
+      user_id: userData._id,
       token: userData.api_token != null ? userData.api_token : userData.token,
       ut: userData.roleId
     };
-    var response = await clientApi.callApi(
-      "get_reviews.php",
-      obj,
-      userData.api_token != null ? userData.api_token : userData.token
-    );
-    console.log("reviews == ", response);
-    const approvedReviews = [];
-    const pendingReviews = [];
-    if (response.success == 1) {
-      reviews = response.data;
-      for (let review of reviews) {
-        if (review.approve == 1) {
-          approvedReviews.push(review);
-        } else {
-          pendingReviews.push(review);
-        }
-      }
-      this.setState({ pending: pendingReviews, approved: approvedReviews });
-    }
+
+   // this.props.AllReview(obj)
+    // var response = await clientApi.callApi(
+    //   "get_reviews.php",
+    //   obj,
+    //   userData.api_token != null ? userData.api_token : userData.token
+    // );
+    // console.log("reviews == ", response);
+    // const approvedReviews = [];
+    // const pendingReviews = [];
+    // if (response.success == 1) {
+    //   reviews = response.data;
+    //   for (let review of reviews) {
+    //     if (review.approve == 1) {
+    //       approvedReviews.push(review);
+    //     } else {
+    //       pendingReviews.push(review);
+    //     }
+    //   }
+    //   this.setState({ pending: pendingReviews, approved: approvedReviews });
+    // }
   };
 
   render() {
@@ -77,7 +84,7 @@ class ReviewScreen extends React.Component {
             activeTabStyle={Styles.activeTabStyle}
             activeTextStyle={Styles.activeTabText}
           >
-            <PenddingReview reviews={this.state.pending} />
+            <PenddingReview reviews={this.props.reviewPendingList} />
           </Tab>
           <Tab
             heading={KeyWords.approved}
@@ -86,7 +93,7 @@ class ReviewScreen extends React.Component {
             activeTabStyle={Styles.activeTabStyle}
             activeTextStyle={Styles.activeTabText}
           >
-            <ApprovedReview reviews={this.state.approved} />
+            <ApprovedReview reviews={this.props.reviewApproveList} />
           </Tab>
         </Tabs>
       </Container>
@@ -95,10 +102,12 @@ class ReviewScreen extends React.Component {
 }
 const maptoprops = state => {
   return {
-    userData: state.User.userdata
+    userData: state.User.userdata,
+    reviewPendingList:state.AllReviews.reviewPendingList,
+    reviewApproveList:state.AllReviews.reviewApproveList
   };
 };
 export default connect(
   maptoprops,
-  {}
+  {AllReview}
 )(ReviewScreen);

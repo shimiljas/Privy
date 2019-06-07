@@ -6,7 +6,7 @@
  * @flow
  */
 import React, { Component } from "react";
-import { YellowBox, SafeAreaView } from "react-native";
+import { YellowBox, SafeAreaView,AsyncStorage } from "react-native";
 import { Root } from "native-base";
 // provider import for  wrapping the main component
 import { Provider } from "react-redux";

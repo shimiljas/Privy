@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BackHandler, Platform, StatusBar, NetInfo } from "react-native";
+import { BackHandler, Platform, StatusBar, NetInfo ,AsyncStorage} from "react-native";
 import {
   Router,
   Reducer,
@@ -44,6 +44,7 @@ import EditScheduleScreen from "./views/drawer/schedules/EditScheduleScreen";
 import Images from "./common/images";
 import Colors from "./common/Color";
 import Util from "./common/Util";
+import {AllReview} from "./actions/Reviews"
 
 // Load Redux Actions
 const reducerCreate = params => {
@@ -100,6 +101,23 @@ class PrivyApp extends Component {
       this.setState({ isInternetConnected: isConnected });
     }
   };
+
+
+  getReviews=async()=>{
+    
+    
+   
+    var obj = {
+      user_id:await AsyncStorage.getItem("userId"),
+      token: await AsyncStorage.getItem("apiToken"),
+      ut:await AsyncStorage.getItem("roleId")
+    };
+
+    console.log(obj,"sdsdfsdf")
+    
+
+    this.props.AllReview(obj)
+  }
 
   _renderScene = (Component, title) => {
     return <Component title={title} />;
@@ -214,7 +232,8 @@ class PrivyApp extends Component {
                   hideNavBar
                   key="Review"
                   component={() => this._renderScene(ReviewScreen)}
-                  title="Review"
+                  onEnter={()=>this.getReviews()}
+                  
                 />
               </Stack>
 
@@ -416,5 +435,5 @@ class PrivyApp extends Component {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  {AllReview}
 )(PrivyApp);
