@@ -1,8 +1,9 @@
-import { SERACHLIST, SELECTEDDATA } from "../actions/Types";
+import { SERACHLIST, SELECTEDDATA, SELECT_CALENDER } from "../actions/Types";
 
 const INITIAL_STATE = {
   searchedList: [],
-  selectedUser: {}
+  selectedUser: {},
+  calenderSelectionIndex: -1
   // error: ""
 };
 export default (state = INITIAL_STATE, action) => {
@@ -17,6 +18,11 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         selectedUser: action.selectedUser
+      };
+    case SELECT_CALENDER:
+      return {
+        ...state,
+        calenderSelectionIndex: action.selectedIndex
       };
     default:
       return { ...state };

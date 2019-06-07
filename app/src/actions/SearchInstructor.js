@@ -1,7 +1,7 @@
 import { Alert } from "react-native";
 import { Actions } from "react-native-router-flux";
 import API from "../common/ApiManager";
-import { LOADEROFF, LOADERON, SERACHLIST, SELECTEDDATA } from "./Types";
+import { LOADEROFF, LOADERON, SERACHLIST, SELECTEDDATA,SELECT_CALENDER } from "./Types";
 
 export const SearchInstructor = data => {
   return dispatch => {
@@ -18,6 +18,19 @@ export const Booknow = data => {
     setBooknow(dispatch, data);
   };
 };
+export const showCalendar = data => {
+  return dispatch => {
+    setCalendarData(dispatch, data);
+  };
+};
+
+const setCalendarData = async (dispatch, data) => {
+  dispatch({
+    type: SELECT_CALENDER,
+    selectedIndex: data
+  });
+};
+
 const setBooknow = async (dispatch, data) => {
   dispatch({
     type: SELECTEDDATA,
@@ -32,6 +45,8 @@ const setSelectedUser = async (dispatch, data) => {
   });
   Actions.InstructorProfile({ type: "replace" });
 };
+
+
 const getSearchInstructor = async (dispatch, data) => {
   dispatch({
     type: LOADERON

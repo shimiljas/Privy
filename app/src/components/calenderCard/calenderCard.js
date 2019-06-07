@@ -15,6 +15,8 @@ class CalenderCard extends React.Component {
   test () {}
 
   render () {
+    const {data, date} = this.props;
+
     return (
       <View style={Styles.cardArea}>
         <View style={[Styles.container]}>
@@ -26,7 +28,7 @@ class CalenderCard extends React.Component {
             />
             <View style={Styles.dataText}>
               <Text style={[Styles.nameStyle, {color: Color.whiteClr}]}>
-                {moment (this.props.date, 'YYYY-MM-DD').month ()}
+                {moment (date, 'YYYY-MM-DD').date ()}
               </Text>
             </View>
           </View>
@@ -43,8 +45,8 @@ class CalenderCard extends React.Component {
                   Category
                 </Text>
                 <Text style={{fontSize: 11, marginTop: 8, fontWeight: 'bold'}}>
-                  {this.props.data && this.props.data.cname
-                    ? this.props.data.cname
+                  {data && data.cname
+                    ? data.cname
                     : ''}
                 </Text>
               </View>
@@ -53,8 +55,8 @@ class CalenderCard extends React.Component {
                   Limit
                 </Text>
                 <Text style={{fontSize: 11, marginTop: 8, fontWeight: 'bold'}}>
-                  {this.props.data && this.props.data.size
-                    ? this.props.data.size
+                  {data && data.size
+                    ? data.size
                     : ''}
                 </Text>
               </View>
@@ -78,8 +80,8 @@ class CalenderCard extends React.Component {
                   Time
                 </Text>
                 <Text style={{fontSize: 11, marginTop: 8, fontWeight: 'bold'}}>
-                  {this.props.data && this.props.data.dhours
-                    ? this.props.data.dhours
+                  {data && data.dhours
+                    ? data.dhours
                     : ''}
                   {' '}
                   Hr

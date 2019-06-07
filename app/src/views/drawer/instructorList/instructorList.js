@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import {Actions} from 'react-native-router-flux';
 import StarRating from 'react-native-star-rating';
 import ModalSelector from 'react-native-modal-selector';
-import {SelectedUser, Booknow} from '../../../actions';
+import {SelectedUser, Booknow,showCalendar} from '../../../actions';
 import Styles from './Styles';
 import GlobalStyle from '../../../common/GlobalStyle';
 import Images from '../../../common/images';
@@ -46,7 +46,8 @@ class InstructorComponent extends React.Component {
     console.log (value);
   };
 
-  _cellDetailView = data => {
+  _cellDetailView = (data, index) => {
+    const {showCalendar} = this.props;
     return (
       <Card style={[GlobalStyle.row, Styles.cardStyle]}>
         <TouchableOpacity
@@ -83,10 +84,13 @@ class InstructorComponent extends React.Component {
           </View>
           <TouchableOpacity
             onPress={() =>
-              Actions.CalendarList ({
+             {
+               console.log("nabeel: instruction list: ", this.props.InstructorList, data, index);
+               showCalendar(index);
+                Actions.CalendarList ({
                 data: this.props.InstructorList,
-                selected: data,
-              })}
+                selected: index,
+              })}}
           >
             <Text style={[Styles.link, {marginTop: Util.getHeight (1.5)}]}>
               {KeyWords.calendar}
@@ -181,7 +185,7 @@ class InstructorComponent extends React.Component {
           <View style={Styles.listArea}>
             <FlatList
               data={InstructorList}
-              renderItem={({item}) => this._cellDetailView (item)}
+              renderItem={({item, index}) => this._cellDetailView (item, index)}
               keyExtractor={this._keyExtractor}
               listKey="instructorsList"
             />
@@ -208,6 +212,6 @@ const maptoprops = state => {
   };
 };
 
-export default connect (maptoprops, {SelectedUser, Booknow}) (
+export default connect (maptoprops, {SelectedUser, Booknow, showCalendar}) (
   InstructorComponent
 );

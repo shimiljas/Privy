@@ -14,6 +14,7 @@ export const DASHBOARDTEXT = "home btn change data text";
 export const GETALLMESSAGE = "get all messages";
 export const SENDMESSAGE = "send message to instructor";
 export const ALLCLASSES = "get all booked and cancel classes";
+export const SELECT_CALENDER="SELECT_CALENDER"
 
 // Review
 export const ALLPENDINGREVIEWS = "get all pending reviews";
