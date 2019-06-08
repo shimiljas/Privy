@@ -15,17 +15,13 @@ class CalendarList extends Component {
     super(props);
     const { InstructorList, selectedIndex } = props;
     let selectedInstructor = InstructorList[selectedIndex];
-    console.log("nabeel: selected date: ", selectedInstructor, selectedInstructor.sd);
-    const selectedStartDate = selectedInstructor.sd;
-    const filteredInstructor = InstructorList.filter((item, index, array) => {
-      return selectedStartDate === item.sd;
-    });
 
+    const selectedStartDate = selectedInstructor.sd;
+    const newStateValues = this.updateRelatedDates(selectedStartDate, InstructorList);
 
     let marked = _.groupBy(InstructorList, function (b) {
       return b.sd;
     });
-
     let markeddateaArray = Object.keys(marked);
     let markedDates = {};
     markeddateaArray.map(date => {
@@ -36,22 +32,28 @@ class CalendarList extends Component {
       };
     });
 
-    console.log("nabeel: filteredList", filteredInstructor, selectedStartDate);
     this.state = {
-      date: moment().format('YYYY-MM-DD'),
-      selectedDate: selectedStartDate,
+      ...newStateValues,
       markedDates,
-      marked: {},
-      selectedDateData: filteredInstructor,
     };
   }
 
+  updateRelatedDates = (selectedDate, InstructorList) => {
+    const filteredInstructor = InstructorList.filter(item => {
+      return selectedDate === item.sd;
+    });
+
+    return {
+      selectedDate: selectedDate,
+      selectedDateData: filteredInstructor,
+    };
+  };
+
 
   render() {
-    const { markedDates } = this.state;
-
-    console.log("nabeel: clander List: ", this.state, this.state.selectedDateData, markedDates);
+    const { markedDates, selectedDateData, selectedDate } = this.state;
     const { InstructorList } = this.props;
+
     return (
       <ScrollView style={{ flex: 1, backgroundColor: 'white' }}>
         <Header title="Calendar" />
@@ -67,21 +69,21 @@ class CalendarList extends Component {
           onDayPress={(date) => {
             console.log('nabeel: selected day', date)
             const { year, month, day } = date;
-            this.setState({
-              selectedDate: `${year}-${month}-${day}`
-            });
+            const formattedDate = `${year}-${month<10?"0":""}${month}-${day<10?"0":""}${day}`;
+            const newStateValues = this.updateRelatedDates(formattedDate, InstructorList);
+
+            this.setState({ ...newStateValues });
           }}
           firstDay={1}
           markedDates={markedDates}
           onDayLongPress={day => {
             console.log(day);
-            this.setState({ selected: day });
           }}
           hideArrows={false}
         />
         <View style={{ flex: 1, alignItems: 'center' }}>
-          {this.state.selectedDateData.map(item => {
-            return <CalenderCard data={item} date={this.state.selectedDate} />;
+          {selectedDateData.map(item => {
+            return (<CalenderCard data={item} date={selectedDate} />);
           })}
 
         </View>
@@ -91,7 +93,6 @@ class CalendarList extends Component {
 }
 
 const maptoprops = state => {
-  console.log('maptoprops==', state.SearchIntructor.searchedList);
   return {
     SpinnerVisible: state.Loader.visible,
     userData: state.User.userdata,
