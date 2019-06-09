@@ -6,7 +6,8 @@ import {
   Modal,
   TextInput,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+  SafeAreaView
 } from "react-native";
 import Color from "../../common/Color";
 
@@ -48,58 +49,62 @@ class LocationModal extends React.Component {
         animationType={"slide"}
         onRequestClose={() => onClose()}
       >
-        <View style={{ padding: 10 }}>
-          <TouchableOpacity onPress={() => onClose()}>
-            <Text
-              style={{
-                width: "25%",
-                textAlign: "center",
-                fontSize: 20,
-                padding: 5,
-                backgroundColor: "black",
-                color: "white"
-              }}
-            >
-              {"Back"}
-            </Text>
-          </TouchableOpacity>
-          <View style={{ height: 10 }} />
-          <TextInput
-            onChangeText={home => this.fetchAuto(home)}
-            style={{ color: Color.grayClg, fontSize: 25, padding: 0 }}
-            placeholder={title}
-          />
-          <View style={{ height: 10 }} />
-          <FlatList
-            data={locations}
-            keyExtractor={item => item.value}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => this.changeLocation(item)}
-                key={item.Lat}
+        <SafeAreaView>
+
+          <View style={{ padding: 10 }}>
+            <TouchableOpacity onPress={() => onClose()}>
+              <Text
                 style={{
-                  padding: 10,
-                  borderBottomColor: "#DDD",
-                  borderBottomWidth: 0.5
+                  width: "25%",
+                  textAlign: "center",
+                  fontSize: 20,
+                  padding: 5,
+                  backgroundColor: "black",
+                  color: "white"
                 }}
               >
-                <Text
+                {"Back"}
+              </Text>
+            </TouchableOpacity>
+            <View style={{ height: 10 }} />
+            <TextInput
+              onChangeText={home => this.fetchAuto(home)}
+              style={{ color: Color.grayClg, fontSize: 25, padding: 0 }}
+              placeholder={title}
+            />
+            <View style={{ height: 10 }} />
+            <FlatList
+              data={locations}
+              keyExtractor={item => item.value}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  onPress={() => this.changeLocation(item)}
+                  key={item.Lat}
                   style={{
-                    paddingVertical: 2,
-                    fontSize: 16,
-                    fontWeight: "bold",
-                    color: "#666"
+                    padding: 10,
+                    borderBottomColor: "#DDD",
+                    borderBottomWidth: 0.5
                   }}
                 >
-                  {item.Name}
-                </Text>
-                <Text style={{ fontSize: 14, color: "#777" }}>
-                  {item.Address}
-                </Text>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
+                  <Text
+                    style={{
+                      paddingVertical: 2,
+                      fontSize: 16,
+                      fontWeight: "bold",
+                      color: "#666"
+                    }}
+                  >
+                    {item.Name}
+                  </Text>
+                  <Text style={{ fontSize: 14, color: "#777" }}>
+                    {item.Address}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </SafeAreaView>
+
       </Modal>
     );
   }
