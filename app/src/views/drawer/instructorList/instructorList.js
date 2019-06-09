@@ -85,7 +85,6 @@ class InstructorComponent extends React.Component {
           <TouchableOpacity
             onPress={() =>
              {
-               console.log("nabeel: instruction list: ", this.props.InstructorList, data, index);
                showCalendar(index);
                 Actions.CalendarList ({
                 data: this.props.InstructorList,

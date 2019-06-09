@@ -67,7 +67,6 @@ class CalendarList extends Component {
           }}
           monthFormat="MMM yyyy"
           onDayPress={(date) => {
-            console.log('nabeel: selected day', date)
             const { year, month, day } = date;
             const formattedDate = `${year}-${month<10?"0":""}${month}-${day<10?"0":""}${day}`;
             const newStateValues = this.updateRelatedDates(formattedDate, InstructorList);
