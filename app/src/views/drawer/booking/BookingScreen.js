@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -7,11 +7,11 @@ import {
   AsyncStorage,
   FlatList,
 } from 'react-native';
-import {Container, Tab, Tabs} from 'native-base';
-import {Actions} from 'react-native-router-flux';
-import {connect} from 'react-redux';
+import { Container, Tab, Tabs } from 'native-base';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {AllClasses, cancelClasses, BookClass} from '../../../actions';
+import { AllClasses, cancelClasses, BookClass, selectUser } from '../../../actions';
 import Header from '../../../components/header/header';
 import Styles from './bookingStatus/Styles';
 import CancelBooking from './bookingStatus/CancelBooking';
@@ -21,8 +21,8 @@ import RF from 'react-native-responsive-fontsize';
 import BookingCard from './components/BookingCard';
 
 class BookingScreen extends Component {
-  constructor (props) {
-    super (props);
+  constructor(props) {
+    super(props);
     this.state = {
       // tabStatus:0
       sIndex: 0,
@@ -33,34 +33,33 @@ class BookingScreen extends Component {
     //his.getAllClasses();
   }
 
-  async componentWillMount () {
-    let ut = await AsyncStorage.getItem ('roleId');
-    const {userData, AllClasses} = this.props;
+  async componentWillMount() {
+    let ut = await AsyncStorage.getItem('roleId');
+    const { userData, AllClasses } = this.props;
     let object = {
       ut: ut,
       user_id: userData._id,
       api_token: userData.api_token,
     };
-    this.setState ({roleId: ut});
+    this.setState({ roleId: ut });
 
-    AllClasses (object);
+    AllClasses(object);
   }
-  componentWillReceiveProps (nextProps) {
-    console.log (nextProps.changed, 'nextPropsnextPropsnextProps');
+  componentWillReceiveProps(nextProps) {
     if (
       this.state.sIndex == 0 &&
       nextProps.allClasses &&
       nextProps.allClasses.length > 0
     ) {
-      const data = nextProps.allClasses.filter (data => data.cancel === 0);
-      this.setState ({bookings: data, allClasses: nextProps.allClasses});
+      const data = nextProps.allClasses.filter(data => data.cancel === 0);
+      this.setState({ bookings: data, allClasses: nextProps.allClasses });
     } else if (
       this.state.sIndex == 1 &&
       nextProps.allClasses &&
       nextProps.allClasses.length > 0
     ) {
-      let data = nextProps.allClasses.filter (data => data.cancel === 1);
-      this.setState ({bookings: data, allClasses: nextProps.allClasses});
+      let data = nextProps.allClasses.filter(data => data.cancel === 1);
+      this.setState({ bookings: data, allClasses: nextProps.allClasses });
     }
   }
 
@@ -78,49 +77,53 @@ class BookingScreen extends Component {
   // }
 
   tabChange = index => {
-    this.setState ({sIndex: index}, () => {
+    this.setState({ sIndex: index }, () => {
       if (this.state.sIndex == 0) {
-        let data = this.state.allClasses.filter (data => data.cancel === 0);
-        this.setState ({bookings: data});
+        let data = this.state.allClasses.filter(data => data.cancel === 0);
+        this.setState({ bookings: data });
       } else {
-        let data = this.state.allClasses.filter (data => data.cancel === 1);
-        this.setState ({bookings: data});
+        let data = this.state.allClasses.filter(data => data.cancel === 1);
+        this.setState({ bookings: data });
       }
     });
   };
-  onScrollEnd (e) {
+
+  onScrollEnd(e) {
     let contentOffset = e.nativeEvent.contentOffset;
     let viewSize = e.nativeEvent.layoutMeasurement;
 
     // Divide the horizontal offset by the width of the view to see which page is visible
-    let pageNum = Math.floor (contentOffset.x / viewSize.width);
-    console.log ('scrolled to page ', pageNum);
+    let pageNum = Math.floor(contentOffset.x / viewSize.width);
+    console.log('scrolled to page ', pageNum);
   }
+
   actionclick = item => {
     return;
     if (this.state.sIndex == 0) {
-      const {userData, cancelClasses} = this.props;
+      const { userData, cancelClasses } = this.props;
       const object = {
         bid: item.bid,
         user_id: userData._id,
         api_token: userData.api_token,
       };
 
-      cancelClasses (object);
+      cancelClasses(object);
     } else {
-      const {userData, BookClass} = this.props;
+      const { userData, BookClass } = this.props;
       const object = {
         cid: item.cid,
         user_id: userData._id,
         api_token: userData.api_token,
       };
-      BookClass (object);
+      BookClass(object);
       // this.props.cancelClassesForId();
     }
   };
 
-  render () {
-    const {userData} = this.props;
+  render() {
+    const { userData, selectUser } = this.props;
+    const { roleId, sIndex, bookings } = this.state;
+
     return (
       <Container>
         <Header
@@ -132,28 +135,32 @@ class BookingScreen extends Component {
         />
         <View>
           <TabBar
-            onSelect={sIndex => this.tabChange (sIndex)}
-            selected={this.state.sIndex}
+            onSelect={sIndex => this.tabChange(sIndex)}
+            selected={sIndex}
             data={[
-              this.state.roleId == 3
+              roleId == 3
                 ? KeyWords.booked + ' ' + KeyWords.scheduleTitle
                 : KeyWords.upcoming,
-              this.state.roleId == 3
+              roleId == 3
                 ? KeyWords.cancelled + ' ' + KeyWords.scheduleTitle
                 : KeyWords.previousL,
             ]}
           />
         </View>
-        <View style={{flex: 1}}>
+        <View style={{ flex: 1 }}>
           <FlatList
-            style={{padding: 10}}
-            data={this.state.bookings}
-            renderItem={({item}) => (
+            style={{ padding: 10 }}
+            data={bookings}
+            renderItem={({ item, index }) => (
               <BookingCard
                 Item={item}
-                roleId={this.state.roleId ? this.state.roleId : 3}
-                tab={this.state.sIndex}
-                action={item => this.actionclick (item)}
+                roleId={roleId ? roleId : 3}
+                tab={sIndex}
+                action={item => this.actionclick(item)}
+                onPress={() => {
+                  Actions.StudentProfileScreen();
+                  selectUser(item);
+                }}
               />
             )}
           />
@@ -163,7 +170,7 @@ class BookingScreen extends Component {
   }
 }
 
-const TabBar = ({onSelect, selected, data}) => (
+const TabBar = ({ onSelect, selected, data }) => (
   <View
     style={{
       flexDirection: 'row',
@@ -175,13 +182,13 @@ const TabBar = ({onSelect, selected, data}) => (
       style={{
         flex: 1,
       }}
-      onPress={() => onSelect (0)}
+      onPress={() => onSelect(0)}
     >
-      <View style={{backgroundColor: selected === 0 ? 'green' : 'white'}}>
+      <View style={{ backgroundColor: selected === 0 ? 'green' : 'white' }}>
         <Text
           style={{
             padding: '5%',
-            fontSize: RF (2.3),
+            fontSize: RF(2.3),
             fontFamily: 'Poppins-Medium',
             color: selected === 0 ? 'white' : 'black',
             textAlign: 'center',
@@ -195,13 +202,13 @@ const TabBar = ({onSelect, selected, data}) => (
       style={{
         flex: 1,
       }}
-      onPress={() => onSelect (1)}
+      onPress={() => onSelect(1)}
     >
-      <View style={{backgroundColor: selected === 1 ? 'green' : 'white'}}>
+      <View style={{ backgroundColor: selected === 1 ? 'green' : 'white' }}>
         <Text
           style={{
             padding: '5%',
-            fontSize: RF (2.3),
+            fontSize: RF(2.3),
             fontFamily: 'Poppins-Medium',
             textAlign: 'center',
             color: selected === 1 ? 'white' : 'black',
@@ -219,13 +226,13 @@ BookingScreen.propTypes = {
 };
 
 const maptoprops = state => {
-  console.log (state.AllClasses, 'state=======<>');
+  console.log(state.AllClasses, 'state=======<>');
   return {
     userData: state.User.userdata,
     allClasses: state.AllClasses.allClasses,
     changed: state.AllClasses.changed,
   };
 };
-export default connect (maptoprops, {AllClasses, cancelClasses, BookClass}) (
+export default connect(maptoprops, { AllClasses, cancelClasses, BookClass, selectUser })(
   BookingScreen
 );

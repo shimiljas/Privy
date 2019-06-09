@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import Styles from "./Styles";
 import Images from "../../../common/images";
 import GlobalStyle from "../../../common/GlobalStyle";
-import { updateUserData } from "../../../actions";
+import { updateUserData, selectUser } from "../../../actions";
 import {
   SpinnerLoad,
   ButtonComponent,
@@ -28,7 +28,7 @@ class StudentProfileComponent extends React.Component {
     const { userData } = this.props;
     this.state = {
       user_id: userData._id,
-      isOpenHome:false,
+      isOpenHome: false,
       name: userData.name,
       email: userData.email,
       homeLocation: "",
@@ -42,10 +42,13 @@ class StudentProfileComponent extends React.Component {
   }
 
   async componentDidMount() {
-    let user_id = await AsyncStorage.getItem("userId");
-    clientApi.callPostApi("get_user_profile.php", {user_id}).then(res =>{
+    const { selectedUser } = this.props;
+
+    let user_id = selectedUser ? selectedUser.stu_id : await AsyncStorage.getItem("userId");
+
+    clientApi.callPostApi("get_user_profile.php", { user_id }).then(res => {
       console.log("RESUSER", res);
-      if(res.success == 1) {
+      if (res.success == 1) {
         this.setState({
           _id: user_id,
           name: res.data.name,
@@ -60,9 +63,9 @@ class StudentProfileComponent extends React.Component {
       }
     });
   }
-  
+
   inputClick = (text, key) => {
-    this.setState({[key]: text})
+    this.setState({ [key]: text })
   };
   componentCall = data => {
     return (
@@ -81,7 +84,7 @@ class StudentProfileComponent extends React.Component {
       />
     );
   };
-  takePicture = async function() {
+  takePicture = async function () {
     var options = {
       title: KeyWords.select + " " + KeyWords.avatar,
       customButtons: [],
@@ -125,17 +128,21 @@ class StudentProfileComponent extends React.Component {
       instructChildren,
     }
 
-    clientApi.callPostApi("update_user_profile.php", {...obj}).then(res =>{
+    clientApi.callPostApi("update_user_profile.php", { ...obj }).then(res => {
       console.log(res)
       alert(res.message);
-      if(res.success == 1) {
+      if (res.success == 1) {
       }
     });
   };
 
+  componentWillUnmount(){
+    selectUser(null);
+  }
+
   render() {
     const { showDefault, profilePic, SpinnerVisible } = this.state;
-    var icon = showDefault ? Images.user : {uri : profilePic};
+    var icon = showDefault ? Images.user : { uri: profilePic };
     const {
       name,
       country,
@@ -293,11 +300,12 @@ const maptoprops = state => {
     userData: state.User.userdata,
     token: state.User.userdata.api_token
       ? state.User.userdata.api_token
-      : state.User.userdata.token
+      : state.User.userdata.token,
+    selectedUser: state.AllClasses.selectedUser
   };
 };
 
 export default connect(
   maptoprops,
-  { updateUserData }
+  { updateUserData, selectUser }
 )(StudentProfileComponent);

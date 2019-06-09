@@ -15,6 +15,7 @@ export const GETALLMESSAGE = "get all messages";
 export const SENDMESSAGE = "send message to instructor";
 export const ALLCLASSES = "get all booked and cancel classes";
 export const SELECT_CALENDER="SELECT_CALENDER"
+export const SHOW_USER_DETAIL="SHOW_USER_DETAIL"
 
 // Review
 export const ALLPENDINGREVIEWS = "get all pending reviews";

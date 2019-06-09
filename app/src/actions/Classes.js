@@ -1,9 +1,9 @@
 import { Actions } from "react-native-router-flux";
-import { ALLCLASSES, LOADERON, LOADEROFF } from "./Types";
+import { ALLCLASSES, LOADERON, LOADEROFF, SHOW_USER_DETAIL } from "./Types";
 import API from "../common/ApiManager";
 import { Alert } from "react-native";
 
-const dashDefult = () => {};
+const dashDefult = () => { };
 export default dashDefult;
 
 export const AllClasses = data => {
@@ -23,6 +23,20 @@ export const cancelClasses = data => {
     cancelClassesForId(dispatch, data);
   };
 };
+
+export const selectUser = user => {
+  return dispatch => {
+    selectUserWithIndex(dispatch, user);
+  };
+};
+
+const selectUserWithIndex = (dispatch, user) => {
+  dispatch({
+    type: SHOW_USER_DETAIL,
+    selectedUser: user
+  });
+}
+
 
 const getAllClasses = async (dispatch, data) => {
   dispatch({

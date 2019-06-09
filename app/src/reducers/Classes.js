@@ -1,8 +1,9 @@
-import { ALLCLASSES } from "../actions/Types";
+import { ALLCLASSES, SHOW_USER_DETAIL } from "../actions/Types";
 
 const INITIAL_STATE = {
   allClasses: [],
-  changed: false
+  changed: false,
+  selectedUser: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -19,7 +20,11 @@ export default (state = INITIAL_STATE, action) => {
       state.allClasses[index].cancel = 1;
 
       return { ...state, changed: true };
-
+    case SHOW_USER_DETAIL:
+      return {
+        ...state,
+        selectedUser: action.selectedUser
+      };
     case "BOOK_CLASS":
       console.log(action.payload, "action.payloadaction.payload");
       const dupindex = state.allClasses.findIndex(x => x.cid == action.payload);
