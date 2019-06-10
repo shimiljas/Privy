@@ -1,12 +1,13 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Container, Content, Item } from "native-base";
+import moment from "moment";
 import { connect } from "react-redux";
-import Calendar from "react-native-calendar";
+import { Calendar } from 'react-native-calendars';
 import { Actions } from "react-native-router-flux";
-import { BookNowClass,PaypalToken } from "../../../actions";
+import { BookNowClass, PaypalToken } from "../../../actions";
 import Util from "../../../common/Util";
-
+import DateTimePicker from "react-native-modal-datetime-picker";
 import Styles from "./Styles";
 import Images from "../../../common/images";
 import Color from "../../../common/Color";
@@ -24,11 +25,11 @@ class BookNowComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      startTime: "Start Time",
-      endTime: "End Time",
-      isStartTimePickerVisible: false,
-      isEndTimePickerVisible: false,
-      successData: false
+      startTime: null,
+      endTime: null,
+      showStartPicker: false,
+      showEndPicker: false,
+      successData: false,
     };
   }
 
@@ -37,17 +38,17 @@ class BookNowComponent extends React.Component {
   };
 
   pay = async () => {
-     const { userData, SelectedUser,BookNowClass} = this.props;
+    const { userData, SelectedUser, BookNowClass } = this.props;
     console.log("paypal function");
     await BookNowClass({
-      api_token:userData.api_token != null ? userData.api_token : userData.token,
+      api_token: userData.api_token != null ? userData.api_token : userData.token,
       user_id: userData._id,
-      classId:SelectedUser._id,
-      from_time:SelectedUser.time, 
-      to_time:SelectedUser.end_time,
-      actualPrice:SelectedUser.price,
-      payedPrice:(SelectedUser.price+1),
-      classdate:SelectedUser.startDate != undefined? (SelectedUser.startDate).substring(0, 10):''
+      classId: SelectedUser._id,
+      from_time: SelectedUser.time,
+      to_time: SelectedUser.end_time,
+      actualPrice: SelectedUser.price,
+      payedPrice: (SelectedUser.price + 1),
+      classdate: SelectedUser.startDate != undefined ? (SelectedUser.startDate).substring(0, 10) : ''
     })
     // await PaypalToken();
     // Actions.Pay({ type: "replace" });
@@ -58,46 +59,20 @@ class BookNowComponent extends React.Component {
   };
 
   calendar = () => {
-    const customStyle = {
-      selectedDayCircle: {
-        backgroundColor: Color.calenderColor
-      },
-      title: {
-        color: Color.grayClg
-      },
-      titleText: {
-        fontSize: 15
-      },
-      dayHeading: {
-        color: Color.grayClg
-      },
-      weekendHeading: {
-        color: Color.grayClg
-      },
-      weekendDayText: {
-        color: Color.darkGray
-      },
-      selectedDayText: {
-        color: Color.whiteClr
-      },
-      hasEventCircle: {
-        backgroundColor: Color.calenderColor
-      }
-    };
     const { SelectedUser } = this.props;
-    //alert([(SelectedUser.startDate).substring(0, 10), (SelectedUser.endDate).substring(0, 10)]);
+
     return (
-      <View style={Styles.calenderView}>
-        <Calendar
-          showControls
-          eventDates={[
-            SelectedUser.startDate != undefined? (SelectedUser.startDate).substring(0, 10):'',
-            SelectedUser.endDate != undefined? (SelectedUser.endDate).substring(0, 10):''
-          ]}
-          customStyle={customStyle}
-        />
-        <View style={Styles.transparent} />
-      </View>
+      <Calendar
+        style={{
+          borderWidth: 1,
+          borderColor: 'gray',
+          height: 350
+        }}
+        markedDates={{
+          [SelectedUser.sd]: { selected: true, marked: true, selectedColor: 'blue' },
+        }}
+        hideArrows
+      />
     );
   };
 
@@ -135,8 +110,27 @@ class BookNowComponent extends React.Component {
     );
   };
 
+  handleDatePicked = (isStartTime, date) => {
+    if (isStartTime) {
+      this.setState({ startTime: date, showStartPicker: false });
+    } else {
+      this.setState({ endTime: date, showEndPicker: false });
+    }
+  };
+
+  hideDateTimePicker = isStartDate => {
+    if (isStartDate) {
+      this.setState({ showStartPicker: false });
+    } else {
+      this.setState({
+        showEndPicker: false
+      });
+    }
+  };
+
   render() {
     const { SpinnerVisible, SelectedUser } = this.props;
+    const { showStartPicker, showEndPicker, startTime, endTime } = this.state;
 
     return (
       <Container>
@@ -160,7 +154,7 @@ class BookNowComponent extends React.Component {
                   <Text>: </Text>
                 </Text>
                 <Text style={[Styles.amtLable]}>
-                  ${SelectedUser.price == undefined ? 0 : (SelectedUser.price+1)}
+                  ${SelectedUser.price == undefined ? 0 : (SelectedUser.price + 1)}
                 </Text>
               </View>
             </View>
@@ -170,30 +164,45 @@ class BookNowComponent extends React.Component {
           <View style={[GlobalStyle.fullDivider, Styles.nextLine2]} />
           <View style={{ margin: Util.getWidth(5) }}>
             <Text style={Styles.lable}>{KeyWords.timeSlot}</Text>
-            <View style={GlobalStyle.row}>
-              <DatePickerComponent
-                title={KeyWords.startTime}
-                titleStyle={{marginLeft: 15}}
-                icon={Images.clockImg}
-                iconStyle={Styles.sameIcon}
-                // placeholder={KeyWords.startTime}
-                type="disable"
-                setValue={SelectedUser.time}
-                fieldWidth={{ width: "50%" }}
-                height={90}
-                key="startTime"
-              />
-              <DatePickerComponent
-                title={KeyWords.endTime}
-                icon={Images.clockImg}
-                iconStyle={Styles.sameIcon}
-                //placeholder={KeyWords.endTime}
-                type="disable"
-                setValue={SelectedUser.end_time}
-                fieldWidth={{ width: "50%" }}
-                height={90}
-                key="endTime"
-              />
+            <View style={{ flexDirection: "row", marginTop: 12 }}>
+              <TouchableOpacity onPress={() => this.setState({ showStartPicker: true })} style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={{ color: "#aeb5bc", marginRight: 8, fontSize: 16 }}> Start Time</Text>
+                  <Image source={Images.clockImg} style={{ width: 16, height: 16 }} />
+                </View>
+                <View>
+                  <Text style={{ marginTop: 16, fontSize: 14 }}>
+                    {startTime ? moment(startTime).format("h:mm a") : null}
+                  </Text>
+                  <DateTimePicker
+                    isVisible={showStartPicker}
+                    mode="time"
+                    date={startTime ? startTime : new Date()}
+                    titleIOS="Start Time"
+                    onConfirm={(date) => this.handleDatePicked(true, date)}
+                    onCancel={() => this.hideDateTimePicker(true)}
+                  />
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.setState({ showEndPicker: true })} style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                <View style={{ flexDirection: "row" }}>
+                  <Text style={{ color: "#aeb5bc", marginRight: 8, fontSize: 16 }}>End Time</Text>
+                  <Image source={Images.clockImg} style={{ width: 16, height: 16 }} />
+                </View>
+                <View>
+                  <Text style={{ marginTop: 16, fontSize: 14 }}>
+                    {endTime ? moment(endTime).format("h:mm a") : null}
+                  </Text>
+                  <DateTimePicker
+                    isVisible={showEndPicker}
+                    mode="time"
+                    date={endTime ? endTime : new Date()}
+                    titleIOS="End Time"
+                    onConfirm={(date) => this.handleDatePicked(false, date)}
+                    onCancel={() => this.hideDateTimePicker(false)}
+                  />
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -237,5 +246,5 @@ const maptoprops = state => {
 
 export default connect(
   maptoprops,
-  { BookNowClass ,PaypalToken}
+  { BookNowClass, PaypalToken }
 )(BookNowComponent);
