@@ -36,7 +36,7 @@ const setBooknow = async (dispatch, data) => {
     type: SELECTEDDATA,
     selectedUser: data
   });
-  Actions.BookNow({ type: "replace" });
+  // Actions.BookNow({ type: "replace" });
 };
 const setSelectedUser = async (dispatch, data) => {
   dispatch({
