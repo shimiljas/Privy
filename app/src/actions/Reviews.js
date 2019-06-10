@@ -1,5 +1,5 @@
 import { Alert } from "react-native";
-import { SENDREVIEWS, LOADEROFF, SENDAPPROVEREVIEW,LOADERON, ALLPENDINGREVIEWS,ALLAPPROVEREVIEWS } from "./Types";
+import { SENDREVIEWS, LOADEROFF, SENDAPPROVEREVIEW, LOADERON, ALLPENDINGREVIEWS, ALLAPPROVEREVIEWS, APPROVE_REVIEW } from "./Types";
 import API from "../common/ApiManager";
 import Util from "../common/Util";
 import Color from "../common/Color";

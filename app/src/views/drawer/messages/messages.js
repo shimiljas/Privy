@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Alert, ScrollView, FlatList, AsyncStorage, Modal,TouchableOpacity, Image } from "react-native";
+import { View, Alert, ScrollView, FlatList, AsyncStorage, Modal, TouchableOpacity, Image, SafeAreaView } from "react-native";
 // import { Container, Content, Text } from "native-base";
 import { Container, Content, Item, Text, Textarea } from "native-base";
 import { connect } from "react-redux";
@@ -19,7 +19,7 @@ class MessagesComponent extends React.Component {
     this.state = {
       sendMessage: false,
       SelectedUser: {},
-      selMessage: {name: ""},
+      selMessage: { name: "" },
       cMsg: [],
       openConv: false,
       message: "This is very very very very loooooooooong messge to student..."
@@ -55,7 +55,7 @@ class MessagesComponent extends React.Component {
               mid: item.mid
             }).then(res => {
               console.log("DELETE", res);
-              if(res.success == 1) {
+              if (res.success == 1) {
                 alert(res.message);
                 this.getCMsg(this.state.selMessage);
               }
@@ -79,14 +79,14 @@ class MessagesComponent extends React.Component {
         {
           text: KeyWords.ok,
           onPress: async () => {
-            console.log( this.state.selMessage)
+            console.log(this.state.selMessage)
             await clientApi.callPostApi("del_msg_cid.php", {
               user_id: await AsyncStorage.getItem("userId"),
               cid: this.state.selMessage.cid
             }).then(res => {
               console.log("DELETE", res);
               // this.setState({openConv: false})
-              if(res.success == 1) {
+              if (res.success == 1) {
                 alert(res.message);
                 this.getMessages();
               }
@@ -152,28 +152,29 @@ class MessagesComponent extends React.Component {
   showConv() {
     const { openConv, cMsg, selMessage } = this.state;
     console.log(cMsg, selMessage);
-    return(
+    return (
       <Modal
         visible={openConv}
         animationType={"slide"}
         transparent={false}
-        onRequestClose={() => this.setState({openConv: false})}
+        onRequestClose={() => this.setState({ openConv: false })}
       >
-        <View style={{backgroundColor: "#ffffff99", flex:1}}>
-          <View style={{flexDirection: 'row', backgroundColor: Color.inputBg, alignItems: 'center'}}>
-            <TouchableOpacity onPress={() => this.setState({openConv: false})}>
-              <View style={{backgroundColor: Color.appDefultColor, padding: 10}}>
-                <Text style={{color: Color.whiteClr, fontFamily: "Poppins"}}>{'< Back'}</Text>
+        <SafeAreaView style={{ backgroundColor: "#ffffff99", flex: 1 }}>
+        
+          <View style={{ flexDirection: 'row', backgroundColor: Color.inputBg, alignItems: 'center' }}>
+            <TouchableOpacity onPress={() => this.setState({ openConv: false })}>
+              <View style={{ backgroundColor: Color.appDefultColor, padding: 10 }}>
+                <Text style={{ color: Color.whiteClr, fontFamily: "Poppins" }}>{'< Back'}</Text>
               </View>
             </TouchableOpacity>
-            <View style={{ padding: 10, flex:1}}>
-              <Text style={{ fontFamily: "Poppins"}}>{selMessage.name.toUpperCase()}</Text>
+            <View style={{ padding: 10, flex: 1 }}>
+              <Text style={{ fontFamily: "Poppins" }}>{selMessage.name.toUpperCase()}</Text>
             </View>
             {/* <TouchableOpacity onPress={() => this.deleteConv()} >
               <Image source={Images.deleteImg} resizeMode={'contain'} style={{width: 32, height: 32, marginRight: 10}} />
             </TouchableOpacity> */}
           </View>
-          <ScrollView style={{flex:1, padding: 10}}>
+          <ScrollView style={{ flex: 1, padding: 10 }}>
             {cMsg.map(msg => {
               return (
                 <CardComponentMessage
@@ -190,7 +191,7 @@ class MessagesComponent extends React.Component {
               );
             })}
           </ScrollView>
-        </View>
+        </SafeAreaView>
       </Modal>
     )
   }
@@ -204,9 +205,9 @@ class MessagesComponent extends React.Component {
     const { message } = this.state;
     console.log("send message person", SelectedUser, message);
 
-    if(message==''){
-     alert("Please enter message")
-    }else{
+    if (message == '') {
+      alert("Please enter message")
+    } else {
       this.setState({ sendMessage: false });
       await SendMessage({
         user_id: await AsyncStorage.getItem("userId"),
@@ -219,15 +220,15 @@ class MessagesComponent extends React.Component {
     }
   };
 
- async getCMsg(item) {
+  async getCMsg(item) {
     await clientApi.callPostApi("get_messages_cid.php", {
       user_id: await AsyncStorage.getItem("userId"),
       cid: item.cid
     }).then(res => {
       console.log("all Messages", res);
       // this.setState({});
-      if(res.success == 1) {
-        this.setState({cMsg: res.data,openConv: true, selMessage: item})
+      if (res.success == 1) {
+        this.setState({ cMsg: res.data, openConv: true, selMessage: item })
       }
     })
   }
@@ -267,8 +268,8 @@ class MessagesComponent extends React.Component {
                   keyExtractor={(item) => item.id + "as"}
                 />
               ) : (
-                <Text style={Styles.margin15}>{KeyWords.noMsgReceived}</Text>
-              )}
+                  <Text style={Styles.margin15}>{KeyWords.noMsgReceived}</Text>
+                )}
             </View>
           </View>
         </Content>
