@@ -51,7 +51,17 @@
 		2DCD954D1E0B4F2C00145EB5 /* PrivyAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* PrivyAppTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		3C707640F2624341BAC80D3A /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42830FDA164B4B059AAB22A5 /* libRNFirebase.a */; };
-		460BFDAAEB034481B6CB795F /* libRCTBraintree.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C96F47D2F5542DEBBA63E7B /* libRCTBraintree.a */; };
+		42082EF322BCEA9E0000D225 /* libBraintree.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082EF222BCEA9E0000D225 /* libBraintree.a */; };
+		42082FE522BCFE350000D225 /* Braintree3DSecure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FE422BCFE350000D225 /* Braintree3DSecure.framework */; };
+		42082FE722BCFE350000D225 /* BraintreeApplePay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FE622BCFE350000D225 /* BraintreeApplePay.framework */; };
+		42082FE922BCFE350000D225 /* BraintreeCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FE822BCFE350000D225 /* BraintreeCard.framework */; };
+		42082FEB22BCFE350000D225 /* BraintreeCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FEA22BCFE350000D225 /* BraintreeCore.framework */; };
+		42082FED22BCFE360000D225 /* BraintreeDataCollector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FEC22BCFE360000D225 /* BraintreeDataCollector.framework */; };
+		42082FEF22BCFE360000D225 /* BraintreePayPal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FEE22BCFE360000D225 /* BraintreePayPal.framework */; };
+		42082FF122BCFE360000D225 /* BraintreeUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FF022BCFE360000D225 /* BraintreeUI.framework */; };
+		42082FF322BCFE360000D225 /* BraintreeUnionPay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FF222BCFE360000D225 /* BraintreeUnionPay.framework */; };
+		42082FF522BCFE360000D225 /* BraintreeVenmo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FF422BCFE360000D225 /* BraintreeVenmo.framework */; };
+		42AFF35B22B9669C004B7AA4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42AFF32E22B9669C004B7AA4 /* GoogleService-Info.plist */; };
 		47A465F7720E46FB833A8EE9 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FA591234A48E986948DB8 /* FontAwesome5_Brands.ttf */; };
 		4E23E255978D4B059D34FD54 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E55666F7D435481A81C8BA10 /* MaterialCommunityIcons.ttf */; };
 		4FF841D9F977463CB895E7D8 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F4FA92678836485A838008F2 /* MaterialIcons.ttf */; };
@@ -82,7 +92,6 @@
 		E1AA40AF01FD494893FD31D7 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4049C6B6CB2D4398B97E8B34 /* Poppins-Medium.ttf */; };
 		ED37FED6856594465E21D93A /* libPods-PrivyApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B203496149DF9734E2A029C5 /* libPods-PrivyApp-tvOS.a */; };
 		EFE94FFC500348B1ADDC6EDE /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 73A2DCED97E5482C841774C4 /* SimpleLineIcons.ttf */; };
-		F029A89221B69C180055D177 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F029A86521B69C170055D177 /* GoogleService-Info.plist */; };
 		F08A8654A91F46A7A3910AC6 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7E5DBC88321B426892D1AB7F /* Poppins-Thin.ttf */; };
 		F98BC180519B42FB8436BE60 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 412E3134C9BD443E9A61175B /* Zocial.ttf */; };
 		FA0B000B7DC044C390C9912E /* Poppins.otf in Resources */ = {isa = PBXBuildFile; fileRef = 3F94301CBB184C87946167B6 /* Poppins.otf */; };
@@ -363,6 +372,13 @@
 			remoteGlobalIDString = 3D3CD9181DE5FBD800167DC4;
 			remoteInfo = "jschelpers-tvOS";
 		};
+		4208303B22BD063F0000D225 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4208303722BD063F0000D225 /* RNBraintreeDropIn.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNBraintreeDropIn;
+		};
 		5E9157321DD0AC6500FF2AA8 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */;
@@ -460,7 +476,21 @@
 		4049C6B6CB2D4398B97E8B34 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		412E3134C9BD443E9A61175B /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		415255E3AD3C433BB509DBB1 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
+		42082EF022BCEA950000D225 /* libBraintreeDropIn.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBraintreeDropIn.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		42082EF222BCEA9E0000D225 /* libBraintree.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBraintree.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		42082FE422BCFE350000D225 /* Braintree3DSecure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Braintree3DSecure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		42082FE622BCFE350000D225 /* BraintreeApplePay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreeApplePay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		42082FE822BCFE350000D225 /* BraintreeCard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreeCard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		42082FEA22BCFE350000D225 /* BraintreeCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreeCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		42082FEC22BCFE360000D225 /* BraintreeDataCollector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreeDataCollector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		42082FEE22BCFE360000D225 /* BraintreePayPal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreePayPal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		42082FF022BCFE360000D225 /* BraintreeUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreeUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		42082FF222BCFE360000D225 /* BraintreeUnionPay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreeUnionPay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		42082FF422BCFE360000D225 /* BraintreeVenmo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreeVenmo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4208303722BD063F0000D225 /* RNBraintreeDropIn.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNBraintreeDropIn.xcodeproj; path = "../node_modules/react-native-braintree-payments-drop-in/ios/RNBraintreeDropIn.xcodeproj"; sourceTree = "<group>"; };
+		4208303D22BD06510000D225 /* libBraintreeDropIn.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBraintreeDropIn.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		42830FDA164B4B059AAB22A5 /* libRNFirebase.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFirebase.a; sourceTree = "<group>"; };
+		42AFF32E22B9669C004B7AA4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		45F01E15FDDF4CB8ACE5B5A0 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/native-base/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		474856F8F1466CCB2D0A208E /* Pods-PrivyApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PrivyApp-tvOSTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PrivyApp-tvOSTests/Pods-PrivyApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		4D995BC8522C4228A9EE81E9 /* BVLinearGradient.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = BVLinearGradient.xcodeproj; path = "../node_modules/react-native-linear-gradient/BVLinearGradient.xcodeproj"; sourceTree = "<group>"; };
@@ -496,12 +526,12 @@
 		CC6126A2C68E4F6B8E2888FC /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		CE4C6967E77040948DB610F5 /* Poppins-ExtraLightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraLightItalic.ttf"; path = "../assets/fonts/Poppins-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
 		CF30B1726AE84F9CBD0E008F /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
+		D735760670B142AAB5F30484 /* libRNBraintreeDropIn.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNBraintreeDropIn.a; sourceTree = "<group>"; };
 		DBBFD08D12A14A19A5BBB152 /* Poppins-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-ExtraLight.ttf"; path = "../assets/fonts/Poppins-ExtraLight.ttf"; sourceTree = "<group>"; };
 		E357639473074317A4198F90 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/native-base/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		E55666F7D435481A81C8BA10 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		E745E96056674A278B8F71CA /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		EFAC0D9FE98D445482816C96 /* Poppins-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-LightItalic.ttf"; path = "../assets/fonts/Poppins-LightItalic.ttf"; sourceTree = "<group>"; };
-		F029A86521B69C170055D177 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F029A89321B6A27C0055D177 /* PrivyApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = PrivyApp.entitlements; path = PrivyApp/PrivyApp.entitlements; sourceTree = "<group>"; };
 		F4FA92678836485A838008F2 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		F6F962A7E3A5442193AE350F /* Poppins-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-BoldItalic.ttf"; path = "../assets/fonts/Poppins-BoldItalic.ttf"; sourceTree = "<group>"; };
@@ -521,6 +551,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42082FE522BCFE350000D225 /* Braintree3DSecure.framework in Frameworks */,
+				42082FE722BCFE350000D225 /* BraintreeApplePay.framework in Frameworks */,
+				42082FE922BCFE350000D225 /* BraintreeCard.framework in Frameworks */,
+				42082FEB22BCFE350000D225 /* BraintreeCore.framework in Frameworks */,
+				42082FED22BCFE360000D225 /* BraintreeDataCollector.framework in Frameworks */,
+				42082FEF22BCFE360000D225 /* BraintreePayPal.framework in Frameworks */,
+				42082FF122BCFE360000D225 /* BraintreeUI.framework in Frameworks */,
+				42082FF322BCFE360000D225 /* BraintreeUnionPay.framework in Frameworks */,
+				42082FF522BCFE360000D225 /* BraintreeVenmo.framework in Frameworks */,
+				42082EF322BCEA9E0000D225 /* libBraintree.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
@@ -538,7 +578,6 @@
 				55004E02D2774B1DA15B7C10 /* libBVLinearGradient.a in Frameworks */,
 				BA10EB4A552E49BBB71C3382 /* libReactNativeLocalization.a in Frameworks */,
 				CAC15709C22E207F2CACE373 /* libPods-PrivyApp.a in Frameworks */,
-				460BFDAAEB034481B6CB795F /* libRCTBraintree.a in Frameworks */,
 				3C707640F2624341BAC80D3A /* libRNFirebase.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -653,9 +692,9 @@
 		13B07FAE1A68108700A75B9A /* PrivyApp */ = {
 			isa = PBXGroup;
 			children = (
+				42AFF32E22B9669C004B7AA4 /* GoogleService-Info.plist */,
 				F029A89321B6A27C0055D177 /* PrivyApp.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
-				F029A86521B69C170055D177 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -698,6 +737,7 @@
 				3D28AA3479D2479581CDCC75 /* libReactNativeLocalization.a */,
 				0C96F47D2F5542DEBBA63E7B /* libRCTBraintree.a */,
 				42830FDA164B4B059AAB22A5 /* libRNFirebase.a */,
+				D735760670B142AAB5F30484 /* libRNBraintreeDropIn.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -738,6 +778,18 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4208303D22BD06510000D225 /* libBraintreeDropIn.a */,
+				42082FE422BCFE350000D225 /* Braintree3DSecure.framework */,
+				42082FE622BCFE350000D225 /* BraintreeApplePay.framework */,
+				42082FE822BCFE350000D225 /* BraintreeCard.framework */,
+				42082FEA22BCFE350000D225 /* BraintreeCore.framework */,
+				42082FEC22BCFE360000D225 /* BraintreeDataCollector.framework */,
+				42082FEE22BCFE360000D225 /* BraintreePayPal.framework */,
+				42082FF022BCFE360000D225 /* BraintreeUI.framework */,
+				42082FF222BCFE360000D225 /* BraintreeUnionPay.framework */,
+				42082FF422BCFE360000D225 /* BraintreeVenmo.framework */,
+				42082EF222BCEA9E0000D225 /* libBraintree.a */,
+				42082EF022BCEA950000D225 /* libBraintreeDropIn.a */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
 				A6A936F62CE65D7D00EDB189 /* libPods-PrivyApp.a */,
 				B203496149DF9734E2A029C5 /* libPods-PrivyApp-tvOS.a */,
@@ -745,6 +797,14 @@
 				364D331B4916A46DB14EA96D /* libPods-PrivyAppTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4208303822BD063F0000D225 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4208303C22BD063F0000D225 /* libRNBraintreeDropIn.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		5E91572E1DD0AC6500FF2AA8 /* Products */ = {
@@ -768,6 +828,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				4208303722BD063F0000D225 /* RNBraintreeDropIn.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -1002,10 +1063,12 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						ProvisioningStyle = Manual;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = T4Q3XEB88Y;
+						DevelopmentTeam = JQU9B6X6L5;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -1031,6 +1094,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -1097,6 +1161,10 @@
 				{
 					ProductGroup = 14A57F82218707BA008CC0A8 /* Products */;
 					ProjectRef = 6C4F2C905A024B278CEE851B /* ReactNativeLocalization.xcodeproj */;
+				},
+				{
+					ProductGroup = 4208303822BD063F0000D225 /* Products */;
+					ProjectRef = 4208303722BD063F0000D225 /* RNBraintreeDropIn.xcodeproj */;
 				},
 				{
 					ProductGroup = 14A57F7C218707BA008CC0A8 /* Products */;
@@ -1381,6 +1449,13 @@
 			remoteRef = 3DAD3EAE1DF850E9000B6D8A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		4208303C22BD063F0000D225 /* libRNBraintreeDropIn.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNBraintreeDropIn.a;
+			remoteRef = 4208303B22BD063F0000D225 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1456,7 +1531,6 @@
 				4FF841D9F977463CB895E7D8 /* MaterialIcons.ttf in Resources */,
 				5F56D932007C4B51BF47768B /* Octicons.ttf in Resources */,
 				B24B72C0904442AEA2DE0AB8 /* Roboto_medium.ttf in Resources */,
-				F029A89221B69C180055D177 /* GoogleService-Info.plist in Resources */,
 				D12E075C23754D3B9D28C640 /* Roboto.ttf in Resources */,
 				26C4F1D60A94446C9CA329A4 /* rubicon-icon-font.ttf in Resources */,
 				EFE94FFC500348B1ADDC6EDE /* SimpleLineIcons.ttf in Resources */,
@@ -1485,6 +1559,7 @@
 				92EEB99032654D24895A4A89 /* Poppins-ThinItalic.ttf in Resources */,
 				FA0B000B7DC044C390C9912E /* Poppins.otf in Resources */,
 				77F5F543D5D2458EAA4B391F /* Quicksand.ttf in Resources */,
+				42AFF35B22B9669C004B7AA4 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1676,6 +1751,9 @@
 			baseConfigurationReference = 4F0C1EFECCFABDDE1FBB78D2 /* Pods-PrivyAppTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1688,12 +1766,14 @@
 					"$(SRCROOT)..\node_modules\neact-native-localization",
 					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-payments-drop-in/ios",
 				);
 				INFOPLIST_FILE = PrivyAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1707,6 +1787,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrivyApp.app/PrivyApp";
 			};
 			name = Debug;
@@ -1716,7 +1797,9 @@
 			baseConfigurationReference = 39A97C2A0FB140A3AD04366F /* Pods-PrivyAppTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)..\node_modules\neact-native-cameraios/**",
@@ -1725,12 +1808,14 @@
 					"$(SRCROOT)..\node_modules\neact-native-localization",
 					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-payments-drop-in/ios",
 				);
 				INFOPLIST_FILE = PrivyAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1744,6 +1829,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PrivyApp.app/PrivyApp";
 			};
 			name = Release;
@@ -1754,17 +1840,30 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = PrivyApp/PrivyApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Adam  Zane (RKCRAH9C68)";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = T4Q3XEB88Y;
+				DEVELOPMENT_TEAM = JQU9B6X6L5;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)..\node_modules\neact-native-cameraios/**",
-					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
-					"$(SRCROOT)..\node_modules\neact-native-linear-gradientBVLinearGradient",
-					"$(SRCROOT)..\node_modules\neact-native-localization",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-cameraios/**",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-image-pickerios",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-linear-gradientBVLinearGradient",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-localization",
 					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-payments-drop-in/ios",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
 				);
 				INFOPLIST_FILE = PrivyApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1775,6 +1874,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.privyapp;
 				PRODUCT_NAME = PrivyApp;
+				PROVISIONING_PROFILE_SPECIFIER = "Privy Academy Dev 18062019";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1786,16 +1886,29 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = PrivyApp/PrivyApp.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Adam  Zane (JQU9B6X6L5)";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = T4Q3XEB88Y;
+				DEVELOPMENT_TEAM = JQU9B6X6L5;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)..\node_modules\neact-native-cameraios/**",
-					"$(SRCROOT)..\node_modules\neact-native-image-pickerios",
-					"$(SRCROOT)..\node_modules\neact-native-linear-gradientBVLinearGradient",
-					"$(SRCROOT)..\node_modules\neact-native-localization",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-cameraios/**",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-image-pickerios",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-linear-gradientBVLinearGradient",
+					"$(SRCROOT)..",
+					ode_modules,
+					"eact-native-localization",
 					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-payments-drop-in/ios",
+					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
 				);
 				INFOPLIST_FILE = PrivyApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1806,6 +1919,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.privyapp;
 				PRODUCT_NAME = PrivyApp;
+				PROVISIONING_PROFILE_SPECIFIER = "Privy Academy Prd 02062019";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1832,11 +1946,13 @@
 					"$(SRCROOT)..\node_modules\neact-native-localization",
 					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-payments-drop-in/ios",
 				);
 				INFOPLIST_FILE = "PrivyApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1877,11 +1993,13 @@
 					"$(SRCROOT)..\node_modules\neact-native-localization",
 					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-payments-drop-in/ios",
 				);
 				INFOPLIST_FILE = "PrivyApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1921,11 +2039,13 @@
 					"$(SRCROOT)..\node_modules\neact-native-localization",
 					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-payments-drop-in/ios",
 				);
 				INFOPLIST_FILE = "PrivyApp-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1965,11 +2085,13 @@
 					"$(SRCROOT)..\node_modules\neact-native-localization",
 					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 					"$(SRCROOT)/../node_modules/react-native-firebase/ios/RNFirebase/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-payments-drop-in/ios",
 				);
 				INFOPLIST_FILE = "PrivyApp-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",

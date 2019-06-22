@@ -1,39 +1,44 @@
 {
   "project_info": {
-    "project_number": "127582348875",
-    "firebase_url": "https://privyapp-1362a.firebaseio.com",
-    "project_id": "privyapp-1362a",
-    "storage_bucket": "privyapp-1362a.appspot.com"
+    "project_number": "1038539194947",
+    "firebase_url": "https://privy-fa8aa.firebaseio.com",
+    "project_id": "privy-fa8aa",
+    "storage_bucket": "privy-fa8aa.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:127582348875:android:3b6515d21dd135fe",
+        "mobilesdk_app_id": "1:1038539194947:android:3b6515d21dd135fe",
         "android_client_info": {
           "package_name": "com.privyapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "127582348875-hkmbugt6bnc5joodjqcklj3tjqc7ojko.apps.googleusercontent.com",
+          "client_id": "1038539194947-q9iu8tj9folruggu6emdlqmmvri093u3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBcDQxD8VKZeeMN_lW7C7pOlv8JAFwopFM"
+          "current_key": "AIzaSyDfD-xSxwvY3tDbdyafczHb9MVzJki6hLc"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1038539194947-q9iu8tj9folruggu6emdlqmmvri093u3.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1038539194947-qhdbb0qu6i5oqbsmkrj0vppmm29cnig7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.privyapp"
+              }
+            }
+          ]
         }
       }
     }

@@ -9,22 +9,27 @@
 #import <Firebase.h> //Add This Line
 //#import "RNFirebaseMessaging.h"
 #import "RNFirebaseNotifications.h" //Add This Line
-#import "RCTBraintree.h"
+
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import "RCTLinkingManager.h"
+
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   [FIRApp configure]; //Add This Line
-  [
-   RNFirebaseNotifications configure];  //Add This Line
+  [RNFirebaseNotifications configure];
+     //Add This Line
   NSURL *jsCodeLocation;
 
-//    [FIRApp configure];
+   // [FIRApp configure];
 //    [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
 
+
+  
+  
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
@@ -42,24 +47,19 @@
 }
 
 
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-         annotation:(id)annotation
-  sourceApplication:(NSString *)sourceApplication
-            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-  
-  // Add any custom logic here.
-  [BTAppSwitch setReturnURLScheme:@"org.reactjs.native.example.PrivyApp.payments"];
-  return [[RCTBraintree sharedInstance] application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
+
+
+
+
+
+- (NSString *)paymentsURLScheme {
+  NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+  return [NSString stringWithFormat:@"%@.%@", bundleIdentifier, @"payments"];
 }
 
 
 
 
-
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-  return [[RCTBraintree sharedInstance] application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
-}
 //
 //- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
 //{

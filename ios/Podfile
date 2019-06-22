@@ -14,8 +14,9 @@ target 'PrivyApp' do
 
   end
   pod 'Firebase'
-  pod 'Firebase/Core'
-  pod 'Firebase/Messaging'
+  pod 'Firebase/Core', '~> 5.20.2'
+  pod 'Firebase/Messaging', '~> 5.20.2'
+  
 
   target 'PrivyAppTests' do
     inherit! :search_paths

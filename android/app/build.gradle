@@ -170,6 +170,7 @@ subprojects {
     }
 }
 dependencies {
+    compile project(':react-native-braintree-payments-drop-in')
     compile project(':react-native-vector-icons')
     compile project(':react-native-firebase')
     compile project(':react-native-braintree-xplat')
@@ -196,4 +197,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 apply plugin: 'com.google.gms.google-services'
+
 // com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true

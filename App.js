@@ -6,7 +6,7 @@
  * @flow
  */
 import React, { Component } from "react";
-import { YellowBox, SafeAreaView,AsyncStorage } from "react-native";
+import { YellowBox, SafeAreaView, AsyncStorage } from "react-native";
 import { Root } from "native-base";
 // provider import for  wrapping the main component
 import { Provider } from "react-redux";
@@ -14,6 +14,9 @@ import { Provider } from "react-redux";
 import Reduxthunk from "redux-thunk";
 import logger from "redux-logger";
 import { createStore, applyMiddleware } from "redux";
+import firebase from "react-native-firebase";
+import NotificationPopup from "react-native-push-notification-popup";
+
 // import firebase, { Notification } from "react-native-firebase";
 // import { Notification } from 'react-native-firebase';
 // import firebase ,{ Notification, NotificationOpen } from 'react-native-firebase';
@@ -28,117 +31,105 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     YellowBox.ignoreWarnings(["Warning: isMounted(...) is deprecated"]);
+    this.checkPermission();
+    this.createNotificationListeners();
   }
 
-  // async componentDidMount() {
-  //   firebase
-  //     .messaging()
-  //     .hasPermission()
-  //     .then(enabled => {
-  //       if (enabled) {
-  //         firebase
-  //           .messaging()
-  //           .getToken()
-  //           .then(token => {
-  //             console.log("LOG token: ", token);
+  getToken = async () => {
+    let fcmToken = await AsyncStorage.getItem("fcmToken");
+    if (!fcmToken) {
+      fcmToken = await firebase.messaging().getToken();
+      if (fcmToken) {
+        // user has a device token
+        console.log("fcmToken:", fcmToken);
+        await AsyncStorage.setItem("fcmToken", fcmToken);
+      }
+    }
+    console.log("fcmToken:", fcmToken);
+  };
 
-  //             //   util.setStore('DeviceToken', token)
-  //             //     .then(res => {
+  checkPermission = async () => {
+    const enabled = await firebase.messaging().hasPermission();
+    if (enabled) {
+      this.getToken();
+    } else {
+      this.requestPermission();
+    }
+  };
 
-  //             //     })
-  //             //     .catch((error) => {
-  //             //       console.log('Token Error ', error)
-  //             //     });
-  //           });
-  //         // user has permissions
-  //       } else {
-  //         firebase
-  //           .messaging()
-  //           .requestPermission()
-  //           .then(() => {
-  //             alert("User Now Has Permission");
-  //           })
-  //           .catch(error => {
-  //             alert("Error", error);
-  //             // User has rejected permissions
-  //           });
-  //       }
-  //     });
+  showAlert = (title, body, data) => {
+    console.log(title, body, data, "title, body, data");
+    if (title && body) {
+      this.popup.show({
+        onPress: function() {
+          console.log("Pressed");
+        },
+        appIconSource: require("./assets/images/Icon.png"),
+        appTitle: "Privy",
+        timeText: "Now",
+        title: title,
+        body: body
+      });
+    }
+  };
 
-  //   this.notificationListener = firebase
-  //     .notifications()
-  //     .onNotification(notification => {
-  //       // Process your notification as required
-  //       const {
-  //         body,
-  //         data,
-  //         notificationId,
-  //         sound,
-  //         subtitle,
-  //         title
-  //       } = notification;
-  //       console.log("LOG Check: ", title, body, JSON.stringify(data));
-  //     });
-  // }
-  // componentWillUnmount() {
-  //   this.notificationListener();
-  // }
-  //     const notificationOpen: NotificationOpen = await firebase.notifications().getInitialNotification();
-  //     if (notificationOpen) {
-  //         const action = notificationOpen.action;
-  //         const notification: Notification = notificationOpen.notification;
-  //         var seen = [];
-  //         alert(JSON.stringify(notification.data, function(key, val) {
-  //             if (val != null && typeof val == "object") {
-  //                 if (seen.indexOf(val) >= 0) {
-  //                     return;
-  //                 }
-  //                 seen.push(val);
-  //             }
-  //             return val;
-  //         }));
-  //     }
-  //     const channel = new firebase.notifications.Android.Channel('test-channel', 'Test Channel', firebase.notifications.Android.Importance.Max)
-  //             .setDescription('My apps test channel');
-  // // Create the channel
-  //     firebase.notifications().android.createChannel(channel);
-  //     this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification: Notification) => {
-  //         // Process your notification as required
-  //         // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
-  //     });
-  //     this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
-  //         // Process your notification as required
-  //         notification
-  //             .android.setChannelId('test-channel')
-  //             .android.setSmallIcon('ic_launcher');
-  //         firebase.notifications()
-  //             .displayNotification(notification);
+  requestPermission = async () => {
+    try {
+      await firebase.messaging().requestPermission();
+      this.getToken();
+    } catch (error) {
+      console.log("permission rejected");
+    }
+  };
 
-  //     });
-  //     this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
-  //         // Get the action triggered by the notification being opened
-  //         const action = notificationOpen.action;
-  //         // Get information about the notification that was opened
-  //         const notification: Notification = notificationOpen.notification;
-  //         var seen = [];
-  //         alert(JSON.stringify(notification.data, function(key, val) {
-  //             if (val != null && typeof val == "object") {
-  //                 if (seen.indexOf(val) >= 0) {
-  //                     return;
-  //                 }
-  //                 seen.push(val);
-  //             }
-  //             return val;
-  //         }));
-  //         firebase.notifications().removeDeliveredNotification(notification.notificationId);
+  createNotificationListeners = async () => {
+    /*
+     * Triggered when a particular notification has been received in foreground
+     * */
+    this.notificationListener = firebase
+      .notifications()
+      .onNotification(notification => {
+        const { title, body, data } = notification;
+        this.showAlert(title, body, data, notification);
+      });
 
-  //     });
-  // }
-  // componentWillUnmount() {
-  //     this.notificationDisplayedListener();
-  //     this.notificationListener();
-  //     this.notificationOpenedListener();
-  // }
+    /*
+     * If your app is in background, you can listen for when a notification is clicked / tapped / opened as follows:
+     * */
+    this.notificationOpenedListener = firebase
+      .notifications()
+      .onNotificationOpened(notificationOpen => {
+        const { data } = notificationOpen.notification;
+        store.store.dispatch({
+          type: "NOTIFICATION",
+          payload: data
+        });
+      });
+
+    /*
+     * If your app is closed, you can check if it was opened by a notification being clicked / tapped / opened as follows:
+     * */
+    const notificationOpen = await firebase
+      .notifications()
+      .getInitialNotification();
+    if (notificationOpen) {
+      const { title, body, data } = notificationOpen.notification;
+      this.showAlert(title, body, data);
+    }
+    /*
+     * Triggered for data only payload in foreground
+     * */
+    this.messageListener = firebase.messaging().onMessage(message => {
+      console.log(JSON.stringify(message));
+    });
+  };
+
+  componentWillUnmount() {
+    this.notificationListener();
+    this.notificationOpenedListener();
+    this.unsubscribeFromNotificationListener();
+  }
+
   render() {
     console.ignoredYellowBox = ["Warning: Each", "Warning: Failed"];
     console.disableYellowBox = true;
@@ -151,6 +142,7 @@ export default class App extends Component {
       <Provider store={store}>
         <Root>
           <SafeAreaView style={{ flex: 1, backgroundColor: Colors.whiteClr }}>
+            <NotificationPopup ref={ref => (this.popup = ref)} />
             <PrivyApp />
           </SafeAreaView>
         </Root>

@@ -3,6 +3,7 @@ package com.privyapp;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import tech.bam.RNBraintreeDropIn.RNBraintreeDropInPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
@@ -33,10 +34,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNBraintreeDropInPackage(),
             new VectorIconsPackage(),
             new RNFirebasePackage(),
             new RNFirebaseMessagingPackage(),
-                new RNFirebaseNotificationsPackage(),
+            new RNFirebaseNotificationsPackage(),
             new BraintreePackage(),
           
             new ReactNativeLocalizationPackage(),
