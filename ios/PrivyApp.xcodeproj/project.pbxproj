@@ -52,15 +52,6 @@
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		3C707640F2624341BAC80D3A /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42830FDA164B4B059AAB22A5 /* libRNFirebase.a */; };
 		42082EF322BCEA9E0000D225 /* libBraintree.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082EF222BCEA9E0000D225 /* libBraintree.a */; };
-		42082FE522BCFE350000D225 /* Braintree3DSecure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FE422BCFE350000D225 /* Braintree3DSecure.framework */; };
-		42082FE722BCFE350000D225 /* BraintreeApplePay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FE622BCFE350000D225 /* BraintreeApplePay.framework */; };
-		42082FE922BCFE350000D225 /* BraintreeCard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FE822BCFE350000D225 /* BraintreeCard.framework */; };
-		42082FEB22BCFE350000D225 /* BraintreeCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FEA22BCFE350000D225 /* BraintreeCore.framework */; };
-		42082FED22BCFE360000D225 /* BraintreeDataCollector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FEC22BCFE360000D225 /* BraintreeDataCollector.framework */; };
-		42082FEF22BCFE360000D225 /* BraintreePayPal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FEE22BCFE360000D225 /* BraintreePayPal.framework */; };
-		42082FF122BCFE360000D225 /* BraintreeUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FF022BCFE360000D225 /* BraintreeUI.framework */; };
-		42082FF322BCFE360000D225 /* BraintreeUnionPay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FF222BCFE360000D225 /* BraintreeUnionPay.framework */; };
-		42082FF522BCFE360000D225 /* BraintreeVenmo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42082FF422BCFE360000D225 /* BraintreeVenmo.framework */; };
 		42AFF35B22B9669C004B7AA4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 42AFF32E22B9669C004B7AA4 /* GoogleService-Info.plist */; };
 		47A465F7720E46FB833A8EE9 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FA591234A48E986948DB8 /* FontAwesome5_Brands.ttf */; };
 		4E23E255978D4B059D34FD54 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E55666F7D435481A81C8BA10 /* MaterialCommunityIcons.ttf */; };
@@ -478,15 +469,6 @@
 		415255E3AD3C433BB509DBB1 /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNImagePicker.xcodeproj; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; };
 		42082EF022BCEA950000D225 /* libBraintreeDropIn.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBraintreeDropIn.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		42082EF222BCEA9E0000D225 /* libBraintree.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBraintree.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		42082FE422BCFE350000D225 /* Braintree3DSecure.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Braintree3DSecure.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		42082FE622BCFE350000D225 /* BraintreeApplePay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreeApplePay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		42082FE822BCFE350000D225 /* BraintreeCard.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreeCard.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		42082FEA22BCFE350000D225 /* BraintreeCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreeCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		42082FEC22BCFE360000D225 /* BraintreeDataCollector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreeDataCollector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		42082FEE22BCFE360000D225 /* BraintreePayPal.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreePayPal.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		42082FF022BCFE360000D225 /* BraintreeUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreeUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		42082FF222BCFE360000D225 /* BraintreeUnionPay.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreeUnionPay.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		42082FF422BCFE360000D225 /* BraintreeVenmo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BraintreeVenmo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4208303722BD063F0000D225 /* RNBraintreeDropIn.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNBraintreeDropIn.xcodeproj; path = "../node_modules/react-native-braintree-payments-drop-in/ios/RNBraintreeDropIn.xcodeproj"; sourceTree = "<group>"; };
 		4208303D22BD06510000D225 /* libBraintreeDropIn.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libBraintreeDropIn.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		42830FDA164B4B059AAB22A5 /* libRNFirebase.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFirebase.a; sourceTree = "<group>"; };
@@ -551,15 +533,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42082FE522BCFE350000D225 /* Braintree3DSecure.framework in Frameworks */,
-				42082FE722BCFE350000D225 /* BraintreeApplePay.framework in Frameworks */,
-				42082FE922BCFE350000D225 /* BraintreeCard.framework in Frameworks */,
-				42082FEB22BCFE350000D225 /* BraintreeCore.framework in Frameworks */,
-				42082FED22BCFE360000D225 /* BraintreeDataCollector.framework in Frameworks */,
-				42082FEF22BCFE360000D225 /* BraintreePayPal.framework in Frameworks */,
-				42082FF122BCFE360000D225 /* BraintreeUI.framework in Frameworks */,
-				42082FF322BCFE360000D225 /* BraintreeUnionPay.framework in Frameworks */,
-				42082FF522BCFE360000D225 /* BraintreeVenmo.framework in Frameworks */,
 				42082EF322BCEA9E0000D225 /* libBraintree.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
@@ -779,15 +752,6 @@
 			isa = PBXGroup;
 			children = (
 				4208303D22BD06510000D225 /* libBraintreeDropIn.a */,
-				42082FE422BCFE350000D225 /* Braintree3DSecure.framework */,
-				42082FE622BCFE350000D225 /* BraintreeApplePay.framework */,
-				42082FE822BCFE350000D225 /* BraintreeCard.framework */,
-				42082FEA22BCFE350000D225 /* BraintreeCore.framework */,
-				42082FEC22BCFE360000D225 /* BraintreeDataCollector.framework */,
-				42082FEE22BCFE360000D225 /* BraintreePayPal.framework */,
-				42082FF022BCFE360000D225 /* BraintreeUI.framework */,
-				42082FF222BCFE360000D225 /* BraintreeUnionPay.framework */,
-				42082FF422BCFE360000D225 /* BraintreeVenmo.framework */,
 				42082EF222BCEA9E0000D225 /* libBraintree.a */,
 				42082EF022BCEA950000D225 /* libBraintreeDropIn.a */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
